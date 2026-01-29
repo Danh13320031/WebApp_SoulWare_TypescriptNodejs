@@ -1,16 +1,22 @@
 import express, { Express } from "express";
-import viewEngineConfig from "./configs/viewEngine.config";
+import connectDbConfig from "./configs/database.config";
+import setViewEngineConfig from "./configs/viewEngine.config";
+import { APP_HOST, APP_PORT } from "./constants/constant";
+
+// Connect to MongoDB
+connectDbConfig();
 
 const app: Express = express();
-const port: number = 3000;
+const host: string = APP_HOST;
+const port: number = APP_PORT;
 
 // Config EJS package
-viewEngineConfig(app);
+setViewEngineConfig(app);
 
 app.get("/", (req, res) => {
   res.render("client/pages/topic/topic.view.ejs");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(port, host, () => {
+  console.log(`Server is running at http://${host}:${port}`);
 });

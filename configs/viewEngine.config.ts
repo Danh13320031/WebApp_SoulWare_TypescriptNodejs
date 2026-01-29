@@ -1,7 +1,7 @@
 import ejs from "ejs";
 import { Express } from "express";
 
-const viewEngineConfig = (app: Express) => {
+const setViewEngineConfig = (app: Express) => {
   app.set("views", "./views");
   app.set("view engine", "ejs");
 
@@ -10,4 +10,4 @@ const viewEngineConfig = (app: Express) => {
   ejs.closeDelimiter = ">";
 };
 
-export default viewEngineConfig;
+export default setViewEngineConfig;
