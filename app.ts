@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import connectDbConfig from "./configs/database.config";
 import setViewEngineConfig from "./configs/viewEngine.config";
 import { APP_HOST, APP_PORT } from "./constants/constant";
+import createClientRoute from "./routes/client/index.route";
 
 // Connect to MongoDB
 connectDbConfig();
@@ -13,9 +14,8 @@ const port: number = APP_PORT;
 // Config EJS package
 setViewEngineConfig(app);
 
-app.get("/", (req, res) => {
-  res.render("client/pages/topic/topic.view.ejs");
-});
+// Client routes
+createClientRoute(app);
 
 app.listen(port, host, () => {
   console.log(`Server is running at http://${host}:${port}`);
