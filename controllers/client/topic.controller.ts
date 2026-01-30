@@ -1,0 +1,26 @@
+import { Request, Response } from "express";
+import TopicModel from "../../models/topic.model";
+
+// [GET]: /topics
+const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
+  const topicList = await TopicModel.find({
+    deleted: false,
+    status: "active",
+  }).sort({
+    createdAt: "desc",
+  });
+
+  console.log(topicList);
+
+  res.render("client/pages/topic/topic.view.ejs");
+};
+
+type ITopicController = {
+  getAllTopicGet: (req: Request, res: Response) => Promise<void>;
+};
+
+const topicController: ITopicController = {
+  getAllTopicGet,
+};
+
+export default topicController;
