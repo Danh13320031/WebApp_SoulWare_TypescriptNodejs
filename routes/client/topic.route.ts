@@ -1,18 +1,7 @@
-import { Request, Response, Router } from "express";
-import TopicModel from "../../models/topic.model";
+import { Router } from "express";
+import topicController from "../../controllers/client/topic.controller";
 const topicRoute: Router = Router();
 
-topicRoute.get("/", async (req: Request, res: Response): Promise<void> => {
-  const topicList = await TopicModel.find({
-    deleted: false,
-    status: "active",
-  }).sort({
-    createdAt: "desc",
-  });
-
-  console.log(topicList);
-
-  res.render("client/pages/topic/topic.view.ejs");
-});
+topicRoute.get("/", topicController.getAllTopicGet);
 
 export default topicRoute;
