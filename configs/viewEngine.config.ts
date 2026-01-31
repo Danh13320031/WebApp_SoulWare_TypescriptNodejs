@@ -1,7 +1,7 @@
 import ejs from "ejs";
 import { Express } from "express";
 
-const setViewEngineConfig = (app: Express) => {
+const setViewEngineConfig = (app: Express): void => {
   app.set("views", "./views");
   app.set("view engine", "ejs");
 
