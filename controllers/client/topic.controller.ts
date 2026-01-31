@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import TopicModel from "../../models/topic.model";
 
 // [GET]: /topics
-const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
+const getAllTopicGet = async (req: Request, res: Response): Promise<any> => {
   const topicList = await TopicModel.find({
     deleted: false,
     status: "active",
@@ -12,11 +12,14 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
 
   console.log(topicList);
 
-  res.render("client/pages/topic/topic.view.ejs");
+  res.render("client/pages/topic/topic.view.ejs", {
+    pageTitle: "Chủ đề bài hát",
+    topicList,
+  });
 };
 
 type ITopicController = {
-  getAllTopicGet: (req: Request, res: Response) => Promise<void>;
+  getAllTopicGet: (req: Request, res: Response) => Promise<any>;
 };
 
 const topicController: ITopicController = {
