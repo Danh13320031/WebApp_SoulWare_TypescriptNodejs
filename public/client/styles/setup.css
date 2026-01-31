@@ -1,4 +1,70 @@
+/* Layout setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Color setup */
+:root {
+  --primary-color: #cc40d7;
+  --light-primary-color: #e96cf1;
+  --dark-primary-color: #b000b0;
+  --secondary-color: #349dd5;
+  --light-secondary-color: #6cb2eb;
+  --dark-secondary-color: #0080ff;
+
+  --light-color: #f5f5f5;
+  --light-gray-color: #ccc;
+  --dark-gray-color: #999;
+  --dark-color: #333;
+
+  --background-color: #ffffff;
+  --text-color: #2c2c2c;
+  --link-color: #0808ff;
+  --border-color: #fff;
+
+  --hover-color: #ff0000;
+  --active-color: #ff0000;
+  --disabled-color: #ccc;
+
+  --error-color: #ee4549;
+  --success-color: #3bb537;
+  --warning-color: #fabc2c;
+  --info-color: #3995db;
+}
+
+/* Font setup */
+:root {
+  --font-primary: "Poppins", sans-serif;
+  --font-secondary: "Open Sans", sans-serif;
+
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  --font-size-xxl: 2rem;
+  --font-size-xl: 1.5rem;
+  --font-size-lg: 1.25rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+
+  --line-height-xxl: 2.5rem;
+  --line-height-xl: 2rem;
+  --line-height-lg: 1.75rem;
+  --line-height-md: 1.5rem;
+  --line-height-sm: 1.25rem;
+  --line-height-xs: 1rem;
+}
+
+/* Bootstrap setup */
 .container {
   max-width: 1600px;
   margin: 0 auto;
+}
+.form-control {
+  box-shadow: none !important;
 }
