@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { DATABASE_URL } from "../constants/constant";
 
-const connectDbConfig = async () => {
+const connectDbConfig = async (): Promise<void> => {
   try {
     await mongoose.connect(DATABASE_URL);
     console.log("Connected to MongoDB successfully!");
