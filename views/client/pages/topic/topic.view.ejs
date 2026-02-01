@@ -18,12 +18,83 @@
   <body>
     <%-include('../../partials/header.view.ejs') %>
 
-    <main class="main" id="topic-main">
-      <section>
+    <main class="main py-4" id="topic-main">
+      <section class="topic-title">
         <div class="container my-3">
           <div class="row">
             <div class="col-12">
-              <h1>Chủ đề bài hát</h1>
+              <h1
+                class="d-flex align-items-center topic-title-text"
+                style="
+                  color: var(--secondary-color);
+                  font-size: var(--font-size-xl);
+                  font-weight: var(--font-weight-semibold);
+                "
+              >
+                <i
+                  class="fa-solid fa-icons me-2"
+                  style="font-size: var(--font-size-md)"
+                ></i>
+                Chủ đề & Thể loại
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="topic-list">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <ul class="list-unstyled ms-0 d-flex flex-column gap-3 topic-list-menu">
+                <% if(topicList.length > 0) { %>
+                  <% topicList.forEach((topic) => { %>
+                    <li class="topic-list-menu-item">
+                      <div class="topic-item-box">
+                        <div
+                          class="d-flex align-items-center justify-content-between topic-item-title"
+                        >
+                          <div class="d-flex align-items-center">
+                            <div class="topic-avatar">
+                              <img
+                                src="<%= topic.avatar %>"
+                                alt="<%= topic.title %>"
+                                width="40px"
+                                class="me-2 rounded-1 topic-avatar-img"
+                              />
+                            </div>
+                            <h4
+                              class="mb-0 topic-name"
+                              style="
+                                color: var(--dark-color);
+                                font-size: var(--font-size-lg);
+                                font-weight: var(--font-weight-semibold);
+                              "
+                            >
+                              <%= topic.title %>
+                              <p
+                                class="mb-0 topic-description"
+                                style="
+                                  font-size: var(--font-size-sm);
+                                  color: var(--dark-gray-color);
+                                  font-weight: var(--font-weight-regular);
+                                "
+                              >
+                                <%= topic.description %>
+                              </p>
+                            </h4>
+                          </div>
+                          <a
+                            href="http://localhost:3000/songs/<%= topic.slug %>"
+                            class="d-flex align-items-center text-decoration-none topic-item-link"
+                            >Xem thêm<i class="fa-solid fa-angle-right ms-2"></i
+                          ></a>
+                        </div>
+                      </div>
+                    </li>
+                  <% }) %>
+                <% } %>
+              </ul>
             </div>
           </div>
         </div>

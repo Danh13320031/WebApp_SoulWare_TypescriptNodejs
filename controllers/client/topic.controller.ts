@@ -6,11 +6,9 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<any> => {
   const topicList = await TopicModel.find({
     deleted: false,
     status: "active",
-  }).sort({
-    createdAt: "desc",
   });
 
-  console.log(topicList);
+  console.log("List topic::: ", topicList);
 
   res.render("client/pages/topic/topic.view.ejs", {
     pageTitle: "Chủ đề bài hát",
