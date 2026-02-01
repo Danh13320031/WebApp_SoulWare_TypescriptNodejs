@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import TopicModel from "../../models/topic.model";
 
 // [GET]: /topics
-const getAllTopicGet = async (req: Request, res: Response): Promise<any> => {
+const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
   const topicList = await TopicModel.find({
     deleted: false,
     status: "active",
@@ -17,7 +17,7 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<any> => {
 };
 
 type ITopicController = {
-  getAllTopicGet: (req: Request, res: Response) => Promise<any>;
+  getAllTopicGet: (req: Request, res: Response) => Promise<void>;
 };
 
 const topicController: ITopicController = {
