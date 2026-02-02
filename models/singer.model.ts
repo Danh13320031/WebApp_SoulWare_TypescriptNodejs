@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const objSchema = {
-  title: { type: String, required: true },
+  fullName: { type: String, required: true },
+  stageName: { type: String, required: false },
   avatar: { type: String, required: true },
   description: { type: String, required: true },
   status: {
@@ -16,7 +17,7 @@ const objSchema = {
   deletedAt: { type: Date, default: null },
 };
 
-const TopicSchema = new Schema(objSchema, { timestamps: true });
-const TopicModel = mongoose.model("Topic", TopicSchema, "Topic");
+const SingerSchema = new Schema(objSchema, { timestamps: true });
+const SingerModel = mongoose.model("Singer", SingerSchema, "Singer");
 
-export default TopicModel;
+export default SingerModel;
