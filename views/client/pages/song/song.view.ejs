@@ -45,189 +45,55 @@
       <section class="song-list">
         <div class="container">
           <div class="row g-2">
-            <div class="col-lg-6 col-12">
-              <div class="song-item">
-                <div class="song-thumb">
-                  <img
-                    src="https://backend.daca.vn/assets/images/ruou-mung-hoa-nguoi-dung.jpg"
-                    alt="Rượu Mừng Hoa Người Dưng"
-                  />
+            <% if(songList.length > 0) { %>
+              <% songList.forEach((song) => { %>
+                <div class="col-lg-6 col-12">
+                  <div class="song-item">
+                    <div class="song-thumb">
+                      <img
+                        src="<%= song.avatar %>"
+                        alt="<%= song.title %>"
+                      />
 
-                  <button class="play-btn" title="Phát nhạc">
-                    <i class="fa-solid fa-play"></i>
-                  </button>
-                </div>
+                      <button class="play-btn" title="Phát nhạc">
+                        <i class="fa-solid fa-play"></i>
+                      </button>
+                    </div>
 
-                <div class="song-info">
-                  <h4 class="song-title">Rượu Mừng Hoa Người Dưng</h4>
+                    <div class="song-info">
+                      <h4 class="song-title"><%= song.title %></h4>
 
-                  <div class="song-meta">
-                    <span class="song-singer">
-                      <i class="fa-solid fa-microphone-lines"></i>
-                      TLong
-                    </span>
+                      <div class="song-meta">
+                        <span class="song-singer">
+                          <i class="fa-solid fa-microphone-lines"></i>
+                          <%= song.singerId.stageName %>
+                        </span>
 
-                    <span class="song-like">
-                      <i class="fa-solid fa-thumbs-up"></i>
-                      1,000
-                    </span>
+                        <span class="song-like">
+                          <i class="fa-solid fa-thumbs-up"></i>
+                          <%= song.like %>
+                        </span>
 
-                    <span class="song-time">
-                      <i class="fa-regular fa-clock"></i>
-                      Hôm qua
-                    </span>
+                        <span class="song-time">
+                          <i class="fa-regular fa-clock"></i>
+                          Hôm qua
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="song-actions">
+                      <a
+                        href="/songs/detail/<%= song.slug %>"
+                        class="detail-btn"
+                      >
+                        Chi tiết
+                        <i class="fa-solid fa-angle-right"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
-
-                <div class="song-actions">
-                  <a
-                    href="/songs/detail/ruou-mung-hoa-nguoi-dung"
-                    class="detail-btn"
-                  >
-                    Chi tiết
-                    <i class="fa-solid fa-angle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-12">
-              <div class="song-item">
-                <div class="song-thumb">
-                  <img
-                    src="https://backend.daca.vn/assets/images/ruou-mung-hoa-nguoi-dung.jpg"
-                    alt="Rượu Mừng Hoa Người Dưng"
-                  />
-
-                  <button class="play-btn" title="Phát nhạc">
-                    <i class="fa-solid fa-play"></i>
-                  </button>
-                </div>
-
-                <div class="song-info">
-                  <h4 class="song-title">Rượu Mừng Hoa Người Dưng</h4>
-
-                  <div class="song-meta">
-                    <span class="song-singer">
-                      <i class="fa-solid fa-microphone-lines"></i>
-                      TLong
-                    </span>
-
-                    <span class="song-like">
-                      <i class="fa-solid fa-thumbs-up"></i>
-                      1,000
-                    </span>
-
-                    <span class="song-time">
-                      <i class="fa-regular fa-clock"></i>
-                      Hôm qua
-                    </span>
-                  </div>
-                </div>
-
-                <div class="song-actions">
-                  <a
-                    href="/songs/detail/ruou-mung-hoa-nguoi-dung"
-                    class="detail-btn"
-                  >
-                    Chi tiết
-                    <i class="fa-solid fa-angle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-12">
-              <div class="song-item">
-                <div class="song-thumb">
-                  <img
-                    src="https://backend.daca.vn/assets/images/ruou-mung-hoa-nguoi-dung.jpg"
-                    alt="Rượu Mừng Hoa Người Dưng"
-                  />
-
-                  <button class="play-btn" title="Phát nhạc">
-                    <i class="fa-solid fa-play"></i>
-                  </button>
-                </div>
-
-                <div class="song-info">
-                  <h4 class="song-title">Rượu Mừng Hoa Người Dưng</h4>
-
-                  <div class="song-meta">
-                    <span class="song-singer">
-                      <i class="fa-solid fa-microphone-lines"></i>
-                      TLong
-                    </span>
-
-                    <span class="song-like">
-                      <i class="fa-solid fa-thumbs-up"></i>
-                      1,000
-                    </span>
-
-                    <span class="song-time">
-                      <i class="fa-regular fa-clock"></i>
-                      Hôm qua
-                    </span>
-                  </div>
-                </div>
-
-                <div class="song-actions">
-                  <a
-                    href="/songs/detail/ruou-mung-hoa-nguoi-dung"
-                    class="detail-btn"
-                  >
-                    Chi tiết
-                    <i class="fa-solid fa-angle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-12">
-              <div class="song-item">
-                <div class="song-thumb">
-                  <img
-                    src="https://backend.daca.vn/assets/images/ruou-mung-hoa-nguoi-dung.jpg"
-                    alt="Rượu Mừng Hoa Người Dưng"
-                  />
-
-                  <button class="play-btn" title="Phát nhạc">
-                    <i class="fa-solid fa-play"></i>
-                  </button>
-                </div>
-
-                <div class="song-info">
-                  <h4 class="song-title">Rượu Mừng Hoa Người Dưng</h4>
-
-                  <div class="song-meta">
-                    <span class="song-singer">
-                      <i class="fa-solid fa-microphone-lines"></i>
-                      TLong
-                    </span>
-
-                    <span class="song-like">
-                      <i class="fa-solid fa-thumbs-up"></i>
-                      1,000
-                    </span>
-
-                    <span class="song-time">
-                      <i class="fa-regular fa-clock"></i>
-                      Hôm qua
-                    </span>
-                  </div>
-                </div>
-
-                <div class="song-actions">
-                  <a
-                    href="/songs/detail/ruou-mung-hoa-nguoi-dung"
-                    class="detail-btn"
-                  >
-                    Chi tiết
-                    <i class="fa-solid fa-angle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
+              <% }) %>
+            <% } %>
           </div>
         </div>
       </section>
