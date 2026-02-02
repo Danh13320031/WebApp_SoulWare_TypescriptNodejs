@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import SingerModel from "./singer.model";
+import TopicModel from "./topic.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
@@ -18,8 +20,8 @@ const objSchema = {
   position: { type: Number, required: true, default: 1 },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
-  topicId: { type: String, required: true },
-  singerId: { type: String, required: true },
+  topicId: { type: Schema.Types.ObjectId, ref: TopicModel, required: true },
+  singerId: { type: Schema.Types.ObjectId, ref: SingerModel, required: true },
 };
 
 const SongSchema = new Schema(objSchema, { timestamps: true });
