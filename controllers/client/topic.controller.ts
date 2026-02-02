@@ -8,8 +8,6 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     status: "active",
   });
 
-  console.log("List topic::: ", topicList);
-
   res.render("client/pages/topic/topic.view.ejs", {
     pageTitle: "Chủ đề bài hát",
     topicList,
