@@ -26,10 +26,22 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-type ISongController = {
-  getAllSongGet: (req: Request, res: Response) => Promise<void>;
+// [GET]: /songs/detail/:songSlug
+const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
+  const songSlug: string = req.params.songSlug as string;
+
+  console.log(songSlug);
+
+  res.render("client/pages/song/detail.view.ejs", {
+    pageTitle: "Chi tiet bai hat",
+  });
 };
 
-const songController: ISongController = { getAllSongGet };
+type ISongController = {
+  getAllSongGet: (req: Request, res: Response) => Promise<void>;
+  getOneSongGet: (req: Request, res: Response) => Promise<void>;
+};
+
+const songController: ISongController = { getAllSongGet, getOneSongGet };
 
 export default songController;
