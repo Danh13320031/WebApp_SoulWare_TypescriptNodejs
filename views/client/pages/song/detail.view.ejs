@@ -28,7 +28,7 @@
                 style="width: 100%; aspect-ratio: 1/1"
               >
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEh8tLooYiXJ3nrNhO-XRuYRa20Xm6f91_VA&s"
+                  src="<%= song.avatar %>"
                   alt="song"
                   class="position-absolute top-0 start-0 w-100 aspect-ratio-1 z-1 rounded-5 song-info-image"
                 />
@@ -59,7 +59,7 @@
                   color: var(--secondary-color);
                 "
               >
-                Tên bài hát
+                <%= song.title %>
               </h1>
               <p
                 class="song-info-artist mb-1"
@@ -70,7 +70,9 @@
                 "
               >
                 Ca sĩ:
-                <a href="" style="color: var(--secondary-color)">Nghệ danh</a>
+                <a href="" style="color: var(--secondary-color)"
+                  ><%= song?.singerId?.stageName %></a
+                >
               </p>
               <p
                 class="song-info-genre mb-2"
@@ -81,7 +83,11 @@
                 "
               >
                 Thể loại:
-                <a href="" style="color: var(--secondary-color)">Thể loại</a>
+                <a
+                  href="/songs/<%= song?.topicId?.slug %>"
+                  style="color: var(--secondary-color)"
+                  >Nhạc <%= song?.topicId.title %></a
+                >
               </p>
 
               <ul
@@ -95,7 +101,8 @@
                   <i class="fa-solid fa-headphones me-1"></i>Lượt nghe: 123
                 </li>
                 <li class="song-info-like">
-                  <i class="fa-solid fa-thumbs-up me-1"></i>Lượt thích: 123
+                  <i class="fa-solid fa-thumbs-up me-1"></i>Lượt thích: <%=
+                  song.like %>
                 </li>
                 <li class="song-info-release">
                   <i class="fa-regular fa-clock me-1"></i>Ngày phát hành:
@@ -110,7 +117,7 @@
                   font-size: var(--font-size-md);
                 "
               >
-                Mô tả bài hát
+                <%= song.description %>
               </p>
             </div>
           </div>
@@ -126,13 +133,14 @@
                   <div class="d-flex justify-content-center mb-3">
                     <div class="rounded-circle overflow-hidden song-player-box">
                       <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEh8tLooYiXJ3nrNhO-XRuYRa20Xm6f91_VA&s"
+                        src="<%= song.avatar %>"
                         alt="song"
                         class="song-player-image"
                         style="width: 100%; aspect-ratio: 1/1"
                       />
                     </div>
                   </div>
+
                   <div class="d-flex justify-content-center gap-3 mb-3">
                     <button class="button-primary song-player-previous">
                       <i class="fa-solid fa-backward"></i>
@@ -187,15 +195,15 @@
               </h4>
               <div class="card">
                 <div class="card-body" style="min-height: 200px">
-                  <p
+                  <div
                     class="mb-0"
                     style="
-                      color: var(--dark-gray-color);
+                      color: var(--dark-color);
                       font-size: var(--font-size-md);
                     "
                   >
-                    Lời bài hát sẽ hiển thị tại đây...
-                  </p>
+                    <%- song.lyrics %>
+                  </div>
                 </div>
               </div>
             </div>

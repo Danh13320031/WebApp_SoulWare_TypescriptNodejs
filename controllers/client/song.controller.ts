@@ -30,10 +30,18 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
 const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
   const songSlug: string = req.params.songSlug as string;
 
-  console.log(songSlug);
+  const song = await SongModel.findOne({
+    slug: songSlug,
+    status: "active",
+    deleted: false,
+  })
+    .select("-deletedAt -deleted -status -position -__v")
+    .populate("singerId", "stageName slug")
+    .populate("topicId", "title slug");
 
   res.render("client/pages/song/detail.view.ejs", {
-    pageTitle: "Chi tiet bai hat",
+    pageTitle: `Bài hát ${song?.title}`,
+    song,
   });
 };
 
