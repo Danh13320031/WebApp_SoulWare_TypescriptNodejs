@@ -13,7 +13,6 @@
     box-shadow 0.3s ease;
 }
 
-/* viền gradient giả */
 .song-item::before {
   content: "";
   position: absolute;
@@ -124,31 +123,4 @@
 
 .song-actions {
   margin-top: 0px;
-}
-
-.detail-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  padding: 4px 10px;
-  border-radius: 20px;
-
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  text-decoration: none;
-
-  transition: all 0.25s ease;
-}
-
-.detail-btn:hover {
-  color: var(--light-color);
-  border: 1px solid transparent;
-  background: linear-gradient(
-    to right,
-    var(--primary-color),
-    var(--secondary-color)
-  );
 }
