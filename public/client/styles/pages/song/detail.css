@@ -1,0 +1,56 @@
+#song-detail-main .song-info .song-info-box {
+  position: relative;
+}
+
+#song-detail-main .song-info .song-info-box::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+#song-detail-main .song-info .song-info-box:hover::before {
+  opacity: 1;
+}
+
+#song-detail-main .song-info .song-info-box > * {
+  position: relative;
+  z-index: 1;
+}
+
+#song-detail-main .song-info .song-info-box .song-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#song-detail-main .song-info .song-info-box:hover .song-overlay {
+  opacity: 0.5;
+}
+
+#song-detail-main .song-player .song-player-box {
+  width: 90px;
+  aspect-ratio: 1/1;
+  border: 2px solid var(--secondary-color);
+  border-radius: 50%;
+}
+
+#song-detail-main .song-player .song-player-box .song-player-image {
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
