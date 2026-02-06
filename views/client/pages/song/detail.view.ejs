@@ -9,6 +9,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
     <link rel="stylesheet" href="/client/styles/partials/header.css" />
@@ -146,14 +150,14 @@
                       <i class="fa-solid fa-backward"></i>
                     </button>
                     <button class="button-main song-player-play">
-                      <i class="fa-solid fa-play"></i> Tiếp tục phát
+                      <!-- <i class="fa-solid fa-pause me-1"></i> Tạm dừng -->
                     </button>
                     <button class="button-primary song-player-next">
                       <i class="fa-solid fa-forward"></i>
                     </button>
                   </div>
 
-                  <div class="d-flex align-items-center gap-2">
+                  <!-- <div class="d-flex align-items-center gap-2">
                     <small
                       class="song-player-current-time"
                       style="
@@ -171,7 +175,12 @@
                       "
                       >03:45</small
                     >
-                  </div>
+                  </div> -->
+
+                  <div
+                    id="song-player-audio"
+                    data-song="<%= JSON.stringify(song) %>"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -219,7 +228,9 @@
       src="https://kit.fontawesome.com/aaf479b433.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
 
     <script src="/client/scripts/index.js"></script>
+    <script src="/client/scripts/song/handleAudioPlayer.js"></script>
   </body>
 </html>

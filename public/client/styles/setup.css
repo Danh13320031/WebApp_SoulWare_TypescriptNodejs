@@ -232,3 +232,11 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+/* Aplayer setup */
+.aplayer-body .aplayer-pic {
+  display: none;
+}
+.aplayer-body .aplayer-info {
+  margin-left: 0;
+}
