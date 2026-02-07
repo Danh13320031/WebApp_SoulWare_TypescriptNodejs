@@ -104,9 +104,9 @@
                 <li class="song-info-listen">
                   <i class="fa-solid fa-headphones me-1"></i>Lượt nghe: 123
                 </li>
-                <li class="song-info-like">
-                  <i class="fa-solid fa-thumbs-up me-1"></i>Lượt thích: <%=
-                  song.like %>
+                <li class="song-info-like" data-id="<%= song._id %>">
+                  <i class="fa-solid fa-thumbs-up me-1"></i>Lượt thích:
+                  <span class="song-like-number"><%= song.like %></span>
                 </li>
                 <li class="song-info-release">
                   <i class="fa-regular fa-clock me-1"></i>Ngày phát hành:
@@ -232,5 +232,6 @@
 
     <script src="/client/scripts/index.js"></script>
     <script src="/client/scripts/song/handleAudioPlayer.js"></script>
+    <script src="/client/scripts/song/likeASong.js"></script>
   </body>
 </html>
