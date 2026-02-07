@@ -35,6 +35,15 @@
   opacity: 0.5;
 }
 
+#song-detail-main .song-info .song-info-like:hover {
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+#song-detail-main .song-info .song-info-like.liked {
+  color: var(--primary-color);
+}
+
 #song-detail-main .song-player .song-player-box {
   width: 90px;
   aspect-ratio: 1/1;
