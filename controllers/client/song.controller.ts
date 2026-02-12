@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import FavoriteSongModel from "../../models/favoriteSong.model";
 import SongModel from "../../models/song.model";
 import TopicModel from "../../models/topic.model";
 
@@ -40,9 +41,14 @@ const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
     .populate("singerId", "stageName slug")
     .populate("topicId", "title slug");
 
+  const favoritedSong = await FavoriteSongModel.findOne({
+    songId: song?._id,
+  });
+
   res.render("client/pages/song/detail.view.ejs", {
     pageTitle: `Bài hát ${song?.title}`,
     song,
+    favorited: favoritedSong ? true : false,
   });
 };
 
@@ -60,6 +66,7 @@ const likeSongGet = async (req: Request, res: Response): Promise<void> => {
   if (!song) {
     res.json({
       code: StatusCodes.NOT_FOUND,
+      status: "Fail",
       message: "Không tìm thấy bài hát",
     });
     return;
@@ -75,23 +82,62 @@ const likeSongGet = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     code: StatusCodes.OK,
-    success: "Success",
+    status: "Success",
     message: "Thích bài hát thành công",
     data: data,
   });
   return;
 };
 
+// [PATCH]: /songs/favorite/:type/:songId
+const favoriteSongGet = async (req: Request, res: Response): Promise<void> => {
+  const songId: string = req.params.songId as string;
+  const type: string = req.params.type as string;
+
+  switch (type) {
+    case "yes":
+      const favoriteSong = await FavoriteSongModel.findOne({
+        songId: songId,
+        status: "active",
+        deleted: false,
+      }).select("songId");
+
+      if (!favoriteSong) await FavoriteSongModel.create({ songId: songId });
+
+      res.json({
+        code: StatusCodes.OK,
+        status: "Success",
+        message: "Yêu thích bài hát thành công",
+      });
+
+      break;
+    case "no":
+      await FavoriteSongModel.deleteOne({ songId: songId });
+
+      res.json({
+        code: StatusCodes.OK,
+        status: "Success",
+        message: "Bỏ yêu thích bài hát thành công",
+      });
+
+      break;
+    default:
+      break;
+  }
+};
+
 type ISongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   getOneSongGet: (req: Request, res: Response) => Promise<void>;
   likeSongGet: (req: Request, res: Response) => Promise<void>;
+  favoriteSongGet: (req: Request, res: Response) => Promise<void>;
 };
 
 const songController: ISongController = {
   getAllSongGet,
   getOneSongGet,
   likeSongGet,
+  favoriteSongGet,
 };
 
 export default songController;

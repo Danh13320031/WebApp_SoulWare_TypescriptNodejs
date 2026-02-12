@@ -35,6 +35,28 @@
   opacity: 0.5;
 }
 
+#song-detail-main .song-info .song-info-favorite {
+  color: var(--dark-color);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#song-detail-main .song-info .song-info-favorite:hover {
+  color: var(--error-color);
+}
+
+#song-detail-main .song-info .song-info-favorite.favorited {
+  color: var(--error-color);
+}
+#song-detail-main .song-info .song-info-favorite.favorited i {
+  font-weight: 700;
+}
+
+#song-detail-main .song-info .song-info-like {
+  transition: color 0.3s ease;
+}
+
 #song-detail-main .song-info .song-info-like:hover {
   cursor: pointer;
   color: var(--primary-color);
