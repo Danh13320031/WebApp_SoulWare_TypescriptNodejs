@@ -93,6 +93,10 @@
                   >Nhạc <%= song?.topicId.title %></a
                 >
               </p>
+              <p class="mb-2 song-info-favorite" data-id="<%= song._id %>">
+                <i class="fa-regular fa-heart me-1"></i>
+                <span class="song-info-favorite-text">Yêu thích</span>
+              </p>
 
               <ul
                 class="list-unstyled d-flex column-gap-3 align-items-center flex-wrap mb-2 song-secondary-info"
@@ -233,5 +237,6 @@
     <script src="/client/scripts/index.js"></script>
     <script src="/client/scripts/song/handleAudioPlayer.js"></script>
     <script src="/client/scripts/song/likeASong.js"></script>
+    <script src="/client/scripts/song/favoriteASong.js"></script>
   </body>
 </html>
