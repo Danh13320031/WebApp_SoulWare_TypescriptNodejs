@@ -6,7 +6,7 @@ import favoriteSongRoute from "./favoriteSong.route";
 const createClientRoute = (app: Express): void => {
   app.use("/topics", topicRoute);
   app.use("/songs", songRoute);
-  app.use("/favoritesongs", favoriteSongRoute);
+  app.use("/favorite-songs", favoriteSongRoute);
 };
 
 export default createClientRoute;
