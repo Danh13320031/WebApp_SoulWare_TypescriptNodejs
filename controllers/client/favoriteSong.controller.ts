@@ -6,7 +6,7 @@ const getAllFavoriteSongGet = async (
   res: Response,
 ): Promise<void> => {
   res.render("client/pages/favoriteSong/favoriteSong.view.ejs", {
-    pageTitle: "Danh sách bài hát yêu thích",
+    pageTitle: "Playlist yêu thích của tôi",
   });
 };
 
