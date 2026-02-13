@@ -12,19 +12,19 @@
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
     <link rel="stylesheet" href="/client/styles/partials/header.css" />
-    <link rel="stylesheet" href="/client/styles/pages/song/song.css" />
+    <link rel="stylesheet" href="/client/styles/pages/search/search.css" />
     <link rel="stylesheet" href="/client/styles/partials/footer.css" />
   </head>
   <body>
-    <%-include('../../partials/header.view.ejs', { keyword: keyword }) %>
+    <%-include('../../partials/header.view.ejs') %>
 
-    <main class="main py-5" id="song-main">
-      <section class="song-title">
+    <main class="main py-5" id="search-main">
+      <section class="search-title">
         <div class="container my-3">
           <div class="row">
             <div class="col-12">
               <h1
-                class="d-flex align-items-center song-title-text"
+                class="d-flex align-items-center search-title-text"
                 style="
                   color: var(--secondary-color);
                   font-size: var(--font-size-xl);
@@ -32,7 +32,7 @@
                 "
               >
                 <i
-                  class="fa-solid fa-music me-2"
+                  class="fa-solid fa-magnifying-glass me-2"
                   style="font-size: var(--font-size-md)"
                 ></i>
                 <%= pageTitle %>
@@ -42,17 +42,17 @@
         </div>
       </section>
 
-      <section class="song-list">
+      <section class="search-list">
         <div class="container">
           <div class="row g-2">
-            <% if(songList.length > 0) { %>
-              <% songList.forEach((song) => { %>
+            <%# if(searchResults.length > 0) { %>
+              <%# searchResults.forEach((song) => { %>
                 <div class="col-lg-6 col-12">
-                  <div class="song-item">
-                    <div class="song-thumb">
+                  <div class="search-song-item">
+                    <div class="search-song-thumb">
                       <img
-                        src="<%= song.avatar %>"
-                        alt="<%= song.title %>"
+                        src="<%#= song.avatar %>"
+                        alt="<%#= song.title %>"
                       />
 
                       <button class="play-btn" title="Phát nhạc">
@@ -60,30 +60,30 @@
                       </button>
                     </div>
 
-                    <div class="song-info">
-                      <h4 class="song-title"><%= song.title %></h4>
+                    <div class="search-song-info">
+                      <h4 class="search-song-title"><%#= song.title %></h4>
 
-                      <div class="song-meta">
-                        <span class="song-singer">
+                      <div class="search-song-meta">
+                        <span class="search-song-singer">
                           <i class="fa-solid fa-microphone-lines"></i>
-                          <%= song.singerId.stageName %>
+                          <%#= song.singerId.stageName %>
                         </span>
 
-                        <span class="song-like">
+                        <span class="search-song-like">
                           <i class="fa-solid fa-thumbs-up"></i>
-                          <%= song.like %>
+                          <%#= song.like %>
                         </span>
 
-                        <span class="song-time">
+                        <span class="search-song-time">
                           <i class="fa-regular fa-clock"></i>
-                          Hôm qua
+                          Hóm qua
                         </span>
                       </div>
                     </div>
 
-                    <div class="song-actions">
+                    <div class="search-song-actions">
                       <a
-                        href="/songs/detail/<%= song.slug %>"
+                        href="/songs/detail/<%#= song.slug %>"
                         class="button-main text-decoration-none detail-btn"
                       >
                         Chi tiết
@@ -92,8 +92,12 @@
                     </div>
                   </div>
                 </div>
-              <% }) %>
-            <% } %>
+              <%# }) %>
+            <%# } else { %>
+              <div class="col-12">
+                <p class="text-center">Không tìm thấy kết quả</p>
+              </div>
+            <%# } %>
           </div>
         </div>
       </section>

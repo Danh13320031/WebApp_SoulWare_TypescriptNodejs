@@ -19,6 +19,7 @@ const getAllFavoriteSongGet = async (
   res.render("client/pages/favoriteSong/favoriteSong.view.ejs", {
     pageTitle: "Playlist yêu thích của tôi",
     favoriteSongList,
+    keyword: "",
   });
 };
 
