@@ -11,6 +11,7 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
   res.render("client/pages/topic/topic.view.ejs", {
     pageTitle: "Chủ đề bài hát",
     topicList,
+    keyword: "",
   });
 };
 

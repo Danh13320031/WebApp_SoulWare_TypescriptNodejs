@@ -8,7 +8,7 @@ const getAllSearchResultGet = async (
   const keyword: string = (req.query.keyword as string) || "";
 
   res.render("client/pages/search/search.view.ejs", {
-    pageTitle: `Keỳ tim kiếm: ${keyword}`,
+    pageTitle: `Kết quả tìm kiếm: ${keyword}`,
     keyword,
   });
 };
@@ -17,7 +17,7 @@ type ISearchController = {
   getAllSearchResultGet: (req: Request, res: Response) => Promise<void>;
 };
 
-const searchController = {
+const searchController: ISearchController = {
   getAllSearchResultGet,
 };
 

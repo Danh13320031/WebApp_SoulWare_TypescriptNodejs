@@ -25,6 +25,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   res.render("client/pages/song/song.view.ejs", {
     pageTitle: `Danh sách nhạc ${topicTitle}`,
     songList,
+    keyword: "",
   });
 };
 
@@ -49,6 +50,7 @@ const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
     pageTitle: `Bài hát ${song?.title}`,
     song,
     favorited: favoritedSong ? true : false,
+    keyword: "",
   });
 };
 
