@@ -45,14 +45,14 @@
       <section class="favorite-song-list">
         <div class="container">
           <div class="row g-2">
-            <%# if(songList.length > 0) { %>
-              <%# songList.forEach((song) => { %>
+            <% if(favoriteSongList.length > 0) { %>
+              <% favoriteSongList.forEach((favoriteSong) => { %>
                 <div class="col-lg-6 col-12">
                   <div class="favorite-song-item">
                     <div class="favorite-song-thumb">
                       <img
-                        src="Ảnh đại diện bài hát"
-                        alt="Tên bài hát"
+                        src="<%= favoriteSong?.songId?.avatar %>"
+                        alt="<%= favoriteSong?.songId?.title %>"
                       />
 
                       <button class="play-btn" title="Phát nhạc">
@@ -61,29 +61,29 @@
                     </div>
 
                     <div class="favorite-song-info">
-                      <h4 class="favorite-song-title">Tên bài hát</h4>
+                      <h4 class="favorite-song-title"><%= favoriteSong?.songId?.title %></h4>
 
                       <div class="favorite-song-meta">
                         <span class="favorite-song-singer">
                           <i class="fa-solid fa-microphone-lines"></i>
-                          Nghệ danh
+                          <%= favoriteSong?.songId?.singerId?.stageName %>
                         </span>
 
-                        <span class="favorite-song-favorite favorited">
+                        <span class="favorite-song-favorite favorited" data-id="<%= favoriteSong?.songId?._id %>">
                           <i class="fa-solid fa-heart"></i>
                           Yêu thích
                         </span>
 
                         <span class="favorite-song-time">
                           <i class="fa-regular fa-clock"></i>
-                          Hôm qua
+                          <%= dayjs(favoriteSong?.songId?.createdAt).format('DD/MM/YYYY') %>
                         </span>
                       </div>
                     </div>
 
                     <div class="favorite-song-actions">
                       <a
-                        href="/songs/detail/<%#= song.slug %>"
+                        href="/songs/detail/<%= favoriteSong?.songId?.slug %>"
                         class="button-main text-decoration-none detail-btn"
                       >
                         Chi tiết
@@ -92,8 +92,8 @@
                     </div>
                   </div>
                 </div>
-              <%# }) %>
-            <%# } %>
+              <% }) %>
+            <% } %>
           </div>
         </div>
       </section>
