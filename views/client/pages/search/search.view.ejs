@@ -45,14 +45,14 @@
       <section class="search-list">
         <div class="container">
           <div class="row g-2">
-            <%# if(searchResults.length > 0) { %>
-              <%# searchResults.forEach((song) => { %>
+            <% if(newSearchedSongList.length > 0) { %>
+              <% newSearchedSongList.forEach((song) => { %>
                 <div class="col-lg-6 col-12">
                   <div class="search-song-item">
                     <div class="search-song-thumb">
                       <img
-                        src="<%#= song.avatar %>"
-                        alt="<%#= song.title %>"
+                        src="<%= song.avatar %>"
+                        alt="<%= song.title %>"
                       />
 
                       <button class="play-btn" title="Phát nhạc">
@@ -61,17 +61,17 @@
                     </div>
 
                     <div class="search-song-info">
-                      <h4 class="search-song-title"><%#= song.title %></h4>
+                      <h4 class="search-song-title"><%= song.title %></h4>
 
                       <div class="search-song-meta">
                         <span class="search-song-singer">
                           <i class="fa-solid fa-microphone-lines"></i>
-                          <%#= song.singerId.stageName %>
+                          <%= song.singerId.stageName %>
                         </span>
 
                         <span class="search-song-like">
                           <i class="fa-solid fa-thumbs-up"></i>
-                          <%#= song.like %>
+                          <%= song.like %>
                         </span>
 
                         <span class="search-song-time">
@@ -83,7 +83,7 @@
 
                     <div class="search-song-actions">
                       <a
-                        href="/songs/detail/<%#= song.slug %>"
+                        href="/songs/detail/<%= song.slug %>"
                         class="button-main text-decoration-none detail-btn"
                       >
                         Chi tiết
@@ -92,12 +92,12 @@
                     </div>
                   </div>
                 </div>
-              <%# }) %>
-            <%# } else { %>
+              <% }) %>
+            <% } else { %>
               <div class="col-12">
                 <p class="text-center">Không tìm thấy kết quả</p>
               </div>
-            <%# } %>
+            <% } %>
           </div>
         </div>
       </section>
