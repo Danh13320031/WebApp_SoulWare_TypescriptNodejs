@@ -2,7 +2,7 @@ const favoriteSongList = document.querySelectorAll(
   ".favorite-song-info .favorite-song-favorite",
 );
 
-if (favoriteSongList) {
+if (favoriteSongList.length > 0) {
   favoriteSongList.forEach((favoriteSongItem) => {
     favoriteSongItem.addEventListener("click", async () => {
       const songId = favoriteSongItem.dataset.id;
