@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="col-6">
-          <div class="nav-menu h-100 d-flex align-items-center">
+          <div class="h-100 d-flex align-items-center nav-menu">
             <ul class="nav-list mb-0 list-unstyled d-flex gap-2">
               <li class="nav-item">
                 <a
@@ -117,30 +117,36 @@
           </div>
         </div>
       </div>
-      <div class="row mt-3">
-        <div class="col-12">
-          <form
-            action="/search/result"
-            method="GET"
-            role="search"
-            class="d-flex border border-2 rounded-pill"
-            style="border-color: var(--secondary-color)"
-          >
-            <input
-              class="form-control me-2 border-0 bg-transparent"
-              type="search"
-              placeholder="Tìm kiếm bài hát yêu thích của bạn..."
-              aria-label="Search"
-              name="keyword"
-              value="<%= keyword %>"
-            />
-            <button
-              class="btn btn-outline-dark border-0 bg-transparent rounded-pill"
-              type="submit"
+      <div class="row mt-3 justify-content-center">
+        <div class="col-lg-5 col-md-8 col-12">
+          <div class="header-search-box position-relative">
+            <form
+              action="/search/result"
+              method="GET"
+              role="search"
+              class="d-flex border border-2 rounded-pill header-search-form"
+              style="border-color: var(--secondary-color)"
             >
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </form>
+              <input
+                class="form-control me-2 border-0 bg-transparent rounded-pill header-search-input"
+                type="search"
+                placeholder="Tìm kiếm bài hát yêu thích của bạn..."
+                aria-label="Search"
+                name="keyword"
+                value="<%= keyword %>"
+              />
+              <button
+                class="btn btn-outline-dark border-0 bg-transparent rounded-pill header-search-btn"
+                type="submit"
+              >
+                <i class="fa-solid fa-magnifying-glass header-search-icon"></i>
+              </button>
+            </form>
+            <ul
+              class="nav-list mb-0 list-unstyled shadow rounded-3 d-flex flex-column gap-1 p-1 bg-white position-absolute w-100 header-search-result"
+            >
+            </ul>
+          </div>
         </div>
       </div>
     </div>

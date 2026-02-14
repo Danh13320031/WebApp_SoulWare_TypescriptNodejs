@@ -28,3 +28,55 @@
 #header .nav-menu .nav-list .nav-item .nav-link:hover::after {
   transform: scale(1);
 }
+
+#header .header-search-box .header-search-result {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#header .header-search-box .header-search-result.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+#header .header-search-box .header-search-result .header-search-item {
+  background: white;
+  border: 2px solid var(--light-color);
+  border-radius: 4px;
+  transition: background 0.3s ease-in-out;
+}
+
+#header .header-search-box .header-search-result .header-search-item:hover {
+  background: var(--light-color);
+}
+
+#header
+  .header-search-box
+  .header-search-result
+  .header-search-item
+  .header-search-meta
+  .header-search-topic,
+#header
+  .header-search-box
+  .header-search-result
+  .header-search-item
+  .header-search-meta
+  .header-search-singer {
+  font-size: var(--font-size-sm);
+  color: var(--dark-gray-color);
+}
+
+#header
+  .header-search-box
+  .header-search-result
+  .header-search-item
+  .header-search-meta
+  .header-search-topic:hover,
+#header
+  .header-search-box
+  .header-search-result
+  .header-search-item
+  .header-search-meta
+  .header-search-singer:hover {
+  color: var(--primary-color);
+}

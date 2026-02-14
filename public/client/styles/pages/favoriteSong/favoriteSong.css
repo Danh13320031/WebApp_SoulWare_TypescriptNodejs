@@ -118,6 +118,11 @@
   color: var(--primary-color);
 }
 
+.favorite-song-meta .favorite-song-favorite {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
 .favorite-song-meta .favorite-song-favorite.favorited,
 .favorite-song-meta .favorite-song-favorite.favorited i {
   color: var(--error-color);

@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import convertTextToSlug from "../../helpers/client/search/convertTextToSlug.helper";
 import SongModel from "../../models/song.model";
 
-// [GET]: /search/result
+// [GET]: /search/:type
 const getAllSearchResultGet = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const type: string = req.params.type as string;
   const keyword: string = (req.query.keyword as string) || "";
   let newSearchedSongList: any[] = [];
 
@@ -24,16 +26,30 @@ const getAllSearchResultGet = async (
       deleted: false,
     })
       .select("title avatar singerId slug like")
-      .populate("singerId", "stageName slug");
+      .populate("singerId", "stageName slug")
+      .populate("topicId", "title slug");
 
     newSearchedSongList = searchedSongList;
   }
 
-  res.render("client/pages/search/search.view.ejs", {
-    pageTitle: `Kết quả tìm kiếm: ${keyword}`,
-    keyword,
-    newSearchedSongList,
-  });
+  switch (type) {
+    case "result":
+      res.render("client/pages/search/search.view.ejs", {
+        pageTitle: `Kết quả tìm kiếm: ${keyword}`,
+        keyword,
+        newSearchedSongList,
+      });
+      break;
+    case "suggest":
+      res.json({
+        code: StatusCodes.OK,
+        status: "Success",
+        data: newSearchedSongList,
+      });
+      break;
+    default:
+      break;
+  }
 };
 
 type ISearchController = {
