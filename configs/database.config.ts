@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { DATABASE_URL } from "../constants/constant";
+import { DATABASE_URL } from "../constants/database.constant";
 
 const connectDbConfig = async (): Promise<void> => {
   try {

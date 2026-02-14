@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { Express } from "express";
-import { APP_TIMEZONE } from "../constants/constant";
+import { APP_TIMEZONE } from "../constants/app.constant";
 
 const timeConfig = (app: Express): void => {
   dayjs.extend(utc);
