@@ -10,6 +10,7 @@ const objSchema = {
   like: { type: Number, required: true, default: 0 },
   lyrics: { type: String, required: true },
   audio: { type: String, required: true },
+  listen: { type: Number, required: true, default: 0 },
   status: {
     type: String,
     required: true,
