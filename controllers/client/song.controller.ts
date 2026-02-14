@@ -55,7 +55,7 @@ const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
 };
 
 // [PATCH]: /songs/like/:type/:songId
-const likeSongGet = async (req: Request, res: Response): Promise<void> => {
+const likeSongPatch = async (req: Request, res: Response): Promise<void> => {
   const songId: string = req.params.songId as string;
   const type: string = req.params.type as string;
 
@@ -92,7 +92,10 @@ const likeSongGet = async (req: Request, res: Response): Promise<void> => {
 };
 
 // [PATCH]: /songs/favorite/:type/:songId
-const favoriteSongGet = async (req: Request, res: Response): Promise<void> => {
+const favoriteSongPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const songId: string = req.params.songId as string;
   const type: string = req.params.type as string;
 
@@ -128,18 +131,56 @@ const favoriteSongGet = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// [PATCH]: /songs/listen/:songId
+const listenToSongOncePatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const songId: string = req.params.songId as string;
+
+  const song = await SongModel.findOne({
+    _id: songId,
+    status: "active",
+    deleted: false,
+  });
+
+  if (!song) {
+    res.json({
+      code: StatusCodes.NOT_FOUND,
+      status: "Fail",
+      message: "Không tìm thấy bài hát",
+    });
+    return;
+  }
+
+  song.listen += 1;
+  await song.save();
+
+  res.json({
+    code: StatusCodes.OK,
+    status: "Success",
+    message: "Nghe bài hát thành công",
+    data: {
+      listen: song.listen,
+    },
+  });
+  return;
+};
+
 type ISongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   getOneSongGet: (req: Request, res: Response) => Promise<void>;
-  likeSongGet: (req: Request, res: Response) => Promise<void>;
-  favoriteSongGet: (req: Request, res: Response) => Promise<void>;
+  likeSongPatch: (req: Request, res: Response) => Promise<void>;
+  favoriteSongPatch: (req: Request, res: Response) => Promise<void>;
+  listenToSongOncePatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const songController: ISongController = {
   getAllSongGet,
   getOneSongGet,
-  likeSongGet,
-  favoriteSongGet,
+  likeSongPatch,
+  favoriteSongPatch,
+  listenToSongOncePatch,
 };
 
 export default songController;

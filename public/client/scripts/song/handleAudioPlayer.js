@@ -52,8 +52,27 @@ if (songPlayerAudio) {
     songPlayerPlay.innerHTML = htmlPause;
     songPlayerImage.classList.add("running");
   });
+
   ap.on("pause", () => {
     songPlayerPlay.innerHTML = htmlPlay;
     songPlayerImage.classList.remove("running");
+  });
+
+  console.log(songData._id);
+
+  ap.on("ended", async () => {
+    const apiUrl = `/songs/listen/${songData._id}`;
+    const fetchOptions = { method: "PATCH" };
+    const res = await fetch(apiUrl, fetchOptions);
+    const result = await res.json();
+
+    if (result.code === 200) {
+      const songInfoListenSpan = document.querySelector(
+        ".song-info .song-info-listen span",
+      );
+
+      if (songInfoListenSpan)
+        songInfoListenSpan.innerHTML = `Lượt nghe: ${result.data.listen}`;
+    }
   });
 }
