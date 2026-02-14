@@ -4,6 +4,7 @@ import setStaticFileConfig from "./configs/staticFile.config";
 import timeConfig from "./configs/systemTime.config";
 import setViewEngineConfig from "./configs/viewEngine.config";
 import { APP_HOST, APP_PORT } from "./constants/app.constant";
+import createAdminRoute from "./routes/admin/index.route";
 import createClientRoute from "./routes/client/index.route";
 
 // Connect to MongoDB
@@ -21,6 +22,9 @@ setStaticFileConfig(app);
 
 // Config EJS package
 setViewEngineConfig(app);
+
+// Admin routes
+createAdminRoute(app);
 
 // Client routes
 createClientRoute(app);
