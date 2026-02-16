@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import connectDbConfig from "./configs/database.config";
+import setPrefixAdminPathConfig from "./configs/prefixAdminPath.config";
 import setStaticFileConfig from "./configs/staticFile.config";
 import timeConfig from "./configs/systemTime.config";
 import setViewEngineConfig from "./configs/viewEngine.config";
@@ -22,6 +23,9 @@ setStaticFileConfig(app);
 
 // Config EJS package
 setViewEngineConfig(app);
+
+// Config prefix admin path
+setPrefixAdminPathConfig(app);
 
 // Admin routes
 createAdminRoute(app);

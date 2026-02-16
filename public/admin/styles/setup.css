@@ -1,0 +1,104 @@
+/* Layout setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+:root {
+  --sider-width: 256px;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: var(--sider-width);
+  padding: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #main {
+    margin-left: 0;
+  }
+}
+
+/* Color setup */
+:root {
+  --primary-color: #cc40d7;
+  --light-primary-color: #f399fa;
+  --dark-primary-color: #b000b0;
+  --secondary-color: #349dd5;
+  --light-secondary-color: #6cb2eb;
+  --dark-secondary-color: #0080ff;
+
+  --background-color: #f7f7f7;
+  --text-color: #2c2c2c;
+  --link-color: #0808ff;
+
+  --error-color: #ee4549;
+  --success-color: #3bb537;
+  --warning-color: #fabc2c;
+  --info-color: #3995db;
+
+  --light-color: #f8f9fa;
+  --light-gray-color: #e9ecef;
+  --dark-color: #343a40;
+  --dark-gray-color: #343a40;
+}
+
+/* Font setup */
+:root {
+  --font-primary: "Poppins", sans-serif;
+  --font-secondary: "Open Sans", sans-serif;
+
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  --font-size-xxl: 2rem;
+  --font-size-xl: 1.5rem;
+  --font-size-lg: 1.25rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+
+  --line-height-xxl: 2.5rem;
+  --line-height-xl: 2rem;
+  --line-height-lg: 1.75rem;
+  --line-height-md: 1.5rem;
+  --line-height-sm: 1.25rem;
+  --line-height-xs: 1rem;
+}
+
+/* Button setup  */
+.button-icon-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--light-color);
+  color: var(--text-color);
+  font-size: var(--font-size-md);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+.button-icon-main:hover {
+  background-color: var(--light-secondary-color);
+  color: white;
+}
