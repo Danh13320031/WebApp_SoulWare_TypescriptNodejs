@@ -1,0 +1,16 @@
+#footer {
+  position: fixed;
+  left: var(--sider-width);
+  bottom: 0;
+  width: calc(100% - var(--sider-width));
+  background-color: white;
+  z-index: 1050;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #footer {
+    left: 0;
+    width: 100%;
+  }
+}

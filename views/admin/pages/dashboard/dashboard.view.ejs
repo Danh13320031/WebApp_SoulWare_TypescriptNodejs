@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <div class="main-wrapper">
+        <h1 class="main-title">Tổng quan</h1>
+        <div class="main-content">
+          <p>Chào mừng đến với trang tổng quan của Soulware Admin!</p>
+          <p>Tại đây, bạn có thể quản lý bài hát, ca sĩ và chủ đề một cách dễ dàng.</p>
+          <p>Hãy sử dụng menu bên trái để bắt đầu quản lý nội dung của bạn.</p>
+        </div>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>
