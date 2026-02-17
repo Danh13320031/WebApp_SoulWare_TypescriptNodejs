@@ -102,3 +102,128 @@ body.no-scroll {
   background-color: var(--light-secondary-color);
   color: white;
 }
+
+.button-icon-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--success-color);
+  color: white;
+  border: 1px solid var(--success-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+}
+.button-icon-success:hover {
+  background-color: white;
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.button-icon-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--error-color);
+  color: white;
+  border: 1px solid var(--error-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+}
+.button-icon-danger:hover {
+  background-color: white;
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
+}
+
+.button-icon-warning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--warning-color);
+  color: white;
+  border: 1px solid var(--warning-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+}
+.button-icon-warning:hover {
+  background-color: white;
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.button-icon-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--info-color);
+  color: white;
+  border: 1px solid var(--info-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+}
+.button-icon-info:hover {
+  background-color: white;
+  color: var(--info-color);
+  border: 1px solid var(--info-color);
+}
+
+/* Table setup */
+table.main-table td,
+table.main-table th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+table.main-table th {
+  vertical-align: middle;
+  background-color: var(--light-color);
+  color: var(--secondary-color) !important;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+table.main-table td {
+  vertical-align: middle;
+  color: var(--text-color);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Field setup */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--light-gray-color);
+  background-color: white;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
+input[type="checkbox"]:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--light-primary-color);
+}

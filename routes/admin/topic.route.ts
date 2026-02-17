@@ -1,5 +1,5 @@
 import { Router } from "express";
-import topicController from "../../controllers/client/topic.controller";
+import topicController from "../../controllers/admin/topic.controller";
 const topicRoute: Router = Router();
 
 topicRoute.get("/topics", topicController.getAllTopicGet);
