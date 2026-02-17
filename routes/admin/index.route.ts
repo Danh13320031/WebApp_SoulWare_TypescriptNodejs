@@ -1,6 +1,7 @@
 import { Express } from "express";
 import { APP_PREFIX_ADMIN } from "../../constants/app.constant";
 import dashboardRoute from "./dashboard.route";
+import songRoute from "./song.route";
 import topicRoute from "./topic.route";
 
 const createAdminRoute = (app: Express): void => {
@@ -8,6 +9,7 @@ const createAdminRoute = (app: Express): void => {
 
   app.use(`${pathAdmin}`, dashboardRoute);
   app.use(`${pathAdmin}`, topicRoute);
+  app.use(`${pathAdmin}`, songRoute);
 };
 
 export default createAdminRoute;
