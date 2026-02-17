@@ -2,6 +2,10 @@
   box-shadow: 0 0 0 2px var(--light-primary-color) !important;
 }
 
+.tox .tox-tbtn--enabled {
+  background-color: var(--light-primary-color) !important;
+}
+
 .tox
   .tox-collection--list
   .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
