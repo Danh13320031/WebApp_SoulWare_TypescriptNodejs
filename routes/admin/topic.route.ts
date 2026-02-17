@@ -1,7 +1,7 @@
 import { Router } from "express";
-import topicController from "../../controllers/admin/topic.controller";
+import topicController from "../../controllers/client/topic.controller";
 const topicRoute: Router = Router();
 
-topicRoute.get("/topics", topicController.topicGet);
+topicRoute.get("/topics", topicController.getAllTopicGet);
 
 export default topicRoute;
