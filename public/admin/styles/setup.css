@@ -209,6 +209,12 @@ table.main-table td {
 }
 
 /* Field setup */
+input,
+select,
+textarea {
+  outline: none;
+}
+
 input[type="checkbox"] {
   width: 16px;
   height: 16px;

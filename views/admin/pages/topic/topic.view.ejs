@@ -43,8 +43,9 @@
             class="card-header bg-white topic-card-header main-card-header"
           ></div>
           <div class="card-body topic-card-body main-card-body">
+            <% if (topicList && topicList.length > 0) { %>
             <div class="overflow-auto table-responsive">
-              <table class="table table-borderless mb-0 topic-table main-table">
+              <table class="table table-border table-hover mb-0 topic-table main-table">
                 <thead class="topic-table-header main-table-header">
                   <tr>
                     <th scope="col">
@@ -64,6 +65,7 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <% topicList.forEach((topic) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -72,21 +74,36 @@
                           type="checkbox"
                           value=""
                           id="flexCheckDefault7"
-                          checked
                         />
                       </div>
                     </td>
                     <td>
                       <img
-                        src="https://randomuser.me/api/portraits/men/1.jpg"
-                        alt="Avatar"
+                        src="<%= topic?.avatar %>"
+                        alt="<%= topic.title %>"
                         width="50px"
                         height="50px"
                         class="rounded-circle"
                       />
                     </td>
-                    <td>Chủ đề 1</td>
-                    <td>Hoạt động</td>
+                    <td><%= topic.title %></td>
+                    <td>
+                      <select 
+                        name="status" 
+                        class="badge" 
+                        id=""
+                        <% if(topic.status === 'active') { %>
+                          style="color: var(--success-color); border-color: var(--success-color);"
+                          value="active"
+                        <% } else if(topic.status === 'inactive') { %>
+                          style="color: var(--danger-color); border-color: var(--error-color);"
+                          value="inactive"
+                        <% } %>
+                        >
+                          <option value="active" <%= topic.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= topic.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                      </select>
+                    </td>
                     <td>
                       <div class="d-flex gap-2">
                         <button type="button" class="button-icon-info">
@@ -98,9 +115,24 @@
                       </div>
                     </td>
                   </tr>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
+            <% } else { %>
+            <div
+              class="d-flex flex-column align-items-center justify-content-center gap-3"
+              style="height: 200px"
+            >
+              <i
+                class="fas fa-folder-open"
+                style="font-size: var(--font-size-xxl); color: var(--secondary-color)"
+              ></i>
+              <p class="mb-0" style="color: var(--secondary-color)">
+                Không có dữ liệu hiển thị.
+              </p>
+            </div>
+            <% } %>
           </div>
           <div
             class="card-footer bg-white topic-card-footer main-card-footer"
