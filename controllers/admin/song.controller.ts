@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 
+// [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   res.render("admin/pages/song/song.view.ejs", {
     pageTitle: "Danh sách bài hát",

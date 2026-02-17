@@ -9,6 +9,8 @@ const createClientRoute = (app: Express): void => {
   app.use("/songs", songRoute);
   app.use("/favorite-songs", favoriteSongRoute);
   app.use("/search", searchRoute);
+
+  return;
 };
 
 export default createClientRoute;

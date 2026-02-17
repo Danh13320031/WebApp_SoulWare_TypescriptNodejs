@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import TopicModel from "../../models/topic.model";
 
+// [GET]: /admin/topics
 const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
   const topicList = await TopicModel.find({
     deleted: false,

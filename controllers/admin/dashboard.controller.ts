@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 
+// [GET]: /admin/dashboard
 const dashboardGet = async (req: Request, res: Response): Promise<void> => {
   res.render("admin/pages/dashboard/dashboard.view.ejs", {
     pageTitle: "Trang tổng quan",

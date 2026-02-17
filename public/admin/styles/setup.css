@@ -84,6 +84,50 @@ body.no-scroll {
 }
 
 /* Button setup  */
+.button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+}
+
+.button-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--secondary-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--secondary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-secondary:hover {
+  background-color: var(--secondary-color);
+  color: var(--light-color);
+}
+
 .button-icon-main {
   display: inline-flex;
   align-items: center;

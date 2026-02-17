@@ -10,6 +10,8 @@ const createAdminRoute = (app: Express): void => {
   app.use(`${pathAdmin}`, dashboardRoute);
   app.use(`${pathAdmin}`, topicRoute);
   app.use(`${pathAdmin}`, songRoute);
+
+  return;
 };
 
 export default createAdminRoute;
