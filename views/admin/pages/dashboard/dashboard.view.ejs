@@ -15,6 +15,7 @@
     />
 
     <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/tinymce.css" />
     <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
     <link rel="stylesheet" href="/admin/styles/partials/header.css" />
     <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
@@ -31,6 +32,7 @@
           <p>Tại đây, bạn có thể quản lý bài hát, ca sĩ và chủ đề một cách dễ dàng.</p>
           <p>Hãy sử dụng menu bên trái để bắt đầu quản lý nội dung của bạn.</p>
         </div>
+        <div class="tinymce-editor"></div>
     </main>
 
     <%-include('../../partials/footer.view.ejs') %>
@@ -40,6 +42,8 @@
       src="https://kit.fontawesome.com/aaf479b433.js"
       crossorigin="anonymous"
     ></script>
+    <script src="/tinymce/tinymce.min.js"></script>
+    <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
 
     <script src="/admin/scripts/index.js"></script>
   </body>

@@ -3,6 +3,7 @@ import connectDbConfig from "./configs/database.config";
 import setPrefixAdminPathConfig from "./configs/prefixAdminPath.config";
 import setStaticFileConfig from "./configs/staticFile.config";
 import timeConfig from "./configs/systemTime.config";
+import textEditorConfig from "./configs/textEditor.config";
 import setViewEngineConfig from "./configs/viewEngine.config";
 import { APP_HOST, APP_PORT } from "./constants/app.constant";
 import createAdminRoute from "./routes/admin/index.route";
@@ -26,6 +27,9 @@ setViewEngineConfig(app);
 
 // Config prefix admin path
 setPrefixAdminPathConfig(app);
+
+// Text formatter config
+textEditorConfig(app);
 
 // Admin routes
 createAdminRoute(app);
