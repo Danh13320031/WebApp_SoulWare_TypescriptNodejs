@@ -58,6 +58,7 @@
                         />
                       </div>
                     </th>
+                    <th>STT</th>
                     <th scope="col" class="text-uppercase">Ảnh đại diện</th>
                     <th scope="col" class="text-uppercase">Tên chủ đề</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
@@ -65,7 +66,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% topicList.forEach((topic) => { %>
+                  <% topicList.forEach((topic, index) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -77,6 +78,7 @@
                         />
                       </div>
                     </td>
+                    <td><%= index + 1 %></td>
                     <td>
                       <img
                         src="<%= topic?.avatar %>"
