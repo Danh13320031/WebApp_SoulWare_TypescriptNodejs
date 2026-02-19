@@ -1,3 +1,7 @@
+.tox .tox-promotion {
+  display: none !important;
+}
+
 .tox .tox-mbtn:focus:not(:disabled)::after {
   box-shadow: 0 0 0 2px var(--light-primary-color) !important;
 }

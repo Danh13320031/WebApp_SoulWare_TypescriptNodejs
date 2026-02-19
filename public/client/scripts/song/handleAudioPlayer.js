@@ -4,9 +4,12 @@ if (songPlayerAudio) {
   let songData = songPlayerAudio.getAttribute("data-song");
   songData = JSON.parse(songData);
 
+  console.log(songData.lyrics);
+
   const ap = new APlayer({
     container: songPlayerAudio,
     autoplay: true,
+    lrcType: 1,
     theme: "#cc40d7",
     audio: [
       {
@@ -14,6 +17,7 @@ if (songPlayerAudio) {
         artist: songData.singerId.stageName,
         url: songData.audio,
         cover: songData.avatar,
+        lrc: songData.lyrics,
       },
     ],
   });

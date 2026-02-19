@@ -72,7 +72,12 @@
   border: 2px solid var(--secondary-color);
   border-radius: 50%;
 }
-
+#song-detail-main .song-player .aplayer-body {
+  padding-bottom: 50px;
+}
+#song-detail-main .song-player .aplayer-body .aplayer-info .aplayer-lrc {
+  height: 80px;
+}
 #song-detail-main .song-player .song-player-box .song-player-image {
   animation-name: spin;
   animation-duration: 10s;
@@ -91,4 +96,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#song-detail-main .song-lyrics .song-lyrics-text {
+  white-space: pre;
 }

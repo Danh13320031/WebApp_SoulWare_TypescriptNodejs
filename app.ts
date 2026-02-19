@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import connectDbConfig from "./configs/database.config";
 import setPrefixAdminPathConfig from "./configs/prefixAdminPath.config";
+import reqBodyConfig from "./configs/reqBody.config";
 import setStaticFileConfig from "./configs/staticFile.config";
 import timeConfig from "./configs/systemTime.config";
 import textEditorConfig from "./configs/textEditor.config";
@@ -15,6 +16,9 @@ connectDbConfig();
 const app: Express = express();
 const host: string = APP_HOST;
 const port: number = APP_PORT;
+
+// Config req body
+reqBodyConfig(app);
 
 // Config system time
 timeConfig(app);

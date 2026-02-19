@@ -15,6 +15,7 @@
     />
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
+    <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
     <link rel="stylesheet" href="/client/styles/partials/header.css" />
     <link rel="stylesheet" href="/client/styles/pages/song/detail.css" />
     <link rel="stylesheet" href="/client/styles/partials/footer.css" />
@@ -126,7 +127,7 @@
                   font-size: var(--font-size-md);
                 "
               >
-                <%= song.description %>
+                <%- song.description %>
               </p>
             </div>
           </div>
@@ -161,27 +162,6 @@
                       <i class="fa-solid fa-forward"></i>
                     </button>
                   </div>
-
-                  <!-- <div class="d-flex align-items-center gap-2">
-                    <small
-                      class="song-player-current-time"
-                      style="
-                        color: var(--secondary-color);
-                        font-size: var(--font-size-sm);
-                      "
-                      >00:00</small
-                    >
-                    <input type="range" class="form-range song-player-range" />
-                    <small
-                      class="song-player-duration"
-                      style="
-                        font-size: var(--font-size-sm);
-                        color: var(--secondary-color);
-                      "
-                      >03:45</small
-                    >
-                  </div> -->
-
                   <div
                     id="song-player-audio"
                     data-song="<%= JSON.stringify(song) %>"
@@ -210,14 +190,12 @@
               <div class="card">
                 <div class="card-body" style="min-height: 200px">
                   <div
-                    class="mb-0"
+                    class="mb-0 song-lyrics-text"
                     style="
                       color: var(--dark-color);
                       font-size: var(--font-size-md);
                     "
-                  >
-                    <%- song.lyrics %>
-                  </div>
+                  ><%= song.lyrics %></div>
                 </div>
               </div>
             </div>

@@ -24,16 +24,21 @@
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">
-      <h1
+      <section class="song-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <h1
         class="song-title main-title"
         style="
           font-size: var(--font-size-xxl);
           font-weight: var(--font-weight-bold);
           color: var(--primary-color);
         "
-      >
-        <%= pageTitle %>
-      </h1>
+        >
+          <%= pageTitle %>
+        </h1>
+        <a href="/admin/songs/create" class="button-primary text-decoration-none">
+          Thêm mới <i class="fa-solid fa-plus"></i>
+        </a>
+      </section>
       <section class="song-content main-content">
         <div
           class="card my-2 shadow-sm song-card main-card"
