@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 import SingerModel from "./singer.model";
 import TopicModel from "./topic.model";
+
 const Schema = mongoose.Schema;
 
 const objSchema = {
@@ -17,7 +19,7 @@ const objSchema = {
     enum: ["active", "inactive"],
     default: "active",
   },
-  slug: { type: String, required: true },
+  slug: { type: String, index: true, unique: true },
   position: { type: Number, required: true, default: 1 },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
@@ -26,6 +28,12 @@ const objSchema = {
 };
 
 const SongSchema = new Schema(objSchema, { timestamps: true });
+
+SongSchema.pre("save", function () {
+  if (this.isModified("title"))
+    this.slug = slugify(this.title, { lower: true });
+});
+
 const SongModel = mongoose.model("Song", SongSchema, "Song");
 
 export default SongModel;
