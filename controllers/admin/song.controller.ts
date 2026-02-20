@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { APP_PREFIX_ADMIN } from "../../constants/app.constant";
+import { StatusCodes } from "http-status-codes";
 import SingerModel from "../../models/singer.model";
 import SongModel from "../../models/song.model";
 import TopicModel from "../../models/topic.model";
@@ -46,29 +46,46 @@ const createANewSongPost = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const countDocument = await SongModel.countDocuments();
-  let avatar: string = "";
-  let audio: string = "";
+  try {
+    const countDocument = await SongModel.countDocuments();
+    let avatar: string = "";
+    let audio: string = "";
 
-  if (req.body.avatar) avatar = req.body.avatar[0];
-  if (req.body.audio) audio = req.body.audio[0];
+    if (req.body.avatar) avatar = req.body.avatar[0];
+    if (req.body.audio) audio = req.body.audio[0];
 
-  const dataBodyCreateSong: TDataBodyCreateSong = {
-    title: req.body.title ? req.body.title : "",
-    avatar: avatar,
-    description: req.body.description || "",
-    lyrics: req.body.lyrics || "",
-    audio: audio,
-    position: req.body.position ? Number(req.body.position) : countDocument + 1,
-    status: req.body.status || "active",
-    topicId: req.body.topicId || "",
-    singerId: req.body.singerId || "",
-  };
+    const dataBodyCreateSong: TDataBodyCreateSong = {
+      title: req.body.title ? req.body.title : "",
+      avatar: avatar,
+      description: req.body.description || "",
+      lyrics: req.body.lyrics || "",
+      audio: audio,
+      position: req.body.position
+        ? Number(req.body.position)
+        : countDocument + 1,
+      status: req.body.status || "active",
+      topicId: req.body.topicId || "",
+      singerId: req.body.singerId || "",
+    };
 
-  const newSong = new SongModel(dataBodyCreateSong);
-  await newSong.save();
+    const newSong = new SongModel(dataBodyCreateSong);
+    await newSong.save();
 
-  res.redirect(`${APP_PREFIX_ADMIN}/songs`);
+    res.status(StatusCodes.CREATED).json({
+      code: StatusCodes.CREATED,
+      status: "Success",
+      message: "Tạo bài hát thành công!",
+    });
+    return;
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
 };
 
 type ISongController = {
