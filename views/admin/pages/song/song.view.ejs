@@ -16,11 +16,13 @@
 
     <link rel="stylesheet" href="/admin/styles/setup.css" />
     <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
     <link rel="stylesheet" href="/admin/styles/partials/header.css" />
     <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
   </head>
   <body>
     <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/alert.view.ejs') %>
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">
@@ -123,9 +125,9 @@
                     </td>
                     <td>
                       <div class="d-flex gap-2">
-                        <button type="button" class="button-icon-info">
+                        <a href="<%= prefixAdminPath %>/songs/update/<%= song._id %>" type="button" class="button-icon-info text-decoration-none">
                           <i class="fas fa-pen"></i>
-                        </button>
+                        </a>
                         <button type="button" class="button-icon-danger">
                           <i class="fas fa-trash"></i>
                         </button>

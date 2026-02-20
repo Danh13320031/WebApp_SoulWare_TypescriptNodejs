@@ -7,9 +7,9 @@ import topicRoute from "./topic.route";
 const createAdminRoute = (app: Express): void => {
   const pathAdmin: string = APP_PREFIX_ADMIN as string;
 
-  app.use(`${pathAdmin}`, dashboardRoute);
-  app.use(`${pathAdmin}`, topicRoute);
-  app.use(`${pathAdmin}`, songRoute);
+  app.use(`${pathAdmin}/dashboard`, dashboardRoute);
+  app.use(`${pathAdmin}/topics`, topicRoute);
+  app.use(`${pathAdmin}/songs`, songRoute);
 
   return;
 };

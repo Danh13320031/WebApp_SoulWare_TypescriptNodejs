@@ -61,10 +61,9 @@ imageInput.addEventListener("change", function () {
   img.src = objectUrl;
 });
 
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", (e) => {
   let isValid = true;
 
-  // Reset lỗi
   imageError.textContent = "";
   audioError.textContent = "";
   titleError.textContent = "";
@@ -74,49 +73,41 @@ form.addEventListener("submit", function (e) {
   lyricsError.textContent = "";
   statusError.textContent = "";
 
-  // IMAGE
   if (!imageInput.files.length || !imageValid) {
     imageError.textContent = "Ảnh hợp lệ là bắt buộc (tỷ lệ 1:1)";
     isValid = false;
   }
 
-  // AUDIO
   if (!audioInput.files.length) {
     audioError.textContent = "Vui lòng chọn tệp âm thanh";
     isValid = false;
   }
 
-  // TITLE
   if (titleInput.value.trim() === "") {
     titleError.textContent = "Tên bài hát không được để trống";
     isValid = false;
   }
 
-  // SINGER
   if (!singerSelect.value) {
     singerError.textContent = "Vui lòng chọn nghệ sĩ";
     isValid = false;
   }
 
-  // TOPIC
   if (!topicSelect.value) {
     topicError.textContent = "Vui lòng chọn chủ đề";
     isValid = false;
   }
 
-  // POSITION
   if (positionInput.value && Number(positionInput.value) <= 0) {
     positionError.textContent = "Vị trí phải lớn hơn 0";
     isValid = false;
   }
 
-  // LYRICS
   if (lyricsInput.value.trim() === "") {
     lyricsError.textContent = "Lời bài hát không được để trống";
     isValid = false;
   }
 
-  // STATUS
   if (!statusSelect.value) {
     statusError.textContent = "Vui lòng chọn trạng thái";
     isValid = false;

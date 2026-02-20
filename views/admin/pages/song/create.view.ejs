@@ -18,12 +18,14 @@
     <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
     <link rel="stylesheet" href="/admin/styles/lib/tinyMCE.css" />
     <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
     <link rel="stylesheet" href="/admin/styles/partials/header.css" />
     <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
     <link rel="stylesheet" href="/admin/styles/pages/song/create.css" />
   </head>
   <body>
     <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/alert.view.ejs') %>
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">
@@ -41,6 +43,7 @@
           <%= pageTitle %>
         </h1>
       </section>
+
       <section class="mb-5 song-content main-content">
         <div class="card">
           <div class="card-header bg-white"></div>
@@ -287,6 +290,7 @@
     <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
 
     <script src="/admin/scripts/song/validateCreateForm.js"></script>
+    <script src="/admin/scripts/song/handleCreateFormSubmit.js"></script>
     <script src="/admin/scripts/index.js"></script>
   </body>
 </html>
