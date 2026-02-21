@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+
+    <link rel="stylesheet" href="/client/styles/setup.css" />
+    <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/header.css" />
+    <link rel="stylesheet" href="/client/styles/pages/search/search.css" />
+    <link rel="stylesheet" href="/client/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main py-5" id="search-main">
+      <section class="search-title">
+        <div class="container my-3">
+          <div class="row">
+            <div class="col-12">
+              <h1
+                class="d-flex align-items-center search-title-text"
+                style="
+                  color: var(--secondary-color);
+                  font-size: var(--font-size-xl);
+                  font-weight: var(--font-weight-semibold);
+                "
+              >
+                <i
+                  class="fa-solid fa-magnifying-glass me-2"
+                  style="font-size: var(--font-size-md)"
+                ></i>
+                <%= pageTitle %>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="search-list">
+        <div class="container">
+          <div class="row g-2">
+            <% if(newSearchedSongList.length > 0) { %>
+              <% newSearchedSongList.forEach((song) => { %>
+                <div class="col-lg-6 col-12">
+                  <div class="search-song-item">
+                    <div class="search-song-thumb">
+                      <img
+                        src="<%= song.avatar %>"
+                        alt="<%= song.title %>"
+                      />
+
+                      <button class="play-btn" title="Phát nhạc">
+                        <i class="fa-solid fa-play"></i>
+                      </button>
+                    </div>
+
+                    <div class="search-song-info">
+                      <h4 class="search-song-title"><%= song.title %></h4>
+
+                      <div class="search-song-meta">
+                        <span class="search-song-singer">
+                          <i class="fa-solid fa-microphone-lines"></i>
+                          <%= song.singerId.stageName %>
+                        </span>
+
+                        <span class="search-song-like">
+                          <i class="fa-solid fa-thumbs-up"></i>
+                          <%= song.like %>
+                        </span>
+
+                        <span class="search-song-time">
+                          <i class="fa-regular fa-clock"></i>
+                          Hóm qua
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="search-song-actions">
+                      <a
+                        href="/songs/detail/<%= song.slug %>"
+                        class="button-main text-decoration-none detail-btn"
+                      >
+                        Chi tiết
+                        <i class="fa-solid fa-angle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="col-12">
+                <p class="text-center" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--dark-color);">Không tìm thấy kết quả</p>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/client/scripts/search/searchSuggest.js"></script>
+  </body>
+</html>

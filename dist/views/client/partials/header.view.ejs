@@ -1,0 +1,154 @@
+<header class="shadow header" id="header">
+  <div class="header-top py-2" style="background-color: var(--light-color)">
+    <div class="container">
+      <div class="row">
+        <div
+          class="col-12 text-center d-flex justify-content-between flex-wrap"
+        >
+          <div class="header-top-email">
+            <span
+              class="email-text"
+              style="
+                color: var(--dark-gray-color);
+                font-size: var(--font-size-sm);
+              "
+              ><i class="fa-regular fa-envelope me-2"></i>
+              danh13320031@gmail.com</span
+            >
+          </div>
+          <div class="header-top-phone">
+            <span
+              class="phone-text"
+              style="
+                color: var(--dark-gray-color);
+                font-size: var(--font-size-sm);
+              "
+              ><i class="fa-solid fa-mobile-screen me-2"></i> 0123456789</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav py-3 bg-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-2">
+          <div class="nav-logo">
+            <a href="/">
+              <img
+                src="/images/logo-removebg-preview.png"
+                alt="logo"
+                width="120"
+                class="nav-logo-img"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="h-100 d-flex align-items-center nav-menu">
+            <ul class="nav-list mb-0 list-unstyled d-flex gap-2">
+              <li class="nav-item">
+                <a
+                  href="/"
+                  class="nav-link fw-bold"
+                  style="
+                    color: var(--primary-color);
+                    font-size: var(--font-size-md);
+                  "
+                  ><i class="fa-solid fa-house me-2"></i>Trang chủ</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  href="/topics"
+                  class="nav-link fw-bold"
+                  style="
+                    color: var(--primary-color);
+                    font-size: var(--font-size-md);
+                  "
+                  ><i class="fa-solid fa-icons me-2"></i>Chủ đề</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  href="/favorite-songs"
+                  class="nav-link fw-bold"
+                  style="
+                    color: var(--primary-color);
+                    font-size: var(--font-size-md);
+                  "
+                  ><i class="fa-solid fa-heart me-2"></i>Yêu thích</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-4">
+          <div
+            class="nav-auth h-100 d-flex align-items-center justify-content-end"
+          >
+            <ul class="nav-list mb-0 list-unstyled d-flex justify-content-end">
+              <li class="nav-item">
+                <a
+                  href="/login"
+                  class="nav-link d-flex align-items-center"
+                  style="
+                    color: var(--dark-gray-color);
+                    font-size: var(--font-size-sm);
+                  "
+                  >Đăng nhập<i
+                    class="fa-solid fa-arrow-right-to-bracket ms-2"
+                  ></i
+                ></a>
+              </li>
+              <li class="nav-item">
+                <a
+                  href="/register"
+                  class="nav-link"
+                  style="
+                    color: var(--dark-gray-color);
+                    font-size: var(--font-size-sm);
+                  "
+                  >Đăng ký</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 justify-content-center">
+        <div class="col-lg-5 col-md-8 col-12">
+          <div class="header-search-box position-relative">
+            <form
+              action="/search/result"
+              method="GET"
+              role="search"
+              class="d-flex border border-2 rounded-pill header-search-form"
+              style="border-color: var(--secondary-color)"
+            >
+              <input
+                class="form-control me-2 border-0 bg-transparent rounded-pill header-search-input"
+                type="search"
+                placeholder="Tìm kiếm bài hát yêu thích của bạn..."
+                aria-label="Search"
+                name="keyword"
+                value="<%= keyword %>"
+              />
+              <button
+                class="btn btn-outline-dark border-0 bg-transparent rounded-pill header-search-btn"
+                type="submit"
+              >
+                <i class="fa-solid fa-magnifying-glass header-search-icon"></i>
+              </button>
+            </form>
+            <ul
+              class="nav-list mb-0 list-unstyled shadow rounded-3 d-flex flex-column gap-1 p-1 bg-white position-absolute w-100 header-search-result"
+            >
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/tinyMCE.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/imagePreview.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <section
+        class="song-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3"
+      >
+        <h1
+          class="song-title main-title"
+          style="
+            font-size: var(--font-size-xxl);
+            font-weight: var(--font-weight-bold);
+            color: var(--primary-color);
+          "
+        >
+          <%= pageTitle %>
+        </h1>
+      </section>
+
+      <section class="mb-5 song-content main-content">
+        <div class="card">
+          <div class="card-header bg-white"></div>
+          <div class="card-body">
+            <form
+              action="<%= prefixAdminPath %>/songs/create"
+              method="POST"
+              enctype="multipart/form-data"
+              class="song-create-form"
+              id="song-form"
+              song-create-form
+            >
+              <div class="container-fluid">
+                <div class="row g-3">
+                  <div class="col-12 mb-3">
+                    <div class="d-flex flex-column gap-3 form-group create-image-group">
+                      <div
+                        class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-image-preview"
+                        form-image-preview
+                      >
+                        <div
+                          class="p-3 d-flex flex-column justify-content-center align-items-center position-relative gap-3 form-image-container"
+                        >
+                          <button
+                            type="button"
+                            class="position-absolute top-0 end-0 m-2 button-icon-danger form-image-remove"
+                            form-image-remove
+                          >
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                          <img
+                            src=""
+                            alt="Ảnh bài hát"
+                            class="form-image-view"
+                            form-image-view
+                          />
+                          <label
+                            for="form-image-input"
+                            class="button-primary text-decoration-none mb-0"
+                            >Tải ảnh lên <i class="fa-solid fa-upload"></i>
+                            <input
+                              type="file"
+                              name="avatar"
+                              accept="image/*"
+                              class="form-control d-none form-image-input"
+                              id="form-image-input"
+                              form-image-input
+                          /></label>
+                        </div>
+                        <span class="form-error form-image-error"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mb-3">
+                    <div class="d-flex flex-column gap-3 form-group create-audio-group">
+                      <div
+                        class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-audio-preview"
+                        form-audio-preview
+                      >
+                        <div
+                          class="p-3 d-flex flex-column justify-content-center align-items-center position-relative gap-3 form-audio-container"
+                        >
+                          <button
+                            type="button"
+                            class="position-absolute top-0 end-0 m-2 button-icon-danger form-audio-remove"
+                            form-audio-remove
+                          >
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                          <audio
+                            src=""
+                            controls
+                            class="form-audio-view"
+                            form-audio-view
+                          ></audio>
+                          <label
+                            for="form-audio-input"
+                            class="button-primary text-decoration-none mb-0"
+                            >Tải nhạc lên <i class="fa-solid fa-upload"></i>
+                            <input
+                              type="file"
+                              name="audio"
+                              accept="audio/*"
+                              class="form-control d-none form-audio-input"
+                              id="form-audio-input"
+                              form-audio-input
+                          /></label>
+                        </div>
+                        <span class="form-error form-audio-error"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="form-group create-title-group">
+                      <label
+                        for="song-create-title"
+                        class="form-label create-title-label"
+                        >Tên bài hát</label
+                      >
+                      <input
+                        type="text"
+                        name="title"
+                        placeholder="Nhập tên bài hát..."
+                        class="form-control create-title-input"
+                        id="song-title"
+                      />
+                      <span class="form-error form-title-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <% if(singerList && singerList.length > 0) { %>
+                    <div class="form-group create-singer-group">
+                      <label
+                        for="song-singer"
+                        class="form-label create-singer-label"
+                        >Nghệ sĩ</label
+                      >
+                      <select name="singerId" id="song-singer">
+                        <option value="" disabled selected>
+                          Chọn nghệ sĩ...
+                        </option>
+                        <% singerList.forEach((singer) => { %>
+                          <option value="<%= singer._id %>"><%= singer.stageName %></option>
+                        <% }) %>
+                      </select>
+                      <span class="form-error form-singer-error"></span>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <% if(topicList && topicList.length > 0) { %>
+                    <div class="form-group create-topic-group">
+                      <label
+                        for="song-topic"
+                        class="form-label create-topic-label"
+                        >Chủ đề</label
+                      >
+                      <select name="topicId" id="song-topic">
+                        <option value="" disabled selected>
+                          Chọn chủ đề...
+                        </option>
+                        <% topicList.forEach((topic) => { %>
+                          <option value="<%= topic._id %>"><%= topic.title %></option>
+                        <% }) %>
+                      </select>
+                      <span class="form-error form-topic-error"></span>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="form-group create-position-group">
+                      <label
+                        for="song-position"
+                        class="form-label create-position-label"
+                        >Vị trí</label
+                      >
+                      <input
+                        type="number"
+                        name="position"
+                        min="1"
+                        placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
+                        class="form-control create-position-input"
+                        id="song-position"
+                      />
+                      <span class="form-error form-position-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group create-lyrics-group">
+                      <label
+                        for="song-lyrics"
+                        class="form-label create-lyrics-label"
+                        >Lời bài hát</label
+                      >
+                      <textarea
+                        name="lyrics"
+                        class="create-lyrics-input"
+                        id="song-lyrics"
+                      ></textarea>
+                      <span class="form-error form-lyrics-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group create-description-group">
+                      <label
+                        for="song-description"
+                        class="form-label create-description-label"
+                        >Mô tả</label
+                      >
+                      <textarea
+                        name="description"
+                        class="create-description-input tinymce-editor"
+                        id="song-description"
+                      ></textarea>
+                      <span class="form-error form-description-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="form-group create-status-group">
+                      <label
+                        for="song-status"
+                        class="form-label create-status-label"
+                        >Trạng thái</label
+                      >
+                      <select name="status" id="song-status">
+                        <option value="" disabled selected>
+                          Chọn trạng thái...
+                        </option>
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Vô hiệu hóa</option>
+                      </select>
+                      <span class="form-error form-status-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div
+                      class="d-flex justify-content-center form-button-group"
+                    >
+                      <button
+                        type="submit"
+                        class="button-primary text-decoration-none"
+                      >
+                        Tạo bài hát <i class="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer bg-white"></div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/tinymce/tinymce.min.js"></script>
+    <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
+
+    <script src="/admin/scripts/song/validateForm.js"></script>
+    <script src="/admin/scripts/song/handleFormSubmit.js"></script>
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>

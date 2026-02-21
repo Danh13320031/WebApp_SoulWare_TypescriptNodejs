@@ -1,0 +1,37 @@
+.tox .tox-promotion {
+  display: none !important;
+}
+
+.tox .tox-mbtn:focus:not(:disabled)::after {
+  box-shadow: 0 0 0 2px var(--light-primary-color) !important;
+}
+
+.tox .tox-tbtn--enabled {
+  background-color: var(--light-primary-color) !important;
+}
+
+.tox
+  .tox-collection--list
+  .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
+  background-color: var(--primary-color) !important;
+}
+
+.tox .tox-edit-area::before {
+  border: 2px solid var(--light-primary-color) !important;
+}
+
+.tox .tox-textfield:focus {
+  border: 2px solid var(--light-primary-color) !important;
+  box-shadow: 0 0 0 2px var(--light-primary-color) !important;
+}
+
+.tox .tox-textarea-wrap:focus-within {
+  border: 2px solid var(--light-primary-color) !important;
+  box-shadow: 0 0 0 2px var(--light-primary-color) !important;
+}
+
+.tox .tox-button {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  outline: none !important;
+}
