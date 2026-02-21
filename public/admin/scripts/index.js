@@ -140,7 +140,7 @@ const showAlert = (type, message) => {
     globalAlertMessage.classList.add("error");
     globalAlertClose.className = "button-icon-danger global-alert-close";
     globalAlertClose.innerHTML = iconErrorClose.outerHTML;
-  } else if (type === "success") {
+  } else {
     const iconSuccessClose = document.createElement("i");
     iconSuccessClose.classList.add("fa-solid", "fa-check");
 
