@@ -18,12 +18,11 @@
 .global-alert.success {
   border-color: var(--success-color);
 }
-.global-alert.error {
-  border-color: var(--error-color);
-}
-
 .global-alert .global-alert-message.success {
   color: var(--success-color);
+}
+.global-alert.error {
+  border-color: var(--error-color);
 }
 .global-alert .global-alert-message.error {
   color: var(--error-color);

@@ -48,18 +48,19 @@
         <div class="card">
           <div class="card-header bg-white"></div>
           <div class="card-body">
+            <% if(song) { %>
             <form
-              action="<%= prefixAdminPath %>/songs/create"
-              method="POST"
+              action="<%= prefixAdminPath %>/songs/update/<%= song._id %>"
+              method="PATCH"
               enctype="multipart/form-data"
-              class="song-create-form"
+              class="song-update-form"
               id="song-form"
-              song-create-form
+              song-update-form
             >
               <div class="container-fluid">
                 <div class="row g-3">
                   <div class="col-12 mb-3">
-                    <div class="d-flex flex-column gap-3 form-group create-image-group">
+                    <div class="d-flex flex-column gap-3 form-group update-image-group">
                       <div
                         class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-image-preview"
                         form-image-preview
@@ -75,8 +76,8 @@
                             <i class="fa-solid fa-xmark"></i>
                           </button>
                           <img
-                            src=""
-                            alt="Ảnh bài hát"
+                            src="<%= song.avatar %>"
+                            alt="<%= song.title %>"
                             class="form-image-view"
                             form-image-view
                           />
@@ -84,10 +85,12 @@
                             for="form-image-input"
                             class="button-primary text-decoration-none mb-0"
                             >Tải ảnh lên <i class="fa-solid fa-upload"></i>
+                            <input type="hidden" name="oldAvatar" value="<%= song.avatar %>" class="form-avatar-view" form-avatar-view />
                             <input
                               type="file"
                               name="avatar"
                               accept="image/*"
+                              value="<%= song.avatar %>"
                               class="form-control d-none form-image-input"
                               id="form-image-input"
                               form-image-input
@@ -98,7 +101,7 @@
                     </div>
                   </div>
                   <div class="col-12 mb-3">
-                    <div class="d-flex flex-column gap-3 form-group create-audio-group">
+                    <div class="d-flex flex-column gap-3 form-group update-audio-group">
                       <div
                         class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-audio-preview"
                         form-audio-preview
@@ -114,7 +117,7 @@
                             <i class="fa-solid fa-xmark"></i>
                           </button>
                           <audio
-                            src=""
+                            src="<%= song.audio %>"
                             controls
                             class="form-audio-view"
                             form-audio-view
@@ -123,10 +126,12 @@
                             for="form-audio-input"
                             class="button-primary text-decoration-none mb-0"
                             >Tải nhạc lên <i class="fa-solid fa-upload"></i>
+                            <input type="hidden" name="oldAudio" value="<%= song.audio %>" class="form-audio-view" form-audio-view />
                             <input
                               type="file"
                               name="audio"
                               accept="audio/*"
+                              value="<%= song.audio %>"
                               class="form-control d-none form-audio-input"
                               id="form-audio-input"
                               form-audio-input
@@ -137,17 +142,18 @@
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="form-group create-title-group">
+                    <div class="form-group update-title-group">
                       <label
-                        for="song-create-title"
-                        class="form-label create-title-label"
+                        for="song-update-title"
+                        class="form-label update-title-label"
                         >Tên bài hát</label
                       >
                       <input
                         type="text"
                         name="title"
                         placeholder="Nhập tên bài hát..."
-                        class="form-control create-title-input"
+                        value="<%= song.title %>"
+                        class="form-control update-title-input"
                         id="song-title"
                       />
                       <span class="form-error form-title-error"></span>
@@ -155,18 +161,18 @@
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
                     <% if(singerList && singerList.length > 0) { %>
-                    <div class="form-group create-singer-group">
+                    <div class="form-group update-singer-group">
                       <label
                         for="song-singer"
-                        class="form-label create-singer-label"
+                        class="form-label update-singer-label"
                         >Nghệ sĩ</label
                       >
                       <select name="singerId" id="song-singer">
-                        <option value="" disabled selected>
+                        <option value="" disabled <%= !song.singerId ? 'selected' : '' %>>
                           Chọn nghệ sĩ...
                         </option>
                         <% singerList.forEach((singer) => { %>
-                          <option value="<%= singer._id %>"><%= singer.stageName %></option>
+                          <option value="<%= singer._id %>" <%= song.singerId == singer._id ? 'selected' : '' %>><%= singer.stageName %></option>
                         <% }) %>
                       </select>
                       <span class="form-error form-singer-error"></span>
@@ -175,18 +181,18 @@
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
                     <% if(topicList && topicList.length > 0) { %>
-                    <div class="form-group create-topic-group">
+                    <div class="form-group update-topic-group">
                       <label
                         for="song-topic"
-                        class="form-label create-topic-label"
+                        class="form-label update-topic-label"
                         >Chủ đề</label
                       >
                       <select name="topicId" id="song-topic">
-                        <option value="" disabled selected>
+                        <option value="" disabled <%= !song.topicId ? 'selected' : '' %>>
                           Chọn chủ đề...
                         </option>
                         <% topicList.forEach((topic) => { %>
-                          <option value="<%= topic._id %>"><%= topic.title %></option>
+                          <option value="<%= topic._id %>" <%= song.topicId == topic._id ? 'selected' : '' %>><%= topic.title %></option>
                         <% }) %>
                       </select>
                       <span class="form-error form-topic-error"></span>
@@ -194,10 +200,10 @@
                     <% } %>
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="form-group create-position-group">
+                    <div class="form-group update-position-group">
                       <label
                         for="song-position"
-                        class="form-label create-position-label"
+                        class="form-label update-position-label"
                         >Vị trí</label
                       >
                       <input
@@ -205,55 +211,57 @@
                         name="position"
                         min="1"
                         placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
-                        class="form-control create-position-input"
+                        value="<%= song.position %>"
+                        class="form-control update-position-input"
                         id="song-position"
                       />
                       <span class="form-error form-position-error"></span>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="form-group create-lyrics-group">
+                    <div class="form-group update-lyrics-group">
                       <label
                         for="song-lyrics"
-                        class="form-label create-lyrics-label"
+                        class="form-label update-lyrics-label"
                         >Lời bài hát</label
                       >
                       <textarea
                         name="lyrics"
-                        class="create-lyrics-input"
+                        value="<%= song.lyrics %>"
+                        class="update-lyrics-input"
                         id="song-lyrics"
-                      ></textarea>
+                      ><%= song.lyrics %></textarea>
                       <span class="form-error form-lyrics-error"></span>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="form-group create-description-group">
+                    <div class="form-group update-description-group">
                       <label
                         for="song-description"
-                        class="form-label create-description-label"
+                        class="form-label update-description-label"
                         >Mô tả</label
                       >
                       <textarea
                         name="description"
-                        class="create-description-input tinymce-editor"
+                        class="update-description-input tinymce-editor"
                         id="song-description"
-                      ></textarea>
+                      ><%= song.description %></textarea>
                       <span class="form-error form-description-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="form-group create-status-group">
+                    <div class="form-group update-status-group">
                       <label
                         for="song-status"
-                        class="form-label create-status-label"
+                        class="form-label update-status-label"
                         >Trạng thái</label
                       >
                       <select name="status" id="song-status">
-                        <option value="" disabled selected>
+                        <option value="" disabled <%= !song.status ? 'selected' : '' %>>
                           Chọn trạng thái...
                         </option>
-                        <option value="active">Hoạt động</option>
-                        <option value="inactive">Vô hiệu hóa</option>
+                        <option value="active" <%= song.status == 'active' ? 'selected' : '' %>>Hoạt động</option>
+                        <option value="inactive" <%= song.status == 'inactive' ? 'selected' : '' %>>Vô hiệu hóa</option>
                       </select>
                       <span class="form-error form-status-error"></span>
                     </div>
@@ -266,13 +274,14 @@
                         type="submit"
                         class="button-primary text-decoration-none"
                       >
-                        Tạo bài hát <i class="fa-solid fa-plus"></i>
+                        Cập nhật bài hát <i class="fa-solid fa-pen"></i>
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
             </form>
+            <% } %>
           </div>
           <div class="card-footer bg-white"></div>
         </div>
@@ -289,8 +298,8 @@
     <script src="/tinymce/tinymce.min.js"></script>
     <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
 
+    <script src="/admin/scripts/index.js"></script>
     <script src="/admin/scripts/song/validateForm.js"></script>
     <script src="/admin/scripts/song/handleFormSubmit.js"></script>
-    <script src="/admin/scripts/index.js"></script>
   </body>
 </html>

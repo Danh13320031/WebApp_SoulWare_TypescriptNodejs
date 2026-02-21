@@ -19,5 +19,16 @@ songRoute.post(
   songValidate.createANewSongValidate,
   songController.createANewSongPost,
 );
+songRoute.get("/update/:songId", songController.getASongByIdGet);
+songRoute.patch(
+  "/update/:songId",
+  upload.fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "audio", maxCount: 1 },
+  ]),
+  uploadCloud.uploadDiffMultiField,
+  songValidate.updateASongByIdValidate,
+  songController.updateASongByIdPatch,
+);
 
 export default songRoute;
