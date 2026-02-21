@@ -4,7 +4,6 @@
   "description": "",
   "license": "ISC",
   "author": "Danh Bùi",
-  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "nodemon --exec ts-node app.ts",
