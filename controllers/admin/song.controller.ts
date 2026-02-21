@@ -199,12 +199,50 @@ const updateASongByIdPatch = async (
   }
 };
 
+// [DELETE]: /admin/songs/soft-delete/:songId
+const softRemoveASongByIdDelete = async (req: Request, res: Response) => {
+  try {
+    const songId: string = req.params.songId as string;
+
+    const song = await SongModel.findOne({
+      _id: songId,
+      deleted: false,
+    });
+
+    if (!song) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy bài hát",
+      });
+      return;
+    }
+
+    await SongModel.updateOne({ _id: songId }, { deleted: true });
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Xoa bài hát thành công",
+    });
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
 type TSongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   createANewSongGet: (req: Request, res: Response) => Promise<void>;
   createANewSongPost: (req: Request, res: Response) => Promise<void>;
   getASongByIdGet: (req: Request, res: Response) => Promise<void>;
   updateASongByIdPatch: (req: Request, res: Response) => Promise<void>;
+  softRemoveASongByIdDelete: (req: Request, res: Response) => Promise<void>;
 };
 
 const songController: TSongController = {
@@ -213,6 +251,7 @@ const songController: TSongController = {
   createANewSongPost,
   getASongByIdGet,
   updateASongByIdPatch,
+  softRemoveASongByIdDelete,
 };
 
 export default songController;
