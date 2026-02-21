@@ -7,11 +7,11 @@ const dashboardGet = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-type IDashboardController = {
+type TDashboardController = {
   dashboardGet: (req: Request, res: Response) => Promise<void>;
 };
 
-export const dashboardController: IDashboardController = {
+export const dashboardController: TDashboardController = {
   dashboardGet,
 };
 
