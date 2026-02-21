@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <section class="song-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <h1
+        class="song-title main-title"
+        style="
+          font-size: var(--font-size-xxl);
+          font-weight: var(--font-weight-bold);
+          color: var(--primary-color);
+        "
+        >
+          <%= pageTitle %>
+        </h1>
+        <a href="/admin/songs/create" class="button-primary text-decoration-none">
+          Thêm mới <i class="fa-solid fa-plus"></i>
+        </a>
+      </section>
+      <section class="song-content main-content">
+        <div
+          class="card my-2 shadow-sm song-card main-card"
+          style="border-color: var(--primary-color)"
+        >
+          <div
+            class="card-header bg-white song-card-header main-card-header"
+          ></div>
+          <div class="card-body song-card-body main-card-body">
+            <% if (songList && songList.length > 0) { %>
+            <div class="overflow-auto table-responsive">
+              <table class="table table-border table-hover mb-0 song-table main-table">
+                <thead class="song-table-header main-table-header">
+                  <tr>
+                    <th scope="col">
+                      <div class="form-check">
+                        <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                        />
+                      </div>
+                    </th>
+                    <th>STT</th>
+                    <th scope="col" class="text-uppercase">Ảnh đại diện</th>
+                    <th scope="col" class="text-uppercase">Tên bài hát</th>
+                    <th scope="col" class="text-uppercase">Ca sĩ</th>
+                    <th scope="col" class="text-uppercase">Chủ đề</th>
+                    <th scope="col" class="text-uppercase">Lượt nghe</th>
+                    <th scope="col" class="text-uppercase">Lượt thích</th>
+                    <th scope="col" class="text-uppercase">Vị trí</th>
+                    <th scope="col" class="text-uppercase">Trạng thái</th>
+                    <th scope="col" class="text-uppercase">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% songList.forEach((song, index) => { %>
+                  <tr>
+                    <td scope="row">
+                      <div class="form-check">
+                        <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault7"
+                        />
+                      </div>
+                    </td>
+                    <td><%= index + 1 %></td>
+                    <td>
+                      <img
+                        src="<%= song?.avatar %>"
+                        alt="<%= song.title %>"
+                        width="50px"
+                        height="50px"
+                        class="rounded-circle"
+                      />
+                    </td>
+                    <td><%= song.title %></td>
+                    <td><%= song?.singerId?.stageName %></td>
+                    <td><%= song?.topicId?.title %></td>
+                    <td><%= song.listen %></td>
+                    <td><%= song.like %></td>
+                    <td><%= song.position %></td>
+                    <td>
+                      <select 
+                        name="status" 
+                        class="badge" 
+                        id=""
+                        <% if(song.status === 'active') { %>
+                          style="color: var(--success-color); border-color: var(--success-color);"
+                          value="active"
+                        <% } else if(song.status === 'inactive') { %>
+                          style="color: var(--error-color); border-color: var(--error-color);"
+                          value="inactive"
+                        <% } %>
+                        >
+                          <option value="active" <%= song.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= song.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                      </select>
+                    </td>
+                    <td>
+                      <div class="d-flex gap-2">
+                        <a href="<%= prefixAdminPath %>/songs/update/<%= song._id %>" type="button" class="button-icon-info text-decoration-none">
+                          <i class="fas fa-pen"></i>
+                        </a>
+                        <button type="button" class="button-icon-danger">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <button type="button" class="button-secondary">
+                          Chi tiết <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+            <% } else { %>
+            <div
+              class="d-flex flex-column align-items-center justify-content-center gap-3"
+              style="height: 200px"
+            >
+              <i
+                class="fas fa-folder-open"
+                style="font-size: var(--font-size-xxl); color: var(--secondary-color)"
+              ></i>
+              <p class="mb-0" style="color: var(--secondary-color)">
+                Không có dữ liệu hiển thị.
+              </p>
+            </div>
+            <% } %>
+          </div>
+          <div
+            class="card-footer bg-white song-card-footer main-card-footer"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>

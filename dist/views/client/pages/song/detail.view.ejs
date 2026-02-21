@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/client/styles/setup.css" />
+    <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/header.css" />
+    <link rel="stylesheet" href="/client/styles/pages/song/detail.css" />
+    <link rel="stylesheet" href="/client/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/header.view.ejs', { keyword: keyword }) %>
+
+    <main class="main py-5" id="song-detail-main">
+      <section class="song-info mb-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+              <div
+                class="bg-secondary rounded-5 position-relative song-info-box"
+                style="width: 100%; aspect-ratio: 1/1"
+              >
+                <img
+                  src="<%= song.avatar %>"
+                  alt="song"
+                  class="position-absolute top-0 start-0 w-100 aspect-ratio-1 z-1 rounded-5 song-info-image"
+                />
+                <div
+                  class="position-absolute top-0 start-0 w-100 h-100 z-2 d-flex justify-content-center align-items-center bg-black text-white rounded-5 song-overlay"
+                >
+                  <button
+                    class="btn border border-1 border-white song-play-btn"
+                  >
+                    <i
+                      class="fa-solid fa-play"
+                      style="
+                        font-size: var(--font-size-xxl);
+                        color: var(--light-color);
+                      "
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-8">
+              <h1
+                class="song-info-title fw-bold"
+                style="
+                  font-size: var(--font-size-xxl);
+                  font-weight: var(--font-weight-semibold);
+                  color: var(--secondary-color);
+                "
+              >
+                <%= song.title %>
+              </h1>
+              <p
+                class="song-info-artist mb-1"
+                style="
+                  color: var(--dark-color);
+                  font-size: var(--font-size-md);
+                  font-weight: var(--font-weight-semibold);
+                "
+              >
+                Ca sĩ:
+                <a href="" style="color: var(--secondary-color)"
+                  ><%= song?.singerId?.stageName %></a
+                >
+              </p>
+              <p
+                class="song-info-genre mb-2"
+                style="
+                  color: var(--dark-color);
+                  font-size: var(--font-size-md);
+                  font-weight: var(--font-weight-semibold);
+                "
+              >
+                Thể loại:
+                <a
+                  href="/songs/<%= song?.topicId?.slug %>"
+                  style="color: var(--secondary-color)"
+                  >Nhạc <%= song?.topicId.title %></a
+                >
+              </p>
+              <p class="mb-2 song-info-favorite" data-id="<%= song._id %>">
+                <i class="fa-regular fa-heart me-1"></i>
+                <span class="song-info-favorite-text">Yêu thích</span>
+              </p>
+
+              <ul
+                class="list-unstyled d-flex column-gap-3 align-items-center flex-wrap mb-2 song-secondary-info"
+                style="
+                  color: var(--dark-gray-color);
+                  font-size: var(--font-size-sm);
+                "
+              >
+                <li class="song-info-listen">
+                  <i class="fa-solid fa-headphones me-1"></i>
+                  <span>Lượt nghe: <%= song.listen %></span>
+                </li>
+                <li class="song-info-like" data-id="<%= song._id %>">
+                  <i class="fa-solid fa-thumbs-up me-1"></i>Lượt thích:
+                  <span class="song-like-number"><%= song.like %></span>
+                </li>
+                <li class="song-info-release">
+                  <i class="fa-regular fa-clock me-1"></i>Ngày phát hành:
+                  01/01/2000
+                </li>
+              </ul>
+
+              <p
+                class="song-info-description"
+                style="
+                  color: var(--dark-gray-color);
+                  font-size: var(--font-size-md);
+                "
+              >
+                <%- song.description %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="song-player mb-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-center mb-3">
+                    <div class="rounded-circle overflow-hidden song-player-box">
+                      <img
+                        src="<%= song.avatar %>"
+                        alt="song"
+                        class="song-player-image"
+                        style="width: 100%; aspect-ratio: 1/1"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-center gap-3 mb-3">
+                    <button class="button-primary song-player-previous">
+                      <i class="fa-solid fa-backward"></i>
+                    </button>
+                    <button class="button-main song-player-play">
+                      <!-- <i class="fa-solid fa-pause me-1"></i> Tạm dừng -->
+                    </button>
+                    <button class="button-primary song-player-next">
+                      <i class="fa-solid fa-forward"></i>
+                    </button>
+                  </div>
+                  <div
+                    id="song-player-audio"
+                    data-song="<%= JSON.stringify(song) %>"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="song-lyrics mb-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h4
+                class="mb-3"
+                style="
+                  color: var(--secondary-color);
+                  font-weight: var(--font-weight-semibold);
+                  font-size: var(--font-size-lg);
+                "
+              >
+                Lời bài hát
+              </h4>
+              <div class="card">
+                <div class="card-body" style="min-height: 200px">
+                  <div
+                    class="mb-0 song-lyrics-text"
+                    style="
+                      color: var(--dark-color);
+                      font-size: var(--font-size-md);
+                    "
+                  ><%= song.lyrics %></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+
+    <script src="/client/scripts/search/searchSuggest.js"></script>
+    <script src="/client/scripts/song/handleAudioPlayer.js"></script>
+    <script src="/client/scripts/song/likeASong.js"></script>
+    <script src="/client/scripts/song/favoriteASong.js"></script>
+  </body>
+</html>

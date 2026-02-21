@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+
+    <link rel="stylesheet" href="/client/styles/setup.css" />
+    <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/header.css" />
+    <link rel="stylesheet" href="/client/styles/pages/favoriteSong/favoriteSong.css" />
+    <link rel="stylesheet" href="/client/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/header.view.ejs', { keyword: keyword }) %>
+
+    <main class="main py-5" id="favorite-song-main">
+      <section class="favorite-song-title">
+        <div class="container my-3">
+          <div class="row">
+            <div class="col-12">
+              <h1
+                class="d-flex align-items-center favorite-song-title-text"
+                style="
+                  color: var(--secondary-color);
+                  font-size: var(--font-size-xl);
+                  font-weight: var(--font-weight-semibold);
+                "
+              >
+                <i
+                  class="fa-solid fa-music me-2"
+                  style="font-size: var(--font-size-md)"
+                ></i>
+                <%= pageTitle %>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="favorite-song-list">
+        <div class="container">
+          <div class="row g-2">
+            <% if(favoriteSongList.length > 0) { %>
+              <% favoriteSongList.forEach((favoriteSong) => { %>
+                <div class="col-lg-6 col-12">
+                  <div class="favorite-song-item">
+                    <div class="favorite-song-thumb">
+                      <img
+                        src="<%= favoriteSong?.songId?.avatar %>"
+                        alt="<%= favoriteSong?.songId?.title %>"
+                      />
+
+                      <button class="play-btn" title="Phát nhạc">
+                        <i class="fa-solid fa-play"></i>
+                      </button>
+                    </div>
+
+                    <div class="favorite-song-info">
+                      <h4 class="favorite-song-title"><%= favoriteSong?.songId?.title %></h4>
+
+                      <div class="favorite-song-meta">
+                        <span class="favorite-song-singer">
+                          <i class="fa-solid fa-microphone-lines"></i>
+                          <%= favoriteSong?.songId?.singerId?.stageName %>
+                        </span>
+
+                        <span class="favorite-song-favorite favorited" data-id="<%= favoriteSong?.songId?._id %>">
+                          <i class="fa-solid fa-heart"></i>
+                          Yêu thích
+                        </span>
+
+                        <span class="favorite-song-time">
+                          <i class="fa-regular fa-clock"></i>
+                          <%= dayjs(favoriteSong?.songId?.createdAt).format('DD/MM/YYYY') %>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="favorite-song-actions">
+                      <a
+                        href="/songs/detail/<%= favoriteSong?.songId?.slug %>"
+                        class="button-main text-decoration-none detail-btn"
+                      >
+                        Chi tiết
+                        <i class="fa-solid fa-angle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/client/scripts/favoriteSong/unfavoriteASong.js"></script>
+    <script src="/client/scripts/search/searchSuggest.js"></script>
+  </body>
+</html>
