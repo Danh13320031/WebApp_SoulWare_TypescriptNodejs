@@ -167,3 +167,40 @@ if (flashData) {
   sessionStorage.removeItem("flashMessage");
 }
 // End handle show alert
+
+// Handle soft delete item from db
+const buttonDeleteList = document.querySelectorAll(".button-delete");
+
+if (buttonDeleteList && buttonDeleteList.length > 0) {
+  buttonDeleteList.forEach((button) => {
+    if (!button) {
+      showAlert("error", "Không tìm thấy dữ liệu muốn xóa!");
+      return;
+    }
+
+    button.addEventListener("click", async (e) => {
+      const currentButton = e.target.closest(".button-delete");
+
+      const id = currentButton.getAttribute("data-id");
+      const type = currentButton.getAttribute("data-type");
+
+      const apiUrl = `/admin/${type}/soft-delete/${id}`;
+      const fetchOptions = { method: "PATCH" };
+
+      const res = await fetch(apiUrl, fetchOptions);
+      const result = await res.json();
+
+      if (result.status === "Success") {
+        const itemElement = currentButton.closest("tr");
+
+        if (itemElement) {
+          itemElement.remove();
+          showAlert("success", "Đã xóa thành công!");
+        }
+      } else {
+        showAlert("error", result.message);
+      }
+    });
+  });
+}
+// End handle soft delete item from db
