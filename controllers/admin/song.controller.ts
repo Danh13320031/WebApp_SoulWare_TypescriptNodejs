@@ -199,7 +199,7 @@ const updateASongByIdPatch = async (
   }
 };
 
-type ISongController = {
+type TSongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   createANewSongGet: (req: Request, res: Response) => Promise<void>;
   createANewSongPost: (req: Request, res: Response) => Promise<void>;
@@ -207,7 +207,7 @@ type ISongController = {
   updateASongByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
-const songController: ISongController = {
+const songController: TSongController = {
   getAllSongGet,
   createANewSongGet,
   createANewSongPost,

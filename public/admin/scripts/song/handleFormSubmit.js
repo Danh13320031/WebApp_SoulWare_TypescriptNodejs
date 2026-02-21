@@ -55,7 +55,6 @@ if (songForm) {
       console.error("Lỗi kết nối::: ", error);
       showAlert("error", "Lỗi kết nối đến máy chủ. Vui lòng thử lại sau!");
     } finally {
-      // 6. Trả lại nút submit như cũ
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalBtnText;
     }

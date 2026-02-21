@@ -75,6 +75,9 @@
 #song-detail-main .song-player .aplayer-body {
   padding-bottom: 50px;
 }
+#song-detail-main .song-player .aplayer-body .aplayer-info {
+  margin-left: 0;
+}
 #song-detail-main .song-player .aplayer-body .aplayer-info .aplayer-lrc {
   height: 80px;
 }
