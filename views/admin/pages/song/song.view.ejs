@@ -111,8 +111,10 @@
                     <td>
                       <select 
                         name="status" 
-                        class="badge" 
-                        id=""
+                        class="badge status-select song-status-select"
+                        status-select
+                        song-status-select
+                        data-id="<%= song._id %>"
                         <% if(song.status === 'active') { %>
                           style="color: var(--success-color); border-color: var(--success-color);"
                           value="active"
@@ -174,5 +176,6 @@
     ></script>
 
     <script src="/admin/scripts/index.js"></script>
+    <script src="/admin/scripts/song/changeStatus.js"></script>
   </body>
 </html>

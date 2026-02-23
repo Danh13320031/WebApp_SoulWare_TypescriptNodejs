@@ -213,6 +213,40 @@ const softRemoveASongByIdDelete = (req, res) => __awaiter(void 0, void 0, void 0
         return;
     }
 });
+// [PATCH]: /admin/songs/change-status/:songId/:status
+const changeStatusSongPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const songId = req.params.songId;
+        const songStatus = req.params.status;
+        const song = yield song_model_1.default.findOne({
+            _id: songId,
+            deleted: false,
+        });
+        if (!song) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy bài hát",
+            });
+            return;
+        }
+        yield song_model_1.default.updateOne({ _id: songId }, { status: songStatus });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Đổi trạng thái thành công!",
+        });
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 const songController = {
     getAllSongGet,
     createANewSongGet,
@@ -220,5 +254,6 @@ const songController = {
     getASongByIdGet,
     updateASongByIdPatch,
     softRemoveASongByIdDelete,
+    changeStatusSongPatch,
 };
 exports.default = songController;
