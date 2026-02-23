@@ -128,6 +128,115 @@ body.no-scroll {
   color: var(--light-color);
 }
 
+.button-danger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--error-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--error-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-danger:hover {
+  background-color: var(--error-color);
+  color: var(--light-color);
+}
+
+.button-success {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--success-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--success-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-success:hover {
+  background-color: var(--success-color);
+  color: var(--light-color);
+}
+
+.button-warning {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--warning-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--warning-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-warning:hover {
+  background-color: var(--warning-color);
+  color: var(--light-color);
+}
+
+.button-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--info-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--info-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-info:hover {
+  background-color: var(--info-color);
+  color: var(--light-color);
+}
+
+.button-text {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-transform: uppercase;
+  color: var(--text-color);
+  height: 32px;
+  background: none;
+  border: 1px solid var(--text-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button-text:hover {
+  background-color: var(--text-color);
+  color: var(--light-color);
+}
+
 .button-icon-main {
   display: inline-flex;
   align-items: center;

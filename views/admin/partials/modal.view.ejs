@@ -1,0 +1,58 @@
+<div class="modal-system" id="modal-system">
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="bg-white shadow modal-box" id="modal-box">
+    <div
+      class="p-3 border border-bottom-1 border-top-0 border-end-0 border-start-0 d-flex align-items-center justify-content-between modal-header"
+    >
+      <span
+        class="modal-title"
+        style="
+          font-weight: var(--font-weight-semibold);
+          font-size: var(--font-size-lg);
+          color: var(--error-color);
+        "
+        >Xoa bai hat</span
+      >
+      <button
+        type="button"
+        class="button-icon-danger modal-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div
+      class="px-3 py-4 border border-bottom-1 border-top-0 border-end-0 border-start-0 d-flex align-items-center gap-2 modal-body"
+    >
+      <p
+        class="mb-0 modal-message"
+        style="
+          font-weight: var(--font-weight-regular);
+          font-size: var(--font-size-md);
+        "
+      >
+        Bạn có chắc chắn muốn xóa bài hát này không?
+      </p>
+    </div>
+    <div
+      class="p-3 d-flex justify-content-end align-items-center gap-2 modal-footer"
+    >
+      <button
+        type="button"
+        class="button-text modal-cancel"
+        data-bs-dismiss="modal"
+        id="cancel-modal"
+      >
+        Hủy
+      </button>
+      <button
+        type="button"
+        class="button-danger modal-confirm"
+        id="confirm-modal"
+      >
+        Chấp nhận
+      </button>
+    </div>
+  </div>
+</div>

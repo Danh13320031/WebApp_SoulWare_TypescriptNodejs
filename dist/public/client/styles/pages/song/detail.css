@@ -103,4 +103,5 @@
 
 #song-detail-main .song-lyrics .song-lyrics-text {
   white-space: pre;
+  text-wrap: balance;
 }
