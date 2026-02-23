@@ -22,4 +22,5 @@ songRoute.patch("/update/:songId", upload.fields([
     { name: "audio", maxCount: 1 },
 ]), uploadCloud_middleware_1.default.uploadDiffMultiField, song_validate_1.default.updateASongByIdValidate, song_controller_1.default.updateASongByIdPatch);
 songRoute.patch("/soft-delete/:songId", song_controller_1.default.softRemoveASongByIdDelete);
+songRoute.patch("/change-status/:songId/:status", song_controller_1.default.changeStatusSongPatch);
 exports.default = songRoute;
