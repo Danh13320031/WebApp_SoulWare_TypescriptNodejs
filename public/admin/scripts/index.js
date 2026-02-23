@@ -168,21 +168,138 @@ if (flashData) {
 }
 // End handle show alert
 
+// Handle show / hide confirm modal
+const modalSystem = document.getElementById("modal-system");
+const modalOverlay = modalSystem.querySelector(".modal-overlay");
+const modalBox = modalSystem.querySelector(".modal-box");
+const modalClose = modalSystem.querySelector(".modal-close");
+const modalCancel = modalSystem.querySelector(".modal-cancel");
+const modalConfirm = modalSystem.querySelector(".modal-confirm");
+
+const modalMessage = modalSystem.querySelector(".modal-message");
+const modalTitle = modalSystem.querySelector(".modal-title");
+
+const handleOpenModal = (type, status, title, message) => {
+  switch (type) {
+    case "alert": {
+      modalClose.style.display = "none";
+      modalCancel.style.display = "none";
+      break;
+    }
+  }
+
+  switch (status) {
+    case "success": {
+      modalTitle.style.color = "var(--success-color)";
+      modalClose.className = "button-icon-success modal-close";
+      modalConfirm.className = "button-success modal-confirm";
+      break;
+    }
+
+    case "error": {
+      modalTitle.style.color = "var(--error-color)";
+      modalClose.className = "button-icon-danger modal-close";
+      modalConfirm.className = "button-danger modal-confirm";
+      break;
+    }
+
+    case "warning": {
+      modalTitle.style.color = "var(--warning-color)";
+      modalClose.className = "button-icon-warning modal-close";
+      modalConfirm.className = "button-warning modal-confirm";
+      break;
+    }
+
+    case "info": {
+      modalTitle.style.color = "var(--info-color)";
+      modalClose.className = "button-icon-info modal-close";
+      modalConfirm.className = "button-info modal-confirm";
+      break;
+    }
+
+    default: {
+      modalTitle.style.color = "var(--text-color)";
+      modalClose.className = "button-text modal-close";
+      modalConfirm.className = "button-text modal-confirm";
+      break;
+    }
+  }
+
+  modalTitle.innerText = title;
+  modalMessage.innerText = message;
+
+  modalSystem.classList.add("active");
+  document.body.classList.add("no-scroll");
+};
+
+const handleCloseModal = () => {
+  modalSystem.classList.remove("active");
+  document.body.classList.remove("no-scroll");
+};
+
+modalOverlay.addEventListener("click", handleCloseModal);
+modalClose.addEventListener("click", handleCloseModal);
+modalCancel.addEventListener("click", handleCloseModal);
+
+const handleConfirmModal = (options = {}) =>
+  new Promise((resolve, reject) => {
+    handleOpenModal(
+      options.type,
+      options.status,
+      options.title,
+      options.message,
+    );
+
+    const cleanUp = () => {
+      handleCloseModal();
+
+      modalConfirm.removeEventListener("click", onConfirm);
+      modalClose.removeEventListener("click", onCancel);
+      modalCancel.removeEventListener("click", onCancel);
+      modalOverlay.removeEventListener("click", outsideClick);
+    };
+
+    const onConfirm = () => {
+      cleanUp();
+      resolve(true);
+    };
+
+    const onCancel = () => {
+      cleanUp();
+      reject(false);
+    };
+
+    const outsideClick = (e) => {
+      if (e.target === modalSystem) {
+        onCancel();
+      }
+    };
+
+    modalConfirm.addEventListener("click", onConfirm);
+    modalCancel.addEventListener("click", onCancel);
+    document.addEventListener("click", outsideClick);
+  });
+// End handle show / hide confirm modal
+
 // Handle soft delete item from db
 const buttonDeleteList = document.querySelectorAll(".button-delete");
 
 if (buttonDeleteList && buttonDeleteList.length > 0) {
   buttonDeleteList.forEach((button) => {
-    if (!button) {
-      showAlert("error", "Không tìm thấy dữ liệu muốn xóa!");
-      return;
-    }
+    button.addEventListener("click", async () => {
+      const ok = await handleConfirmModal({
+        type: "confirm",
+        status: "error",
+        title: "Xoá dữ liệu",
+        message: "Bạn có muốn xóa bài hát này không?",
+      });
 
-    button.addEventListener("click", async (e) => {
-      const currentButton = e.target.closest(".button-delete");
+      console.log(ok);
 
-      const id = currentButton.getAttribute("data-id");
-      const type = currentButton.getAttribute("data-type");
+      if (!ok) return;
+
+      const id = button.dataset.id;
+      const type = button.dataset.type;
 
       const apiUrl = `/admin/${type}/soft-delete/${id}`;
       const fetchOptions = { method: "PATCH" };
@@ -191,12 +308,10 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       const result = await res.json();
 
       if (result.status === "Success") {
-        const itemElement = currentButton.closest("tr");
-
-        if (itemElement) {
-          itemElement.remove();
-          showAlert("success", "Đã xóa thành công!");
-        }
+        showAlert("success", result.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         showAlert("error", result.message);
       }

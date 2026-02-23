@@ -30,7 +30,7 @@ songRoute.patch(
   songValidate.updateASongByIdValidate,
   songController.updateASongByIdPatch,
 );
-songRoute.delete(
+songRoute.patch(
   "/soft-delete/:songId",
   songController.softRemoveASongByIdDelete,
 );
