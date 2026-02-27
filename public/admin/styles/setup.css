@@ -255,6 +255,10 @@ body.no-scroll {
   background-color: var(--light-secondary-color);
   color: white;
 }
+.button-icon-main.active {
+  background-color: var(--light-secondary-color);
+  color: white;
+}
 
 .button-icon-success {
   display: inline-flex;

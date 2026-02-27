@@ -1,0 +1,82 @@
+<% if (pagination && pagination.totalPage > 0) { %>
+<div class="main-pagination-box" id="main-pagination-box">
+  <ul
+    class="list-unstyled mb-0 d-flex gap-2 main-pagination-list"
+    id="main-pagination-list"
+  >
+    <li class="main-pagination-item">
+      <button
+        <% if (pagination.currentPage <= 1) { %> disabled <% } %>
+        class="button-icon-main text-decoration-none border-0 main-pagination-link main-pagination-prev"
+        data-page="<%= pagination.currentPage - 1 %>"
+      >
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+    </li>
+
+    <%
+      const current = pagination.currentPage;
+      const total = pagination.totalPage;
+      const delta = 1;
+    %>
+
+    <li class="main-pagination-item">
+      <a
+        href="javascript:void(0)"
+        class="button-icon-main text-decoration-none main-pagination-link main-pagination-number <%= current === 1 ? 'active' : '' %>"
+        data-page="1"
+      >
+        1
+      </a>
+    </li>
+
+    <% if (current > 3) { %>
+      <li class="main-pagination-item">
+        <span class="button-icon-main">...</span>
+      </li>
+    <% } %>
+
+    <% for (let page = current - delta; page <= current + delta; page++) { %>
+      <% if (page > 1 && page < total) { %>
+        <li class="main-pagination-item">
+          <a
+            href="javascript:void(0)"
+            class="button-icon-main text-decoration-none main-pagination-link main-pagination-number <%= current === page ? 'active' : '' %>"
+            data-page="<%= page %>"
+          >
+            <%= page %>
+          </a>
+        </li>
+      <% } %>
+    <% } %>
+
+    <% if (current < total - 2) { %>
+      <li class="main-pagination-item">
+        <span class="button-icon-main">...</span>
+      </li>
+    <% } %>
+
+    <% if (total > 1) { %>
+      <li class="main-pagination-item">
+        <a
+          href="javascript:void(0)"
+          class="button-icon-main text-decoration-none main-pagination-link main-pagination-number <%= current === total ? 'active' : '' %>"
+          data-page="<%= total %>"
+        >
+          <%= total %>
+        </a>
+      </li>
+    <% } %>
+
+    <li class="main-pagination-item">
+      <button
+        <% if (pagination.currentPage >= pagination.totalPage) { %> disabled <% } %>
+        class="button-icon-main text-decoration-none border-0 main-pagination-link main-pagination-next"
+        data-page="<%= pagination.currentPage + 1 %>"
+      >
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
+    </li>
+  </ul>
+</div>
+<% } %>
