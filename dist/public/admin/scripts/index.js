@@ -281,6 +281,9 @@ const handleConfirmModal = (options = {}) =>
   });
 // End handle show / hide confirm modal
 
+const table = document.querySelector(".main-table");
+const type = table.dataset.type;
+
 // Handle soft delete item from db
 const buttonDeleteList = document.querySelectorAll(".button-delete");
 
@@ -299,7 +302,6 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       if (!ok) return;
 
       const id = button.dataset.id;
-      const type = button.dataset.type;
 
       const apiUrl = `/admin/${type}/soft-delete/${id}`;
       const fetchOptions = { method: "PATCH" };
@@ -319,3 +321,96 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
   });
 }
 // End handle soft delete item from db
+
+// Handle change status
+const statusSelectList = document.querySelectorAll(
+  "select[status-select].status-select",
+);
+
+if (statusSelectList && statusSelectList.length > 0) {
+  console.log(statusSelectList);
+  statusSelectList.forEach((select) => {
+    select.addEventListener("change", async (e) => {
+      console.log(e.target);
+      const id = e.target.getAttribute("data-id");
+      let selectValue = e.target.value;
+      console.log(selectValue);
+      const apiUrl = `/admin/${type}/change-status/${id}/${selectValue}`;
+      const fetchOptions = { method: "PATCH" };
+
+      const res = await fetch(apiUrl, fetchOptions);
+      const result = await res.json();
+
+      if (result.status === "Success") {
+        showAlert("success", result.message);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+        return;
+      } else {
+        showAlert("error", result.message);
+        return;
+      }
+    });
+  });
+}
+// End handle change status
+
+// Handle pagination
+const paginationBox = document.getElementById("main-pagination-box");
+
+if (paginationBox) {
+  const url = new URL(window.location.href);
+  const limit = url.searchParams.get("limit") || 10;
+
+  const paginationLinkNum = paginationBox.querySelectorAll(
+    ".main-pagination-number",
+  );
+  const paginationLinkPrev = paginationBox.querySelector(
+    ".main-pagination-prev",
+  );
+  const paginationLinkNext = paginationBox.querySelector(
+    ".main-pagination-next",
+  );
+
+  if (paginationLinkNum && paginationLinkNum.length > 0) {
+    paginationLinkNum.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const page = e.target.getAttribute("data-page");
+
+        url.searchParams.set("type", type);
+        url.searchParams.set("page", page);
+        url.searchParams.set("limit", limit);
+
+        window.location.href = url.href;
+      });
+    });
+  }
+
+  if (paginationLinkPrev) {
+    paginationLinkPrev.addEventListener("click", async (e) => {
+      const page = e.target.getAttribute("data-page");
+
+      url.searchParams.set("type", type);
+      url.searchParams.set("page", page);
+      url.searchParams.set("limit", limit);
+
+      window.location.href = url.href;
+    });
+  }
+
+  if (paginationLinkNext) {
+    console.log(paginationLinkNext);
+    paginationLinkNext.addEventListener("click", async (e) => {
+      const page = e.target.getAttribute("data-page");
+      console.log(page);
+
+      url.searchParams.set("type", type);
+      url.searchParams.set("page", page);
+      url.searchParams.set("limit", limit);
+
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle pagination

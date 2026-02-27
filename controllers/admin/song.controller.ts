@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
 import SongModel from "../../models/song.model";
 import TopicModel from "../../models/topic.model";
+import { TPagination } from "../../types/index.type";
 import {
   TDataBodyCreateSong,
   TDataBodyUpdateSong,
@@ -10,17 +13,30 @@ import {
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
+  let page: number = 1;
+  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+  let type: string = "";
+
+  if (req.query.page) page = Number(req.query.page);
+  if (req.query.limit) limit = Number(req.query.limit);
+  if (req.query.type) type = req.query.type as string;
+
+  const pagination: TPagination = await handlePagination(page, limit, type);
+
   const songList = await SongModel.find({
     deleted: false,
   })
     .select("-deleted -description -audio -lyrics -slug")
     .sort({ position: "desc" })
     .populate("singerId", "stageName")
-    .populate("topicId", "title");
+    .populate("topicId", "title")
+    .skip(pagination.skipPage)
+    .limit(pagination.limitPage);
 
   res.render("admin/pages/song/song.view.ejs", {
     pageTitle: "Danh sách bài hát",
     songList,
+    pagination,
   });
 };
 
@@ -259,7 +275,12 @@ const changeStatusSongPatch = async (
       return;
     }
 
-    await SongModel.updateOne({ _id: songId }, { status: songStatus });
+    await SongModel.findOneAndUpdate(
+      { _id: songId },
+      {
+        status: songStatus,
+      },
+    ).select("_id");
 
     res.status(StatusCodes.OK).json({
       code: StatusCodes.OK,

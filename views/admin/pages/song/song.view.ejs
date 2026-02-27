@@ -54,7 +54,7 @@
           <div class="card-body song-card-body main-card-body">
             <% if (songList && songList.length > 0) { %>
             <div class="overflow-auto table-responsive">
-              <table class="table table-border table-hover mb-0 song-table main-table">
+              <table class="table table-border table-hover mb-0 song-table main-table" id="main-table" data-type="songs">
                 <thead class="song-table-header main-table-header">
                   <tr>
                     <th scope="col">
@@ -161,8 +161,10 @@
             <% } %>
           </div>
           <div
-            class="card-footer bg-white song-card-footer main-card-footer"
-          ></div>
+            class="card-footer bg-white py-3 d-flex justify-content-end song-card-footer main-card-footer"
+          >
+            <%-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
+          </div>
         </div>
       </section>
     </main>
@@ -176,6 +178,5 @@
     ></script>
 
     <script src="/admin/scripts/index.js"></script>
-    <script src="/admin/scripts/song/changeStatus.js"></script>
   </body>
 </html>

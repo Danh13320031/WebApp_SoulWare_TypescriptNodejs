@@ -13,21 +13,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
+const app_constant_1 = require("../../constants/app.constant");
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let page = 1;
+    let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+    let type = "";
+    if (req.query.page)
+        page = Number(req.query.page);
+    if (req.query.limit)
+        limit = Number(req.query.limit);
+    if (req.query.type)
+        type = req.query.type;
+    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type);
     const songList = yield song_model_1.default.find({
         deleted: false,
     })
         .select("-deleted -description -audio -lyrics -slug")
         .sort({ position: "desc" })
         .populate("singerId", "stageName")
-        .populate("topicId", "title");
+        .populate("topicId", "title")
+        .skip(pagination.skipPage)
+        .limit(pagination.limitPage);
     res.render("admin/pages/song/song.view.ejs", {
         pageTitle: "Danh sách bài hát",
         songList,
+        pagination,
     });
 });
 // [GET]: /admin/songs/create
@@ -230,7 +245,9 @@ const changeStatusSongPatch = (req, res) => __awaiter(void 0, void 0, void 0, fu
             });
             return;
         }
-        yield song_model_1.default.updateOne({ _id: songId }, { status: songStatus });
+        yield song_model_1.default.findOneAndUpdate({ _id: songId }, {
+            status: songStatus,
+        }).select("_id");
         res.status(http_status_codes_1.StatusCodes.OK).json({
             code: http_status_codes_1.StatusCodes.OK,
             status: "Success",
