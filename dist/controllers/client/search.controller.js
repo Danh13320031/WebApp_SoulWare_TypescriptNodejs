@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/client/search/convertTextToSlug.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 // [GET]: /search/:type
 const getAllSearchResultGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

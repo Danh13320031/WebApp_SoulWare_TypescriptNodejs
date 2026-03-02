@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import convertTextToSlug from "../../helpers/client/search/convertTextToSlug.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import SongModel from "../../models/song.model";
 
 // [GET]: /search/:type

@@ -49,8 +49,21 @@
           style="border-color: var(--primary-color)"
         >
           <div
-            class="card-header bg-white song-card-header main-card-header"
-          ></div>
+            class="card-header py-3 bg-white song-card-header main-card-header"
+          >
+            <div class="d-flex flex-column gap-2 main-card-filter">
+              <h5 class="mb-0 main-card-filter-title" style="color: var(--primary-color); font-weight: var(--font-weight-bold); font-size: var(--font-size-lg);">Bộ lọc</h5>
+              <div class="main-card-filter-content">
+                <div class="px-0 container-fluid">
+                  <div class="row">
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <%-include('../../partials/search.view.ejs', { keyword: keyword, placeholder: 'Tìm kiếm bài hát...' }) %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card-body song-card-body main-card-body">
             <% if (songList && songList.length > 0) { %>
             <div class="overflow-auto table-responsive">

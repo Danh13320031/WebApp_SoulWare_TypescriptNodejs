@@ -18,8 +18,10 @@ const handlePagination_helper_1 = __importDefault(require("../../helpers/handleP
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Handle pagination
     let page = 1;
     let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
     let type = "";
@@ -30,7 +32,18 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (req.query.type)
         type = req.query.type;
     const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type);
+    // Handle search
+    let keyword = "";
+    let keywordRegex = new RegExp("", "i");
+    let slugRegex = new RegExp("", "i");
+    if (req.query.keyword)
+        keyword = req.query.keyword;
+    if (keyword) {
+        keywordRegex = new RegExp(keyword, "i");
+        slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+    }
     const songList = yield song_model_1.default.find({
+        $or: [{ title: { $regex: keywordRegex } }, { slug: { $regex: slugRegex } }],
         deleted: false,
     })
         .select("-deleted -description -audio -lyrics -slug")
@@ -43,6 +56,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         pageTitle: "Danh sách bài hát",
         songList,
         pagination,
+        keyword,
     });
 });
 // [GET]: /admin/songs/create

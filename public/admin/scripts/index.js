@@ -282,7 +282,9 @@ const handleConfirmModal = (options = {}) =>
 // End handle show / hide confirm modal
 
 const table = document.querySelector(".main-table");
-const type = table.dataset.type;
+let type;
+
+if (table) type = table.dataset.type;
 
 // Handle soft delete item from db
 const buttonDeleteList = document.querySelectorAll(".button-delete");
@@ -414,3 +416,34 @@ if (paginationBox) {
   }
 }
 // End handle pagination
+
+// Handle search filter
+const mainSearchForm = document.getElementById("main-search-form");
+
+if (mainSearchForm) {
+  const url = new URL(window.location.href);
+  const mainSearchInput = document.getElementById("main-search-input");
+  const mainSearchReset = document.getElementById("main-search-reset");
+
+  if (mainSearchInput.value) mainSearchReset.classList.remove("d-none");
+  else mainSearchReset.classList.add("d-none");
+
+  mainSearchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const keyword = document.getElementById("main-search-input").value;
+
+    url.searchParams.set("keyword", keyword);
+    window.location.href = url.href;
+  });
+
+  mainSearchInput.addEventListener("input", (e) => {
+    if (e.target.value) mainSearchReset.classList.remove("d-none");
+    else mainSearchReset.classList.add("d-none");
+  });
+
+  mainSearchReset.addEventListener("click", () => {
+    url.searchParams.delete("keyword");
+    window.location.href = url.href;
+  });
+}
+// End handle search filter
