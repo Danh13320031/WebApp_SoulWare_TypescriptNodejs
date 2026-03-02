@@ -10,9 +10,12 @@ import {
   TDataBodyCreateSong,
   TDataBodyUpdateSong,
 } from "../../types/song.type";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import handleSearch from "../../helpers/handleSearch.helper";
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
+  // Handle pagination
   let page: number = 1;
   let limit: number = APP_ADMIN_PAGINATION_LIMIT;
   let type: string = "";
@@ -23,7 +26,19 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
 
   const pagination: TPagination = await handlePagination(page, limit, type);
 
+  // Handle search
+  let keyword: string = "";
+  let keywordRegex: RegExp = new RegExp("", "i");
+  let slugRegex: RegExp = new RegExp("", "i");
+
+  if (req.query.keyword) keyword = req.query.keyword as string;
+  if (keyword) {
+    keywordRegex = new RegExp(keyword, "i");
+    slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+  }
+
   const songList = await SongModel.find({
+    $or: [{ title: { $regex: keywordRegex } }, { slug: { $regex: slugRegex } }],
     deleted: false,
   })
     .select("-deleted -description -audio -lyrics -slug")
@@ -37,6 +52,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     pageTitle: "Danh sách bài hát",
     songList,
     pagination,
+    keyword,
   });
 };
 
