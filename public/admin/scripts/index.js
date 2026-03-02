@@ -442,8 +442,38 @@ if (mainSearchForm) {
   });
 
   mainSearchReset.addEventListener("click", () => {
-    url.searchParams.delete("keyword");
-    window.location.href = url.href;
+    if (url.searchParams.get("keyword")) {
+      url.searchParams.delete("keyword");
+      window.location.href = url.href;
+    } else {
+      mainSearchInput.value = "";
+      mainSearchReset.classList.add("d-none");
+    }
   });
 }
 // End handle search filter
+
+// Handle status filter
+const mainCardFilterStatus = document.getElementById("main-card-filter-status");
+
+if (mainCardFilterStatus) {
+  const url = new URL(window.location.href);
+  const mainCardStatusSelect = mainCardFilterStatus.querySelector(
+    ".main-card-status-select",
+  );
+
+  if (url && mainCardStatusSelect) {
+    mainCardStatusSelect.addEventListener("change", (e) => {
+      const status = e.target.value;
+
+      if (url.searchParams.get("status") === "all") {
+        url.searchParams.delete("status");
+      } else {
+        url.searchParams.set("status", status);
+      }
+
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle status filter

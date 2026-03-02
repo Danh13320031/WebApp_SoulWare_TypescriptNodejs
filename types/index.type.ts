@@ -6,3 +6,9 @@ export type TPagination = {
   totalPage: number;
   type?: string;
 };
+
+export type TStatusFilter = {
+  value: string;
+  label: string;
+  class: string;
+};

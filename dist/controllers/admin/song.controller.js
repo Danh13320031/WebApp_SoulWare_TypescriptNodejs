@@ -14,13 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let find = { deleted: false };
     // Handle pagination
     let page = 1;
     let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
@@ -32,7 +34,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (req.query.type)
         type = req.query.type;
     const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type);
-    // Handle search
+    // Handle search filter
     let keyword = "";
     let keywordRegex = new RegExp("", "i");
     let slugRegex = new RegExp("", "i");
@@ -41,11 +43,25 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (keyword) {
         keywordRegex = new RegExp(keyword, "i");
         slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+        find = Object.assign(Object.assign({}, find), { $or: [
+                { title: { $regex: keywordRegex } },
+                { slug: { $regex: slugRegex } },
+            ] });
     }
-    const songList = yield song_model_1.default.find({
-        $or: [{ title: { $regex: keywordRegex } }, { slug: { $regex: slugRegex } }],
-        deleted: false,
-    })
+    // Handle status filter
+    let status = "all";
+    if (req.query.status)
+        status = req.query.status;
+    const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+    if ((statusFilter === null || statusFilter === void 0 ? void 0 : statusFilter.value) === "active")
+        status = "active";
+    else if ((statusFilter === null || statusFilter === void 0 ? void 0 : statusFilter.value) === "inactive")
+        status = "inactive";
+    else
+        status = "";
+    if (status)
+        find = Object.assign(Object.assign({}, find), { status });
+    const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
         .sort({ position: "desc" })
         .populate("singerId", "stageName")
@@ -57,6 +73,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         songList,
         pagination,
         keyword,
+        statusFilter,
     });
 });
 // [GET]: /admin/songs/create
