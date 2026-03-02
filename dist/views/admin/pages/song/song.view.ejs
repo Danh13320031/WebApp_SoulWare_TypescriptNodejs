@@ -55,9 +55,21 @@
               <h5 class="mb-0 main-card-filter-title" style="color: var(--primary-color); font-weight: var(--font-weight-bold); font-size: var(--font-size-lg);">Bộ lọc</h5>
               <div class="main-card-filter-content">
                 <div class="px-0 container-fluid">
-                  <div class="row">
+                  <div class="row g-3">
                     <div class="col-lg-4 col-md-6 col-12">
                       <%-include('../../partials/search.view.ejs', { keyword: keyword, placeholder: 'Tìm kiếm bài hát...' }) %>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <% if (statusFilter) { %>
+                      <div class="main-card-filter-status" id="main-card-filter-status">
+                        <label for="main-card-status-select" class="mb-0 main-card-status-label">Trạng thái</label>
+                        <select name="status" class="main-card-status-select" id="main-card-status-select">
+                          <option value="all" <% if (statusFilter.value === 'all') { %>selected<% } %>>Tất cả</option>
+                          <option value="active" <% if (statusFilter.value === 'active') { %>selected<% } %>>Đang hoạt động</option>
+                          <option value="inactive" <% if (statusFilter.value === 'inactive') { %>selected<% } %>>Vô hiệu hóa</option>
+                        </select>
+                      </div>
+                      <% } %>
                     </div>
                   </div>
                 </div>

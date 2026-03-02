@@ -1,20 +1,22 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
 import SongModel from "../../models/song.model";
 import TopicModel from "../../models/topic.model";
-import { TPagination } from "../../types/index.type";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 import {
   TDataBodyCreateSong,
   TDataBodyUpdateSong,
 } from "../../types/song.type";
-import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
-import handleSearch from "../../helpers/handleSearch.helper";
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
+  let find: any = { deleted: false };
+
   // Handle pagination
   let page: number = 1;
   let limit: number = APP_ADMIN_PAGINATION_LIMIT;
@@ -26,7 +28,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
 
   const pagination: TPagination = await handlePagination(page, limit, type);
 
-  // Handle search
+  // Handle search filter
   let keyword: string = "";
   let keywordRegex: RegExp = new RegExp("", "i");
   let slugRegex: RegExp = new RegExp("", "i");
@@ -35,12 +37,33 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   if (keyword) {
     keywordRegex = new RegExp(keyword, "i");
     slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+    find = {
+      ...find,
+      $or: [
+        { title: { $regex: keywordRegex } },
+        { slug: { $regex: slugRegex } },
+      ],
+    };
   }
 
-  const songList = await SongModel.find({
-    $or: [{ title: { $regex: keywordRegex } }, { slug: { $regex: slugRegex } }],
-    deleted: false,
-  })
+  // Handle status filter
+  let status: string = "all";
+  if (req.query.status) status = req.query.status as string;
+
+  const statusFilter: TStatusFilter = handleStatusFilter(status);
+
+  if (statusFilter?.value === "active") status = "active";
+  else if (statusFilter?.value === "inactive") status = "inactive";
+  else status = "";
+
+  if (status)
+    find = {
+      ...find,
+      status,
+    };
+
+  const songList = await SongModel.find(find)
     .select("-deleted -description -audio -lyrics -slug")
     .sort({ position: "desc" })
     .populate("singerId", "stageName")
@@ -53,6 +76,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     songList,
     pagination,
     keyword,
+    statusFilter,
   });
 };
 
