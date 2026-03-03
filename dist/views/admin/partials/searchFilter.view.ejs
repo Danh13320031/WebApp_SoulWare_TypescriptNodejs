@@ -1,0 +1,19 @@
+<form class="main-card-filter-search" id="main-search-form">
+  <label for="main-search-input" class="form-label mb-0"><%= label %></label>
+  <div class="input-group w-100">
+    <input
+      type="text"
+      name="keyword"
+      value="<%= keyword %>"
+      placeholder="<%= placeholder %>"
+      class="form-control"
+      id="main-search-input"
+    />
+    <button type="reset" class="button-primary" id="main-search-reset">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <button type="submit" class="button-primary" id="main-search-button">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+</form>

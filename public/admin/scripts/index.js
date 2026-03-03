@@ -477,3 +477,28 @@ if (mainCardFilterStatus) {
   }
 }
 // End handle status filter
+
+// Handle singer filter
+const mainCardFilterSinger = document.getElementById("main-card-filter-singer");
+
+if (mainCardFilterSinger) {
+  const url = new URL(window.location.href);
+  const mainCardSingerSelect = mainCardFilterSinger.querySelector(
+    ".main-card-singer-select",
+  );
+
+  if (url && mainCardSingerSelect) {
+    mainCardSingerSelect.addEventListener("change", (e) => {
+      const singer = e.target.value;
+
+      if (url.searchParams.get("singer") === "all") {
+        url.searchParams.delete("singer");
+      } else {
+        url.searchParams.set("singer", singer);
+      }
+
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle singer filter
