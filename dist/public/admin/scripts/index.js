@@ -502,3 +502,28 @@ if (mainCardFilterSinger) {
   }
 }
 // End handle singer filter
+
+// Handle topic filter
+const mainCardFilterTopic = document.getElementById("main-card-filter-topic");
+
+if (mainCardFilterTopic) {
+  const url = new URL(window.location.href);
+  const mainCardTopicSelect = mainCardFilterTopic.querySelector(
+    ".main-card-topic-select",
+  );
+
+  if (url && mainCardTopicSelect) {
+    mainCardTopicSelect.addEventListener("change", (e) => {
+      const topic = e.target.value;
+
+      if (url.searchParams.get("topic") === "all") {
+        url.searchParams.delete("topic");
+      } else {
+        url.searchParams.set("topic", topic);
+      }
+
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle topic filter

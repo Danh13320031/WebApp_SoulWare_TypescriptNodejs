@@ -65,6 +65,14 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         find = Object.assign(Object.assign({}, find), { singerId: {
                 _id: singer,
             } });
+    // Handle topic filter
+    let topic = "all";
+    if (req.query.topic)
+        topic = req.query.topic;
+    if (topic && topic !== "all")
+        find = Object.assign(Object.assign({}, find), { topicId: {
+                _id: topic,
+            } });
     const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
         .sort({ position: "desc" })
@@ -75,6 +83,9 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const singerList = yield singer_model_1.default.find({
         deleted: false,
     }).select("stageName");
+    const topicList = yield topic_model_1.default.find({
+        deleted: false,
+    }).select("title");
     res.render("admin/pages/song/song.view.ejs", {
         pageTitle: "Danh sách bài hát",
         songList,
@@ -84,6 +95,8 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         statusFilter,
         singerList,
         singer,
+        topicList,
+        topic,
     });
 });
 // [GET]: /admin/songs/create

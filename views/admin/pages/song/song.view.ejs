@@ -57,7 +57,7 @@
               </h5>
               <div class="main-card-filter-content">
                 <div class="px-0 container-fluid">
-                  <div class="row g-3">
+                  <div class="row g-2">
                     <div class="col-lg-4 col-md-6 col-12">
                       <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm bài hát', keyword: keyword, placeholder: 'Tìm kiếm bài hát...' }) %>
                     </div>
@@ -72,6 +72,19 @@
                           <% if (singerList && singerList.length > 0) { %>
                             <% for (let i = 0; i < singerList.length; i++) { %>
                             <option value="<%= singerList[i]._id %>" <% if(singerList[i]._id == singer) { %>selected<% } %>><%= singerList[i].stageName %></option>
+                            <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <div class="main-card-filter-topic" id="main-card-filter-topic">
+                        <label for="main-card-topic-select" class="mb-0 main-card-topic-label">Chủ đề</label>
+                        <select name="topic" class="main-card-topic-select" id="main-card-topic-select">
+                          <option value="all">Tất cả</option>
+                          <% if (topicList && topicList.length > 0) { %>
+                            <% for (let i = 0; i < topicList.length; i++) { %>
+                            <option value="<%= topicList[i]._id %>" <% if(topicList[i]._id == topic) { %>selected<% } %>><%= topicList[i].title %></option>
                             <% } %>
                           <% } %>
                         </select>
