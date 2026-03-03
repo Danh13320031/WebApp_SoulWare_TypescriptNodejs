@@ -48,14 +48,11 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   }
 
   // Handle status filter
-  let status: string = "all";
+  let status: string = "";
   if (req.query.status) status = req.query.status as string;
+  if (req.query.status === "all") status = "";
 
-  const statusFilter: TStatusFilter = handleStatusFilter(status);
-
-  if (statusFilter?.value === "active") status = "active";
-  else if (statusFilter?.value === "inactive") status = "inactive";
-  else status = "";
+  const statusFilter: TStatusFilter[] = handleStatusFilter(status);
 
   if (status)
     find = {
@@ -92,6 +89,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     songList,
     pagination,
     keyword,
+    status,
     statusFilter,
     singerList,
     singer,

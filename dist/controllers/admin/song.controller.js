@@ -49,16 +49,12 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             ] });
     }
     // Handle status filter
-    let status = "all";
+    let status = "";
     if (req.query.status)
         status = req.query.status;
-    const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
-    if ((statusFilter === null || statusFilter === void 0 ? void 0 : statusFilter.value) === "active")
-        status = "active";
-    else if ((statusFilter === null || statusFilter === void 0 ? void 0 : statusFilter.value) === "inactive")
-        status = "inactive";
-    else
+    if (req.query.status === "all")
         status = "";
+    const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
     if (status)
         find = Object.assign(Object.assign({}, find), { status });
     // Handle singer filter
@@ -84,6 +80,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         songList,
         pagination,
         keyword,
+        status,
         statusFilter,
         singerList,
         singer,
