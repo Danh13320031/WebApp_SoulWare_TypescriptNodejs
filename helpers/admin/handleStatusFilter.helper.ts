@@ -6,12 +6,12 @@ interface IStatusFilter {
   class: string;
 }
 
-const handleStatusFilter = (status: string): IStatusFilter => {
-  const statusList = [
+const handleStatusFilter = (status: string): IStatusFilter[] => {
+  const statusList: TStatusFilter[] = [
     {
       value: "all",
       label: "Tất cả",
-      class: "active",
+      class: "",
     },
     {
       value: "active",
@@ -25,10 +25,11 @@ const handleStatusFilter = (status: string): IStatusFilter => {
     },
   ];
 
-  const statusFilter: TStatusFilter =
-    statusList.find((item) => item.value === status) || statusList[0];
+  for (const item of statusList) {
+    if (item.value === status) item.class = "active";
+  }
 
-  return statusFilter;
+  return statusList;
 };
 
 export default handleStatusFilter;

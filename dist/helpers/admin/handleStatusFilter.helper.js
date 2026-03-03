@@ -5,7 +5,7 @@ const handleStatusFilter = (status) => {
         {
             value: "all",
             label: "Tất cả",
-            class: "active",
+            class: "",
         },
         {
             value: "active",
@@ -18,7 +18,10 @@ const handleStatusFilter = (status) => {
             class: "",
         },
     ];
-    const statusFilter = statusList.find((item) => item.value === status) || statusList[0];
-    return statusFilter;
+    for (const item of statusList) {
+        if (item.value === status)
+            item.class = "active";
+    }
+    return statusList;
 };
 exports.default = handleStatusFilter;

@@ -1,10 +1,10 @@
-<% if (statusFilter) { %>
+<% if (statusFilter && statusFilter.length > 0) { %>
 <div class="main-card-filter-status" id="main-card-filter-status">
   <label for="main-card-status-select" class="mb-0 main-card-status-label"><%= label %></label>
   <select name="status" class="main-card-status-select" id="main-card-status-select">
-    <option value="all" <% if (statusFilter.value === 'all') { %>selected<% } %>>Tất cả</option>
-    <option value="active" <% if (statusFilter.value === 'active') { %>selected<% } %>>Đang hoạt động</option>
-    <option value="inactive" <% if (statusFilter.value === 'inactive') { %>selected<% } %>>Vô hiệu hóa</option>
+    <% for (let i = 0; i < statusFilter.length; i++) { %>
+    <option value="<%= statusFilter[i].value %>" <% if(statusFilter[i].value == status) { %>selected<% } %>><%= statusFilter[i].label %></option>
+    <% } %>
   </select>
 </div>
 <% } %>
