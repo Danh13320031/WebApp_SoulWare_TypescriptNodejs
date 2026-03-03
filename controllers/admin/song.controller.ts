@@ -63,6 +63,18 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
       status,
     };
 
+  // Handle singer filter
+  let singer: string = "all";
+  if (req.query.singer) singer = req.query.singer as string;
+
+  if (singer && singer !== "all")
+    find = {
+      ...find,
+      singerId: {
+        _id: singer,
+      },
+    };
+
   const songList = await SongModel.find(find)
     .select("-deleted -description -audio -lyrics -slug")
     .sort({ position: "desc" })
@@ -71,12 +83,18 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
 
+  const singerList = await SingerModel.find({
+    deleted: false,
+  }).select("stageName");
+
   res.render("admin/pages/song/song.view.ejs", {
     pageTitle: "Danh sách bài hát",
     songList,
     pagination,
     keyword,
     statusFilter,
+    singerList,
+    singer,
   });
 };
 

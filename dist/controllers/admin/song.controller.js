@@ -61,6 +61,14 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         status = "";
     if (status)
         find = Object.assign(Object.assign({}, find), { status });
+    // Handle singer filter
+    let singer = "all";
+    if (req.query.singer)
+        singer = req.query.singer;
+    if (singer && singer !== "all")
+        find = Object.assign(Object.assign({}, find), { singerId: {
+                _id: singer,
+            } });
     const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
         .sort({ position: "desc" })
@@ -68,12 +76,17 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         .populate("topicId", "title")
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
+    const singerList = yield singer_model_1.default.find({
+        deleted: false,
+    }).select("stageName");
     res.render("admin/pages/song/song.view.ejs", {
         pageTitle: "Danh sách bài hát",
         songList,
         pagination,
         keyword,
         statusFilter,
+        singerList,
+        singer,
     });
 });
 // [GET]: /admin/songs/create
