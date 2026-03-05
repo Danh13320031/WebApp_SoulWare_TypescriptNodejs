@@ -380,6 +380,72 @@ const changeStatusSongPatch = async (
   }
 };
 
+// [PATCH]: /admin/songs/update-multi
+const updateMultiSongPatch = async (req: Request, res: Response) => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active": {
+        await SongModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      }
+      case "status-inactive": {
+        await SongModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      }
+      case "soft-delete": {
+        await SongModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      }
+      case "hard-delete": {
+        await SongModel.deleteMany({ _id: { $in: ids } });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật bài hát thành công",
+      data: ids,
+    });
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
 type TSongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   createANewSongGet: (req: Request, res: Response) => Promise<void>;
@@ -388,6 +454,7 @@ type TSongController = {
   updateASongByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveASongByIdDelete: (req: Request, res: Response) => Promise<void>;
   changeStatusSongPatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiSongPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const songController: TSongController = {
@@ -398,6 +465,7 @@ const songController: TSongController = {
   updateASongByIdPatch,
   softRemoveASongByIdDelete,
   changeStatusSongPatch,
+  updateMultiSongPatch,
 };
 
 export default songController;

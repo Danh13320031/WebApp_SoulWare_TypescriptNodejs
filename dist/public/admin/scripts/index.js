@@ -432,6 +432,11 @@ if (mainSearchForm) {
     e.preventDefault();
     const keyword = document.getElementById("main-search-input").value;
 
+    if (!keyword) {
+      showAlert("error", "Vui lòng nhập từ khóa tìm kiếm");
+      return;
+    }
+
     url.searchParams.set("keyword", keyword);
     window.location.href = url.href;
   });
@@ -547,3 +552,118 @@ if (mainCardFilterSort) {
   }
 }
 // End handle sort filter
+
+// Handle multy update
+const formCheckAll = document.querySelector("input.form-check-all");
+const formCheckSingleList = document.querySelectorAll(
+  "input.form-check-single",
+);
+const mainChangeMultiButton = document.getElementById(
+  "main-change-multi-button",
+);
+let idArr = [];
+
+if (formCheckAll) {
+  formCheckAll.addEventListener("click", (e) => {
+    if (e.target.checked)
+      formCheckSingleList.forEach((input) => {
+        input.checked = true;
+
+        const id = input.getAttribute("data-id");
+        idArr.push(id);
+      });
+    else
+      formCheckSingleList.forEach((input) => {
+        input.checked = false;
+
+        const id = input.getAttribute("data-id");
+        idArr = idArr.filter((item) => item !== id);
+      });
+  });
+}
+
+if (formCheckSingleList && formCheckSingleList.length > 0) {
+  formCheckSingleList.forEach((input) => {
+    input.addEventListener("click", (e) => {
+      const id = e.target.getAttribute("data-id");
+      const formCheckedSingleList = document.querySelectorAll(
+        "input.form-check-single:checked",
+      );
+
+      if (!e.target.checked) {
+        formCheckAll.checked = false;
+        if (idArr.includes(id)) idArr = idArr.filter((item) => item !== id);
+      } else {
+        if (!idArr.includes(id)) idArr.push(id);
+      }
+      if (formCheckedSingleList.length === formCheckSingleList.length)
+        formCheckAll.checked = true;
+      else formCheckAll.checked = false;
+    });
+  });
+}
+
+if (mainChangeMultiButton) {
+  mainChangeMultiButton.addEventListener("click", async () => {
+    if (idArr.length <= 0) {
+      showAlert("error", "Vui lòng chọn bài hát");
+      return;
+    }
+
+    const mainChangeMultiSelect = document.getElementById(
+      "main-change-multi-select",
+    );
+
+    if (!mainChangeMultiSelect) return;
+
+    const value = mainChangeMultiSelect.value;
+
+    if (!value) {
+      showAlert("error", "Vui lòng chọn hành động");
+      return;
+    }
+
+    const ok = await handleConfirmModal({
+      type: "confirm",
+      status: "info",
+      title: "Thay đổi dữ liệu",
+      message: "Bạn có muốn áp dụng thay đổi này ko?",
+    });
+
+    if (!ok) return;
+
+    const dataOptions = {
+      ids: idArr,
+      type: value,
+    };
+
+    const apiUrl = `/admin/${type}/update-multi`;
+    const fetOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataOptions),
+    };
+
+    try {
+      const res = await fetch(apiUrl, fetOptions);
+      const result = await res.json();
+
+      console.log(result);
+
+      if (result.status === "Success") {
+        showAlert("success", result.message);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      } else {
+        showAlert("error", result.message);
+      }
+    } catch (error) {
+      console.error("Lỗi kết nối::: ", error);
+      showAlert("error", "Lỗi kết nối đến máy chủ. Vui lí thử lập sau!");
+    }
+  });
+}
+// End handle multy update
