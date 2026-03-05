@@ -527,3 +527,23 @@ if (mainCardFilterTopic) {
   }
 }
 // End handle topic filter
+
+// Handle sort filter
+const mainCardFilterSort = document.getElementById("main-card-filter-sort");
+
+if (mainCardFilterSort) {
+  const url = new URL(window.location.href);
+  const mainCardSortSelect = mainCardFilterSort.querySelector(
+    ".main-card-sort-select",
+  );
+
+  if (url && mainCardSortSelect) {
+    mainCardSortSelect.addEventListener("change", (e) => {
+      const sort = e.target.value;
+
+      url.searchParams.set("sort", sort);
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle sort filter

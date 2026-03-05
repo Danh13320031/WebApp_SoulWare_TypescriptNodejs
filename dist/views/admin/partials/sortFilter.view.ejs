@@ -1,0 +1,12 @@
+<% if(sortArr && sortArr.length > 0) { %>
+<div class="main-card-filter-sort" id="main-card-filter-sort">
+  <label for="main-card-sort-select" class="mb-0 main-card-sort-label"
+    ><%= label %></label
+  >
+  <select name="sort" class="main-card-sort-select" id="main-card-sort-select">
+    <% sortArr.forEach((item) => { %>
+    <option value="<%= item.value %>" <% if(item.value == sort) { %>selected<% } %>><%= item.label %></option>
+    <% }) %>
+  </select>
+</div>
+<% } %>

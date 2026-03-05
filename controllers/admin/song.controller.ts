@@ -12,6 +12,7 @@ import {
   TDataBodyCreateSong,
   TDataBodyUpdateSong,
 } from "../../types/song.type";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
@@ -84,9 +85,15 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
       },
     };
 
+  // Handle sort filter
+  let sort: string = "";
+  if (req.query.sort) sort = req.query.sort as string;
+
+  const sortFilter = handleSortFilter(sort);
+
   const songList = await SongModel.find(find)
     .select("-deleted -description -audio -lyrics -slug")
-    .sort({ position: "desc" })
+    .sort(sortFilter.sortOptions)
     .populate("singerId", "stageName")
     .populate("topicId", "title")
     .skip(pagination.skipPage)
@@ -111,6 +118,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     singer,
     topicList,
     topic,
+    sort: sortFilter.sort,
   });
 };
 

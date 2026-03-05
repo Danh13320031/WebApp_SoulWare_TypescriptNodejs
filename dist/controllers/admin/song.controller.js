@@ -20,6 +20,7 @@ const handlePagination_helper_1 = __importDefault(require("../../helpers/handleP
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let find = { deleted: false };
@@ -73,9 +74,14 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         find = Object.assign(Object.assign({}, find), { topicId: {
                 _id: topic,
             } });
+    // Handle sort filter
+    let sort = "";
+    if (req.query.sort)
+        sort = req.query.sort;
+    const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
     const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
-        .sort({ position: "desc" })
+        .sort(sortFilter.sortOptions)
         .populate("singerId", "stageName")
         .populate("topicId", "title")
         .skip(pagination.skipPage)
@@ -97,6 +103,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         singer,
         topicList,
         topic,
+        sort: sortFilter.sort,
     });
 });
 // [GET]: /admin/songs/create
