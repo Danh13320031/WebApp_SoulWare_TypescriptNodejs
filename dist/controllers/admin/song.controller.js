@@ -20,6 +20,7 @@ const handlePagination_helper_1 = __importDefault(require("../../helpers/handleP
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let find = { deleted: false };
@@ -73,9 +74,14 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         find = Object.assign(Object.assign({}, find), { topicId: {
                 _id: topic,
             } });
+    // Handle sort filter
+    let sort = "";
+    if (req.query.sort)
+        sort = req.query.sort;
+    const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
     const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
-        .sort({ position: "desc" })
+        .sort(sortFilter.sortOptions)
         .populate("singerId", "stageName")
         .populate("topicId", "title")
         .skip(pagination.skipPage)
@@ -97,6 +103,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         singer,
         topicList,
         topic,
+        sort: sortFilter.sort,
     });
 });
 // [GET]: /admin/songs/create
@@ -318,6 +325,61 @@ const changeStatusSongPatch = (req, res) => __awaiter(void 0, void 0, void 0, fu
         return;
     }
 });
+// [PATCH]: /admin/songs/update-multi
+const updateMultiSongPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let ids = [];
+        let type = "";
+        if (req.body.ids)
+            ids = req.body.ids;
+        if (req.body.type)
+            type = req.body.type;
+        if (!ids || !type || ids.length <= 0) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Tham số không hợp lệ",
+            });
+            return;
+        }
+        switch (type) {
+            case "status-active": {
+                yield song_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "active" });
+                break;
+            }
+            case "status-inactive": {
+                yield song_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "inactive" });
+                break;
+            }
+            case "soft-delete": {
+                yield song_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { deleted: true });
+                break;
+            }
+            case "hard-delete": {
+                yield song_model_1.default.deleteMany({ _id: { $in: ids } });
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật bài hát thành công",
+            data: ids,
+        });
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 const songController = {
     getAllSongGet,
     createANewSongGet,
@@ -326,5 +388,6 @@ const songController = {
     updateASongByIdPatch,
     softRemoveASongByIdDelete,
     changeStatusSongPatch,
+    updateMultiSongPatch,
 };
 exports.default = songController;

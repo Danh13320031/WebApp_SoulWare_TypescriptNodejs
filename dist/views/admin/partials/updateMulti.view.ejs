@@ -1,0 +1,23 @@
+<% if (updateMultiArr && updateMultiArr.length > 0) { %>
+<div class="main-change-multi-box">
+  <label for="main-change-multi-select" class="mb-0 main-change-multi-label"
+    >Hành động</label
+  >
+  <div class="input-group">
+    <select
+      name="action"
+      class="form-select main-change-multi-select"
+      id="main-change-multi-select"
+    >
+      <% updateMultiArr.forEach((item) => { %><option value="<%= item.value %>"><%= item.label %></option><% }) %>
+    </select>
+    <button
+      type="button"
+      class="button-primary main-change-multi-button"
+      id="main-change-multi-button"
+    >
+      Áp dụng
+    </button>
+  </div>
+</div>
+<% } %>

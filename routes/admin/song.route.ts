@@ -38,5 +38,6 @@ songRoute.patch(
   "/change-status/:songId/:status",
   songController.changeStatusSongPatch,
 );
+songRoute.patch("/update-multi", songController.updateMultiSongPatch);
 
 export default songRoute;
