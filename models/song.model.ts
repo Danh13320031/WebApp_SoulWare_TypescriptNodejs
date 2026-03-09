@@ -29,9 +29,21 @@ const objSchema = {
 
 const SongSchema = new Schema(objSchema, { timestamps: true });
 
-SongSchema.pre("save", function () {
-  if (this.isModified("title"))
-    this.slug = slugify(this.title, { lower: true });
+SongSchema.pre("save", async function () {
+  if (!this.isModified("title")) return;
+
+  const Song = this.constructor as any;
+
+  const baseSlug = slugify(this.title, { lower: true, strict: true });
+  let slug = baseSlug;
+  let count = 1;
+
+  while (await Song.findOne({ slug })) {
+    slug = `${baseSlug}-${count}`;
+    count++;
+  }
+
+  this.slug = slug;
 });
 
 const SongModel = mongoose.model("Song", SongSchema, "Song");

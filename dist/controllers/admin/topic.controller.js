@@ -14,17 +14,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const http_status_codes_1 = require("http-status-codes");
 // [GET]: /admin/topics
 const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const topicList = yield topic_model_1.default.find({
-        deleted: false,
-    }).select("-deleted -description");
+    let find = { deleted: false };
+    const topicList = yield topic_model_1.default.find(find).select("-deleted -description");
     res.render("admin/pages/topic/topic.view.ejs", {
         pageTitle: "Danh sách chủ đề",
         topicList,
     });
 });
+// [GET]: /admin/topics/create
+const createANewTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.render("admin/pages/topic/create.view.ejs", {
+        pageTitle: "Thêm mới chủ đề",
+    });
+});
+// [POST]: /admin/songs/create
+const createANewTopicPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const countDocument = yield topic_model_1.default.countDocuments();
+        let avatar = "";
+        if (req.body.avatar)
+            avatar = req.body.avatar[0];
+        const dataBodyCreateTopic = {
+            title: req.body.title ? req.body.title : "",
+            avatar: avatar,
+            description: req.body.description || "",
+            position: req.body.position
+                ? Number(req.body.position)
+                : countDocument + 1,
+            status: req.body.status || "active",
+        };
+        const newSong = new topic_model_1.default(dataBodyCreateTopic);
+        yield newSong.save();
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+            code: http_status_codes_1.StatusCodes.CREATED,
+            status: "Success",
+            message: "Tạo chủ đề thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 exports.topicController = {
     getAllTopicGet,
+    createANewTopicGet,
+    createANewTopicPost,
 };
 exports.default = exports.topicController;
