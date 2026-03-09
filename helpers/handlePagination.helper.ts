@@ -1,5 +1,3 @@
-import SongModel from "../models/song.model";
-import TopicModel from "../models/topic.model";
 import { TPagination } from "../types/index.type";
 
 interface IPagination {

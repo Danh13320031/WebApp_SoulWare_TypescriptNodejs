@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/topics
@@ -32,6 +33,20 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         type = req.query.type;
     const count = yield topic_model_1.default.countDocuments(find);
     const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
+    // Handle search filter
+    let keyword = "";
+    let keywordRegex = new RegExp("", "i");
+    let slugRegex = new RegExp("", "i");
+    if (req.query.keyword)
+        keyword = req.query.keyword;
+    if (keyword) {
+        keywordRegex = new RegExp(keyword, "i");
+        slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+        find = Object.assign(Object.assign({}, find), { $or: [
+                { title: { $regex: keywordRegex } },
+                { slug: { $regex: slugRegex } },
+            ] });
+    }
     const topicList = yield topic_model_1.default.find(find)
         .select("-deleted -description")
         .sort({ position: "desc" })
@@ -41,6 +56,7 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         pageTitle: "Danh sách chủ đề",
         topicList,
         pagination,
+        keyword,
     });
 });
 // [GET]: /admin/topics/create

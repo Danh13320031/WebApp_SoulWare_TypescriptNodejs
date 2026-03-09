@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import TopicModel from "../../models/topic.model";
 import { TPagination } from "../../types/index.type";
@@ -28,6 +29,25 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     count,
   );
 
+  // Handle search filter
+  let keyword: string = "";
+  let keywordRegex: RegExp = new RegExp("", "i");
+  let slugRegex: RegExp = new RegExp("", "i");
+
+  if (req.query.keyword) keyword = req.query.keyword as string;
+  if (keyword) {
+    keywordRegex = new RegExp(keyword, "i");
+    slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+    find = {
+      ...find,
+      $or: [
+        { title: { $regex: keywordRegex } },
+        { slug: { $regex: slugRegex } },
+      ],
+    };
+  }
+
   const topicList = await TopicModel.find(find)
     .select("-deleted -description")
     .sort({ position: "desc" })
@@ -38,6 +58,7 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     pageTitle: "Danh sách chủ đề",
     topicList,
     pagination,
+    keyword,
   });
 };
 
