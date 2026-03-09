@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
@@ -12,7 +13,6 @@ import {
   TDataBodyCreateSong,
   TDataBodyUpdateSong,
 } from "../../types/song.type";
-import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
@@ -381,7 +381,10 @@ const changeStatusSongPatch = async (
 };
 
 // [PATCH]: /admin/songs/update-multi
-const updateMultiSongPatch = async (req: Request, res: Response) => {
+const updateMultiSongPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     let ids: string[] = [];
     let type: string = "";
