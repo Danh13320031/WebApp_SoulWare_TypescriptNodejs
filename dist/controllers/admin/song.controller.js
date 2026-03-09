@@ -34,7 +34,8 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         limit = Number(req.query.limit);
     if (req.query.type)
         type = req.query.type;
-    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type);
+    const count = yield song_model_1.default.countDocuments(find);
+    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
     // Handle search filter
     let keyword = "";
     let keywordRegex = new RegExp("", "i");

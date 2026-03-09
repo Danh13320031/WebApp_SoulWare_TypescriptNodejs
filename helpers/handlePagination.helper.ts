@@ -1,4 +1,5 @@
 import SongModel from "../models/song.model";
+import TopicModel from "../models/topic.model";
 import { TPagination } from "../types/index.type";
 
 interface IPagination {
@@ -13,11 +14,13 @@ const handlePagination = async (
   page: number,
   limit: number,
   type: string,
+  count: number,
 ): Promise<IPagination> => {
-  const currentPage = page ? page : 1;
-  const limitPage = limit ? limit : 10;
-  const skipPage = (currentPage - 1) * limitPage;
-  const totalItem = await SongModel.countDocuments({ deleted: false });
+  const currentPage: number = page ? page : 1;
+  const limitPage: number = limit ? limit : 10;
+  const skipPage: number = (currentPage - 1) * limitPage;
+  let totalItem: number = count;
+
   const totalPage = Math.ceil(totalItem / limitPage);
 
   const pagination: TPagination = {
