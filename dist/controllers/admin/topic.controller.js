@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
@@ -47,6 +48,15 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 { slug: { $regex: slugRegex } },
             ] });
     }
+    // Handle status filter
+    let status = "";
+    if (req.query.status)
+        status = req.query.status;
+    if (req.query.status === "all")
+        status = "";
+    const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+    if (status)
+        find = Object.assign(Object.assign({}, find), { status });
     const topicList = yield topic_model_1.default.find(find)
         .select("-deleted -description")
         .sort({ position: "desc" })
@@ -57,6 +67,8 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         topicList,
         pagination,
         keyword,
+        status,
+        statusFilter,
     });
 });
 // [GET]: /admin/topics/create
