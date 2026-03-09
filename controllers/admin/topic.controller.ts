@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import TopicModel from "../../models/topic.model";
-import { TPagination } from "../../types/index.type";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 import { TDataBodyCreateTopic } from "../../types/topic.type";
 
 // [GET]: /admin/topics
@@ -48,6 +49,19 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     };
   }
 
+  // Handle status filter
+  let status: string = "";
+  if (req.query.status) status = req.query.status as string;
+  if (req.query.status === "all") status = "";
+
+  const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+  if (status)
+    find = {
+      ...find,
+      status,
+    };
+
   const topicList = await TopicModel.find(find)
     .select("-deleted -description")
     .sort({ position: "desc" })
@@ -59,6 +73,8 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     topicList,
     pagination,
     keyword,
+    status,
+    statusFilter,
   });
 };
 
