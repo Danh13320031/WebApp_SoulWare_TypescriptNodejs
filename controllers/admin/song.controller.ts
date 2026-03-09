@@ -27,7 +27,14 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   if (req.query.limit) limit = Number(req.query.limit);
   if (req.query.type) type = req.query.type as string;
 
-  const pagination: TPagination = await handlePagination(page, limit, type);
+  const count = await SongModel.countDocuments(find);
+
+  const pagination: TPagination = await handlePagination(
+    page,
+    limit,
+    type,
+    count,
+  );
 
   // Handle search filter
   let keyword: string = "";

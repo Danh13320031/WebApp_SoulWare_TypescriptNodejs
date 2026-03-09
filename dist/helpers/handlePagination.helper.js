@@ -8,16 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const song_model_1 = __importDefault(require("../models/song.model"));
-const handlePagination = (page, limit, type) => __awaiter(void 0, void 0, void 0, function* () {
+const handlePagination = (page, limit, type, count) => __awaiter(void 0, void 0, void 0, function* () {
     const currentPage = page ? page : 1;
     const limitPage = limit ? limit : 10;
     const skipPage = (currentPage - 1) * limitPage;
-    const totalItem = yield song_model_1.default.countDocuments({ deleted: false });
+    let totalItem = count;
     const totalPage = Math.ceil(totalItem / limitPage);
     const pagination = {
         currentPage,

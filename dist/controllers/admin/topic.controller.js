@@ -13,15 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
-const topic_model_1 = __importDefault(require("../../models/topic.model"));
 const http_status_codes_1 = require("http-status-codes");
+const app_constant_1 = require("../../constants/app.constant");
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
+const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/topics
 const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let find = { deleted: false };
-    const topicList = yield topic_model_1.default.find(find).select("-deleted -description");
+    // Handle pagination
+    let page = 1;
+    let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+    let type = "";
+    if (req.query.page)
+        page = Number(req.query.page);
+    if (req.query.limit)
+        limit = Number(req.query.limit) || app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+    if (req.query.type)
+        type = req.query.type;
+    const count = yield topic_model_1.default.countDocuments(find);
+    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
+    const topicList = yield topic_model_1.default.find(find)
+        .select("-deleted -description")
+        .sort({ position: "desc" })
+        .skip(pagination.skipPage)
+        .limit(pagination.limitPage);
     res.render("admin/pages/topic/topic.view.ejs", {
         pageTitle: "Danh sách chủ đề",
         topicList,
+        pagination,
     });
 });
 // [GET]: /admin/topics/create

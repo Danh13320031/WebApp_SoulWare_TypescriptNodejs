@@ -1,17 +1,43 @@
 import { Request, Response } from "express";
-import TopicModel from "../../models/topic.model";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handlePagination from "../../helpers/handlePagination.helper";
+import TopicModel from "../../models/topic.model";
+import { TPagination } from "../../types/index.type";
 import { TDataBodyCreateTopic } from "../../types/topic.type";
 
 // [GET]: /admin/topics
 const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
   let find: any = { deleted: false };
 
-  const topicList = await TopicModel.find(find).select("-deleted -description");
+  // Handle pagination
+  let page: number = 1;
+  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+  let type: string = "";
+
+  if (req.query.page) page = Number(req.query.page);
+  if (req.query.limit)
+    limit = Number(req.query.limit) || APP_ADMIN_PAGINATION_LIMIT;
+  if (req.query.type) type = req.query.type as string;
+
+  const count = await TopicModel.countDocuments(find);
+  const pagination: TPagination = await handlePagination(
+    page,
+    limit,
+    type,
+    count,
+  );
+
+  const topicList = await TopicModel.find(find)
+    .select("-deleted -description")
+    .sort({ position: "desc" })
+    .skip(pagination.skipPage)
+    .limit(pagination.limitPage);
 
   res.render("admin/pages/topic/topic.view.ejs", {
     pageTitle: "Danh sách chủ đề",
     topicList,
+    pagination,
   });
 };
 
