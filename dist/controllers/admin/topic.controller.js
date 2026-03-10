@@ -197,11 +197,46 @@ const updateATopicByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fu
         return;
     }
 });
+// [PATCH]: /admin/topics/soft-delete/topicId
+const softRemoveTopicByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topicId = req.params.topicId;
+        const topic = yield topic_model_1.default.findOne({
+            _id: topicId,
+            deleted: false,
+        });
+        if (!topic) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy chủ đề",
+            });
+            return;
+        }
+        yield topic_model_1.default.updateOne({ _id: topicId }, { deleted: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Xóa chủ đề thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 exports.topicController = {
     getAllTopicGet,
     createANewTopicGet,
     createANewTopicPost,
     getATopicByIdGet,
     updateATopicByIdPatch,
+    softRemoveTopicByIdPatch,
 };
 exports.default = exports.topicController;

@@ -280,6 +280,7 @@ const softRemoveASongByIdDelete = (req, res) => __awaiter(void 0, void 0, void 0
             status: "Success",
             message: "Xoa bài hát thành công",
         });
+        return;
     }
     catch (error) {
         console.error("Lỗi hệ thống::: ", error);
