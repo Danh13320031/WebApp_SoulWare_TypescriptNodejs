@@ -15,4 +15,5 @@ topicRoute.get("/create", topic_controller_1.default.createANewTopicGet);
 topicRoute.post("/create", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, topic_validate_1.default.createANewTopicValidate, topic_controller_1.default.createANewTopicPost);
 topicRoute.get("/update/:topicId", topic_controller_1.default.getATopicByIdGet);
 topicRoute.patch("/update/:topicId", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, topic_validate_1.default.updateATopicByIdValidate, topic_controller_1.default.updateATopicByIdPatch);
+topicRoute.patch("/soft-delete/:topicId", topic_controller_1.default.softRemoveTopicByIdPatch);
 exports.default = topicRoute;

@@ -24,5 +24,9 @@ topicRoute.patch(
   topicValidate.updateATopicByIdValidate,
   topicController.updateATopicByIdPatch,
 );
+topicRoute.patch(
+  "/soft-delete/:topicId",
+  topicController.softRemoveTopicByIdPatch,
+);
 
 export default topicRoute;

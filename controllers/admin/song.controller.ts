@@ -331,6 +331,7 @@ const softRemoveASongByIdDelete = async (req: Request, res: Response) => {
       status: "Success",
       message: "Xoa bài hát thành công",
     });
+    return;
   } catch (error) {
     console.error("Lỗi hệ thống::: ", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

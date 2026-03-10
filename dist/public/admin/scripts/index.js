@@ -291,12 +291,25 @@ const buttonDeleteList = document.querySelectorAll(".button-delete");
 
 if (buttonDeleteList && buttonDeleteList.length > 0) {
   buttonDeleteList.forEach((button) => {
+    let messageSubStr = "";
+
+    switch (type) {
+      case "songs":
+        messageSubStr = "bài hát";
+        break;
+      case "topics":
+        messageSubStr = "chủ đề";
+        break;
+      default:
+        messageSubStr = "dữ liệu";
+    }
+
     button.addEventListener("click", async () => {
       const ok = await handleConfirmModal({
         type: "confirm",
         status: "error",
         title: "Xoá dữ liệu",
-        message: "Bạn có muốn xóa bài hát này không?",
+        message: `Bạn có muốn xóa ${messageSubStr} này không?`,
       });
 
       console.log(ok);
