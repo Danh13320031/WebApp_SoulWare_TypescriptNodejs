@@ -7,7 +7,10 @@ import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import TopicModel from "../../models/topic.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
-import { TDataBodyCreateTopic } from "../../types/topic.type";
+import {
+  TDataBodyCreateTopic,
+  TDataBodyUpdateTopic,
+} from "../../types/topic.type";
 
 // [GET]: /admin/topics
 const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
@@ -137,16 +140,109 @@ const createANewTopicPost = async (
   }
 };
 
+// [GET]: /admin/topics/update/:topicId
+const getATopicByIdGet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    let topicId: string = "";
+
+    if (req.params.topicId) topicId = req.params.topicId as string;
+
+    const topic = await TopicModel.findOne({
+      _id: topicId,
+      deleted: false,
+    }).select("-deleted -deletedAt -createdAt -updatedAt -slug -__v");
+
+    if (!topic) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy chủ đề",
+      });
+      return;
+    }
+
+    res.render("admin/pages/topic/update.view.ejs", {
+      pageTitle: `Chỉnh sửa chủ đề ${topic.title}`,
+      topic,
+    });
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/topics/update/:topicId
+const updateATopicByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const topicId: string = req.params.topicId as string;
+
+    const topic = await TopicModel.findOne({
+      _id: topicId,
+      deleted: false,
+    });
+
+    if (!topic) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy chủ đề",
+      });
+      return;
+    }
+
+    if (req.body.avatar) topic.avatar = req.body.avatar;
+
+    const dataBodyupdateTopic: TDataBodyUpdateTopic = {
+      title: req.body.title ? req.body.title : topic.title,
+      avatar: req.body.avatar ? req.body.avatar : topic.avatar,
+      description: req.body.description
+        ? req.body.description
+        : topic.description,
+      position: req.body.position ? Number(req.body.position) : topic.position,
+      status: req.body.status ? req.body.status : topic.status,
+    };
+
+    await TopicModel.updateOne({ _id: topicId }, dataBodyupdateTopic);
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật chủ đề thành công!",
+    });
+    return;
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
 type TTopicController = {
   getAllTopicGet: (req: Request, res: Response) => Promise<void>;
   createANewTopicGet: (req: Request, res: Response) => Promise<void>;
   createANewTopicPost: (req: Request, res: Response) => Promise<void>;
+  getATopicByIdGet: (req: Request, res: Response) => Promise<void>;
+  updateATopicByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const topicController: TTopicController = {
   getAllTopicGet,
   createANewTopicGet,
   createANewTopicPost,
+  getATopicByIdGet,
+  updateATopicByIdPatch,
 };
 
 export default topicController;

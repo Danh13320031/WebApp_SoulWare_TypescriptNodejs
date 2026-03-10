@@ -119,9 +119,89 @@ const createANewTopicPost = (req, res) => __awaiter(void 0, void 0, void 0, func
         return;
     }
 });
+// [GET]: /admin/topics/update/:topicId
+const getATopicByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let topicId = "";
+        if (req.params.topicId)
+            topicId = req.params.topicId;
+        const topic = yield topic_model_1.default.findOne({
+            _id: topicId,
+            deleted: false,
+        }).select("-deleted -deletedAt -createdAt -updatedAt -slug -__v");
+        if (!topic) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy chủ đề",
+            });
+            return;
+        }
+        res.render("admin/pages/topic/update.view.ejs", {
+            pageTitle: `Chỉnh sửa chủ đề ${topic.title}`,
+            topic,
+        });
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/topics/update/:topicId
+const updateATopicByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topicId = req.params.topicId;
+        const topic = yield topic_model_1.default.findOne({
+            _id: topicId,
+            deleted: false,
+        });
+        if (!topic) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy chủ đề",
+            });
+            return;
+        }
+        if (req.body.avatar)
+            topic.avatar = req.body.avatar;
+        const dataBodyupdateTopic = {
+            title: req.body.title ? req.body.title : topic.title,
+            avatar: req.body.avatar ? req.body.avatar : topic.avatar,
+            description: req.body.description
+                ? req.body.description
+                : topic.description,
+            position: req.body.position ? Number(req.body.position) : topic.position,
+            status: req.body.status ? req.body.status : topic.status,
+        };
+        yield topic_model_1.default.updateOne({ _id: topicId }, dataBodyupdateTopic);
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật chủ đề thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 exports.topicController = {
     getAllTopicGet,
     createANewTopicGet,
     createANewTopicPost,
+    getATopicByIdGet,
+    updateATopicByIdPatch,
 };
 exports.default = exports.topicController;
