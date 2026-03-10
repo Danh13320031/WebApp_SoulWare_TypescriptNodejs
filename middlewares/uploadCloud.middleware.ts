@@ -12,6 +12,7 @@ const uploadSingerField = async (
   try {
     const file: any = req.file;
     const result = await uploadToCloudinary(file.buffer);
+
     req.body[file.fieldname] = result;
   } catch (error) {
     console.log("Upload singer field error::: ", error);
