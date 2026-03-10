@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
@@ -57,9 +58,14 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
     if (status)
         find = Object.assign(Object.assign({}, find), { status });
+    // Handle sort filter
+    let sort = "";
+    if (req.query.sort)
+        sort = req.query.sort;
+    const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
     const topicList = yield topic_model_1.default.find(find)
         .select("-deleted -description")
-        .sort({ position: "desc" })
+        .sort(sortFilter.sortOptions)
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
     res.render("admin/pages/topic/topic.view.ejs", {
@@ -69,6 +75,7 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         keyword,
         status,
         statusFilter,
+        sort: sortFilter.sort,
     });
 });
 // [GET]: /admin/topics/create
@@ -83,7 +90,7 @@ const createANewTopicPost = (req, res) => __awaiter(void 0, void 0, void 0, func
         const countDocument = yield topic_model_1.default.countDocuments();
         let avatar = "";
         if (req.body.avatar)
-            avatar = req.body.avatar[0];
+            avatar = req.body.avatar;
         const dataBodyCreateTopic = {
             title: req.body.title ? req.body.title : "",
             avatar: avatar,

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
@@ -62,9 +63,15 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
       status,
     };
 
+  // Handle sort filter
+  let sort: string = "";
+  if (req.query.sort) sort = req.query.sort as string;
+
+  const sortFilter = handleSortFilter(sort);
+
   const topicList = await TopicModel.find(find)
     .select("-deleted -description")
-    .sort({ position: "desc" })
+    .sort(sortFilter.sortOptions)
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
 
@@ -75,6 +82,7 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
     keyword,
     status,
     statusFilter,
+    sort: sortFilter.sort,
   });
 };
 
@@ -97,7 +105,7 @@ const createANewTopicPost = async (
     const countDocument = await TopicModel.countDocuments();
     let avatar: string = "";
 
-    if (req.body.avatar) avatar = req.body.avatar[0];
+    if (req.body.avatar) avatar = req.body.avatar;
 
     const dataBodyCreateTopic: TDataBodyCreateTopic = {
       title: req.body.title ? req.body.title : "",

@@ -63,10 +63,10 @@
                       <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm chủ đề', keyword: keyword, placeholder: 'Tìm kiếm chủ đề...' }) %>
                     </div>
                     <div class="col-lg-4 col-md-6 col-12">
-                      <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái bài hát', status: status, statusFilter: statusFilter }) %>
+                      <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái chủ đề', status: status, statusFilter: statusFilter }) %>
                     </div>
                     <div class="col-lg-4 col-md-6 col-12">
-                      <%#-include('../../partials/sortFilter.view.ejs', { 
+                      <%-include('../../partials/sortFilter.view.ejs', { 
                         label: 'Vị trí sắp xếp', 
                         sortArr: [
                           { value: 'position-desc', label: 'Vị trí giảm dần' }, 
