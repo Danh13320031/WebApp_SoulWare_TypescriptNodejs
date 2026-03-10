@@ -16,5 +16,13 @@ topicRoute.post(
   topicValidate.createANewTopicValidate,
   topicController.createANewTopicPost,
 );
+topicRoute.get("/update/:topicId", topicController.getATopicByIdGet);
+topicRoute.patch(
+  "/update/:topicId",
+  upload.single("avatar"),
+  uploadCloud.uploadSingerField,
+  topicValidate.updateATopicByIdValidate,
+  topicController.updateATopicByIdPatch,
+);
 
 export default topicRoute;

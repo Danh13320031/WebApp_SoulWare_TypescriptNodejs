@@ -18,6 +18,10 @@ const uploadToCloudinary_helper_1 = __importDefault(require("../helpers/uploadTo
 const uploadSingerField = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const file = req.file;
+        if (!file) {
+            next();
+            return;
+        }
         const result = yield (0, uploadToCloudinary_helper_1.default)(file.buffer);
         req.body[file.fieldname] = result;
     }
@@ -25,6 +29,7 @@ const uploadSingerField = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         console.log("Upload singer field error::: ", error);
     }
     next();
+    return;
 });
 const uploadDiffMultiField = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const fileObj = req.files;
@@ -42,6 +47,7 @@ const uploadDiffMultiField = (req, res, next) => __awaiter(void 0, void 0, void 
         }
     }
     next();
+    return;
 });
 const uploadCloud = { uploadSingerField, uploadDiffMultiField };
 exports.default = uploadCloud;

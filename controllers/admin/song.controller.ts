@@ -293,6 +293,7 @@ const updateASongByIdPatch = async (
       status: "Success",
       message: "Cập nhật bài hát thành công",
     });
+    return;
   } catch (error) {
     console.error("Lỗi hệ thống::: ", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

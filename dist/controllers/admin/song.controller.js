@@ -246,6 +246,7 @@ const updateASongByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
             status: "Success",
             message: "Cập nhật bài hát thành công",
         });
+        return;
     }
     catch (error) {
         console.error("Lỗi hệ thống::: ", error);

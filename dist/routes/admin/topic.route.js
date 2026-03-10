@@ -13,4 +13,6 @@ const upload = (0, multer_1.default)();
 topicRoute.get("/", topic_controller_1.default.getAllTopicGet);
 topicRoute.get("/create", topic_controller_1.default.createANewTopicGet);
 topicRoute.post("/create", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, topic_validate_1.default.createANewTopicValidate, topic_controller_1.default.createANewTopicPost);
+topicRoute.get("/update/:topicId", topic_controller_1.default.getATopicByIdGet);
+topicRoute.patch("/update/:topicId", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, topic_validate_1.default.updateATopicByIdValidate, topic_controller_1.default.updateATopicByIdPatch);
 exports.default = topicRoute;

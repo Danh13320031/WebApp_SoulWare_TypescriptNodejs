@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import uploadCloudConfig from "../configs/uploadCloud.config";
 import uploadToCloudinary from "../helpers/uploadToCloudinary.helper";
+import { StatusCodes } from "http-status-codes";
 
 uploadCloudConfig();
 
@@ -11,6 +12,12 @@ const uploadSingerField = async (
 ): Promise<void> => {
   try {
     const file: any = req.file;
+
+    if (!file) {
+      next();
+      return;
+    }
+
     const result = await uploadToCloudinary(file.buffer);
 
     req.body[file.fieldname] = result;
@@ -19,6 +26,7 @@ const uploadSingerField = async (
   }
 
   next();
+  return;
 };
 
 const uploadDiffMultiField = async (
@@ -44,6 +52,7 @@ const uploadDiffMultiField = async (
   }
 
   next();
+  return;
 };
 
 const uploadCloud = { uploadSingerField, uploadDiffMultiField };

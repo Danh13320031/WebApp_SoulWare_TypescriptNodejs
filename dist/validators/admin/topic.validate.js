@@ -28,7 +28,45 @@ const createANewTopicValidate = (req, res, next) => {
     }
     next();
 };
+const updateATopicByIdValidate = (req, res, next) => {
+    if (!req.params.topicId) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Không tìm thấy bài hát",
+        });
+        return;
+    }
+    const hasNewAvatar = req.body.avatar && req.body.avatar.length > 0;
+    const hasOldAvatar = req.body.oldAvatar && req.body.oldAvatar.trim() !== "";
+    if (!hasNewAvatar && !hasOldAvatar) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Ảnh đại diện không được để trống",
+        });
+        return;
+    }
+    if (!req.body.title) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Vui lòng nhập tên bài hát",
+        });
+        return;
+    }
+    if (!req.body.status) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Vui lòng chọn trạng thái",
+        });
+        return;
+    }
+    next();
+};
 const topicValidate = {
     createANewTopicValidate,
+    updateATopicByIdValidate,
 };
 exports.default = topicValidate;
