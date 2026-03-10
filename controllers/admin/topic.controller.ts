@@ -270,6 +270,51 @@ const softRemoveTopicByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/topics/change-status/:topicId/:status
+const changeStatusTopicPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const topicId = req.params.topicId as string;
+    const topicStatus = req.params.status as string;
+
+    const topic = await TopicModel.findOne({
+      _id: topicId,
+      deleted: false,
+    });
+
+    if (!topic) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy chủ đề",
+      });
+      return;
+    }
+
+    await TopicModel.findOneAndUpdate(
+      { _id: topicId },
+      { status: topicStatus },
+    ).select("_id");
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái chủ đề thành công!",
+    });
+    return;
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
 type TTopicController = {
   getAllTopicGet: (req: Request, res: Response) => Promise<void>;
   createANewTopicGet: (req: Request, res: Response) => Promise<void>;
@@ -277,6 +322,7 @@ type TTopicController = {
   getATopicByIdGet: (req: Request, res: Response) => Promise<void>;
   updateATopicByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveTopicByIdPatch: (req: Request, res: Response) => Promise<void>;
+  changeStatusTopicPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const topicController: TTopicController = {
@@ -286,6 +332,7 @@ export const topicController: TTopicController = {
   getATopicByIdGet,
   updateATopicByIdPatch,
   softRemoveTopicByIdPatch,
+  changeStatusTopicPatch,
 };
 
 export default topicController;
