@@ -28,5 +28,9 @@ topicRoute.patch(
   "/soft-delete/:topicId",
   topicController.softRemoveTopicByIdPatch,
 );
+topicRoute.patch(
+  "/change-status/:topicId/:status",
+  topicController.changeStatusTopicPatch,
+);
 
 export default topicRoute;

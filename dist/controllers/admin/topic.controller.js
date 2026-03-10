@@ -231,6 +231,41 @@ const softRemoveTopicByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0,
         return;
     }
 });
+// [PATCH]: /admin/topics/change-status/:topicId/:status
+const changeStatusTopicPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topicId = req.params.topicId;
+        const topicStatus = req.params.status;
+        const topic = yield topic_model_1.default.findOne({
+            _id: topicId,
+            deleted: false,
+        });
+        if (!topic) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy chủ đề",
+            });
+            return;
+        }
+        yield topic_model_1.default.findOneAndUpdate({ _id: topicId }, { status: topicStatus }).select("_id");
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái chủ đề thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.error("Lỗi hệ thống::: ", error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Lỗi hệ thống",
+        });
+        return;
+    }
+});
 exports.topicController = {
     getAllTopicGet,
     createANewTopicGet,
@@ -238,5 +273,6 @@ exports.topicController = {
     getATopicByIdGet,
     updateATopicByIdPatch,
     softRemoveTopicByIdPatch,
+    changeStatusTopicPatch,
 };
 exports.default = exports.topicController;
