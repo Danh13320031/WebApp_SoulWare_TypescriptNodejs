@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
+    <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/modal.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <section class="admin-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <h1
+        class="admin-title main-title"
+        style="
+          font-size: var(--font-size-xxl);
+          font-weight: var(--font-weight-bold);
+          color: var(--primary-color);
+        "
+        >
+          <%= pageTitle %>
+        </h1>
+        <a href="/admin/admins/create" class="button-primary text-decoration-none">
+          Thêm mới <i class="fa-solid fa-plus"></i>
+        </a>
+      </section>
+      <section class="admin-content main-content">
+        <div
+          class="card my-2 shadow-sm admin-card main-card"
+          style="border-color: var(--primary-color)"
+        >
+          <div
+            class="card-header py-3 bg-white admin-card-header main-card-header"
+          >
+            <div class="d-flex flex-column gap-2 main-card-filter">
+              <h5 class="mb-0 d-flex align-items-center main-card-filter-title" style="color: var(--primary-color); font-weight: var(--font-weight-bold); font-size: var(--font-size-lg);">
+                <i class="fa-solid fa-filter me-2"></i>Bộ lọc
+              </h5>
+              <div class="main-card-filter-content">
+                <div class="px-0 container-fluid">
+                  <div class="row g-2">
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <%#-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm bài hát', keyword: keyword, placeholder: 'Tìm kiếm bài hát...' }) %>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <%#-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái bài hát', status: status, statusFilter: statusFilter }) %>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12"></div>
+                    <div class="col-lg-4 col-md-6 col-12"></div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <%#-include('../../partials/sortFilter.view.ejs', { 
+                        label: 'Vị trí sắp xếp', 
+                        sortArr: [
+                          { value: 'position-desc', label: 'Vị trí giảm dần' }, 
+                          { value: 'position-asc', label: 'Vị trí tăng dần' },
+                          { value: 'title-desc', label: 'Tiêu đề từ Z-A' },
+                          { value: 'title-asc', label: 'Tiêu đề từ A-Z' },
+                          { value: 'createdAt-desc', label: 'Ngày tạo từ mới tới cũ' },
+                          { value: 'createdAt-asc', label: 'Ngày tạo từ cũ tới mới' },
+                        ] 
+                      }) %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body admin-card-body main-card-body">
+            <%# if (adminList && adminList.length > 0) { %>
+            <div class="overflow-auto table-responsive">
+              <table class="table table-border table-hover mb-0 admin-table main-table" id="main-table" data-type="admins">
+                <thead class="admin-table-header main-table-header">
+                  <tr>
+                    <th scope="col">
+                      <div class="form-check">
+                        <input
+                        type="checkbox"
+                        value=""
+                        class="form-check-input form-check-all"
+                        form-check-all
+                        id="form-check-all"
+                        />
+                      </div>
+                    </th>
+                    <th>STT</th>
+                    <th scope="col" class="text-uppercase">Ảnh đại diện</th>
+                    <th scope="col" class="text-uppercase">Tên bài hát</th>
+                    <th scope="col" class="text-uppercase">Ca sĩ</th>
+                    <th scope="col" class="text-uppercase">Chủ đề</th>
+                    <th scope="col" class="text-uppercase">Lượt nghe</th>
+                    <th scope="col" class="text-uppercase">Lượt thích</th>
+                    <th scope="col" class="text-uppercase">Vị trí</th>
+                    <th scope="col" class="text-uppercase">Trạng thái</th>
+                    <th scope="col" class="text-uppercase">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%# adminList.forEach((admin, index) => { %>
+                  <tr>
+                    <td scope="row">
+                      <div class="form-check">
+                        <input
+                        type="checkbox"
+                        value=""
+                        class="form-check-input form-check-single"
+                        form-check-single
+                        data-id="<%#= admin._id %>"
+                        />
+                      </div>
+                    </td>
+                    <td><%#= index + 1 %></td>
+                    <td>
+                      <img
+                        src="<%#= admin?.avatar %>"
+                        alt="<%#= admin.title %>"
+                        width="50px"
+                        height="50px"
+                        class="rounded-circle"
+                      />
+                    </td>
+                    <td><%#= admin.title %></td>
+                    <td><%#= admin?.singerId?.stageName %></td>
+                    <td><%#= admin?.topicId?.title %></td>
+                    <td><%#= admin.listen %></td>
+                    <td><%#= admin.like %></td>
+                    <td><%#= admin.position %></td>
+                    <td>
+                      <select 
+                        name="status" 
+                        class="badge status-select admin-status-select"
+                        status-select
+                        admin-status-select
+                        data-id="<%#= admin._id %>"
+                        <%# if(admin.status === 'active') { %>
+                          style="color: var(--success-color); border-color: var(--success-color);"
+                          value="active"
+                        <%# } else if(admin.status === 'inactive') { %>
+                          style="color: var(--error-color); border-color: var(--error-color);"
+                          value="inactive"
+                        <%# } %>
+                        >
+                          <option value="active" <%#= admin.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%#= admin.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                      </select>
+                    </td>
+                    <td>
+                      <div class="d-flex gap-2">
+                        <a href="<%= prefixAdminPath %>/admins/update/<%#= admin._id %>" type="button" class="button-icon-info text-decoration-none">
+                          <i class="fas fa-pen"></i>
+                        </a>
+                        <button type="button" class="button-icon-danger button-delete" data-id="<%#= admin._id %>" data-type="songs">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <button type="button" class="button-secondary">
+                          Chi tiết <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <%# }) %>
+                </tbody>
+              </table>
+            </div>
+            <%# } else { %>
+            <div
+              class="d-flex flex-column align-items-center justify-content-center gap-3"
+              style="height: 200px"
+            >
+              <i
+                class="fas fa-folder-open"
+                style="font-size: var(--font-size-xxl); color: var(--secondary-color)"
+              ></i>
+              <p class="mb-0" style="color: var(--secondary-color)">
+                Không có dữ liệu hiển thị.
+              </p>
+            </div>
+            <%# } %>
+          </div>
+          <div
+            class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"
+          >
+            <%#-include('../../partials/updateMulti.view.ejs', {
+              updateMultiArr: [
+                { value: 'status-active', label: 'Đang hoạt động' },
+                { value: 'status-inactive', label: 'Vô hiệu hóa' },
+                { value: 'soft-delete', label: 'Xoá mềm tất cả' },
+                { value: 'hard-delete', label: 'Xoá cứng tất cả' },
+              ]
+            }) %>
+            <%#-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>
