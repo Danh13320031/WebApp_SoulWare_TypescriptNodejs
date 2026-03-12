@@ -619,7 +619,7 @@ if (formCheckSingleList && formCheckSingleList.length > 0) {
 if (mainChangeMultiButton) {
   mainChangeMultiButton.addEventListener("click", async () => {
     if (idArr.length <= 0) {
-      showAlert("error", "Vui lòng chọn bài hát");
+      showAlert("error", "Vui lòng chọn hàng cần cập nhật!");
       return;
     }
 
