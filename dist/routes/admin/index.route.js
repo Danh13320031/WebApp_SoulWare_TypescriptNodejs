@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_constant_1 = require("../../constants/app.constant");
+const admin_routes_1 = __importDefault(require("./admin.routes"));
 const dashboard_route_1 = __importDefault(require("./dashboard.route"));
 const song_route_1 = __importDefault(require("./song.route"));
 const topic_route_1 = __importDefault(require("./topic.route"));
@@ -14,6 +15,7 @@ const createAdminRoute = (app) => {
     app.use(`${pathAdmin}/topics`, topic_route_1.default);
     app.use(`${pathAdmin}/songs`, song_route_1.default);
     app.use(`${pathAdmin}/upload`, upload_route_1.default);
+    app.use(`${pathAdmin}/admins`, admin_routes_1.default);
     return;
 };
 exports.default = createAdminRoute;
