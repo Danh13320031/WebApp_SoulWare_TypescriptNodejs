@@ -315,6 +315,64 @@ const changeStatusTopicPatch = async (
   }
 };
 
+// [PÂTCH]: /admin/topics/update-multi
+const updateMultiTopicPatch = async (req: Request, res: Response) => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active":
+        await TopicModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      case "status-inactive":
+        await TopicModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      case "status-deleted":
+        await TopicModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      default:
+        break;
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật chủ đề thành cong",
+    });
+    return;
+  } catch (error) {
+    console.error("Lỗi hệ thống::: ", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Lỗi hệ thống",
+    });
+    return;
+  }
+};
+
 type TTopicController = {
   getAllTopicGet: (req: Request, res: Response) => Promise<void>;
   createANewTopicGet: (req: Request, res: Response) => Promise<void>;
@@ -323,6 +381,7 @@ type TTopicController = {
   updateATopicByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveTopicByIdPatch: (req: Request, res: Response) => Promise<void>;
   changeStatusTopicPatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiTopicPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const topicController: TTopicController = {
@@ -333,6 +392,7 @@ export const topicController: TTopicController = {
   updateATopicByIdPatch,
   softRemoveTopicByIdPatch,
   changeStatusTopicPatch,
+  updateMultiTopicPatch,
 };
 
 export default topicController;

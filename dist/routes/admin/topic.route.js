@@ -17,4 +17,5 @@ topicRoute.get("/update/:topicId", topic_controller_1.default.getATopicByIdGet);
 topicRoute.patch("/update/:topicId", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, topic_validate_1.default.updateATopicByIdValidate, topic_controller_1.default.updateATopicByIdPatch);
 topicRoute.patch("/soft-delete/:topicId", topic_controller_1.default.softRemoveTopicByIdPatch);
 topicRoute.patch("/change-status/:topicId/:status", topic_controller_1.default.changeStatusTopicPatch);
+topicRoute.patch("/update-multi", topic_controller_1.default.updateMultiTopicPatch);
 exports.default = topicRoute;

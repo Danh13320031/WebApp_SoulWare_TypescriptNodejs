@@ -32,5 +32,6 @@ topicRoute.patch(
   "/change-status/:topicId/:status",
   topicController.changeStatusTopicPatch,
 );
+topicRoute.patch("/update-multi", topicController.updateMultiTopicPatch);
 
 export default topicRoute;
