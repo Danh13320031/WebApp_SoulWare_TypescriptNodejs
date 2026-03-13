@@ -24,6 +24,7 @@ const objSchema = {
     fullName: { type: String, required: true },
     birthday: { type: Date },
     address: { type: String },
+    description: { type: String },
     status: {
         type: String,
         required: true,
