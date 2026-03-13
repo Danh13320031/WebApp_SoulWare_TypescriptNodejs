@@ -680,3 +680,31 @@ if (mainChangeMultiButton) {
   });
 }
 // End handle multy update
+
+// Handle show password
+const buttonShowPassword = document.getElementById("button-show-password");
+
+if (buttonShowPassword) {
+  buttonShowPassword.addEventListener("click", () => {
+    const inputPassword = document.querySelector("input[input-password]");
+    const iconShowPassword = buttonShowPassword.querySelector(
+      "#icon-show-password",
+    );
+    const iconHidePassword = buttonShowPassword.querySelector(
+      "#icon-hide-password",
+    );
+
+    if (!inputPassword || !iconShowPassword || !iconHidePassword) return;
+
+    if (inputPassword.type === "password") {
+      inputPassword.type = "text";
+      iconShowPassword.classList.remove("d-none");
+      iconHidePassword.classList.add("d-none");
+    } else {
+      inputPassword.type = "password";
+      iconShowPassword.classList.add("d-none");
+      iconHidePassword.classList.remove("d-none");
+    }
+  });
+}
+// End handle show password

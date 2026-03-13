@@ -4,7 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 const admin_controller_1 = __importDefault(require("../../controllers/admin/admin.controller"));
+const uploadCloud_middleware_1 = __importDefault(require("../../middlewares/uploadCloud.middleware"));
+const admin_validate_1 = __importDefault(require("../../validators/admin/admin.validate"));
 const adminRoute = (0, express_1.Router)();
+const upload = (0, multer_1.default)();
 adminRoute.get("/", admin_controller_1.default.adminGet);
+adminRoute.get("/create", admin_controller_1.default.createANewAdminGet);
+adminRoute.post("/create", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, admin_validate_1.default.createANewAdminValidate, admin_controller_1.default.createANewAdminPost);
 exports.default = adminRoute;

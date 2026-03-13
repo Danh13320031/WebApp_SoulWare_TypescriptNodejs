@@ -1,4 +1,8 @@
 import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import AdminModel from "../../models/admin.model";
+import hashPassword from "../../helpers/hashPassword.helper";
+import { TDataBodyCreateAdmin } from "../../types/admin.type";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
@@ -7,12 +11,86 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+// [GET]: /admin/admins/create
+const createANewAdminGet = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    res.render("admin/pages/admin/create.view.ejs", {
+      pageTitle: "Tạo mới quản trị viên",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - create new admin",
+    });
+    return;
+  }
+};
+
+// [POST]: /admin/admins/create
+const createANewAdminPost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const countDocument = await AdminModel.countDocuments();
+    let avatar: string = "";
+    let password: string = "";
+    let fullName: string = "";
+
+    if (req.body.avatar) avatar = req.body.avatar;
+    if (req.body.password) password = await hashPassword(req.body.password);
+    if (req.body.name) fullName = req.body.name;
+
+    const dataBodyCreateAdmin: TDataBodyCreateAdmin = {
+      email: req.body.email ? req.body.email : "",
+      password: password ? password : "",
+      phone: req.body.phone ? req.body.phone : "",
+      avatar: avatar ? avatar : "",
+      fullName: fullName ? fullName : "",
+      birthday: req.body.birthday ? req.body.birthday : null,
+      address: req.body.address ? req.body.address : null,
+      description: req.body.description ? req.body.description : null,
+      status: req.body.status ? req.body.status : "active",
+      position: req.body.position
+        ? Number(req.body.position)
+        : countDocument + 1,
+    };
+
+    const newAdmin = new AdminModel(dataBodyCreateAdmin);
+    await newAdmin.save();
+
+    res.status(StatusCodes.CREATED).json({
+      code: StatusCodes.CREATED,
+      status: "Success",
+      message: "Tạo mới quản trị viên thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - create new admin",
+    });
+    return;
+  }
+};
+
 type TAdminController = {
   adminGet: (req: Request, res: Response) => Promise<void>;
+  createANewAdminGet: (req: Request, res: Response) => Promise<void>;
+  createANewAdminPost: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminController: TAdminController = {
   adminGet,
+  createANewAdminGet,
+  createANewAdminPost,
 };
 
 export default adminController;

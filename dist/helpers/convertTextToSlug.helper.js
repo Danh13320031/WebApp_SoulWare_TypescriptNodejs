@@ -9,7 +9,7 @@ const convertTextToSlug = (text) => {
     const unidecodeText = (0, unidecode_1.default)(text);
     const slug = unidecodeText
         .trim()
-        .replace(regex_constant_1.WHITESPACE_TO_HYPHEN, "-")
+        .replace(regex_constant_1.WHITESPACE_TO_HYPHEN_REGEX, "-")
         .toLowerCase();
     return slug;
 };

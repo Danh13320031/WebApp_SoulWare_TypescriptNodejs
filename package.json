@@ -18,6 +18,7 @@
     "add-build"
   ],
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.2",
     "cloudinary": "^2.9.0",
     "dayjs": "^1.11.19",
@@ -33,6 +34,7 @@
     "unidecode": "^1.1.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
