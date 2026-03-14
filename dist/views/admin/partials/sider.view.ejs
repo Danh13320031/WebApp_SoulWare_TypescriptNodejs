@@ -26,14 +26,14 @@
           <li class="sider-body-nav-item">
             <a
               href="/admin/dashboard"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link"
+              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/dashboard")) { %>act<% } %>"
               ><span><i class="fa-solid fa-gauge me-2"></i>Tổng quan</span></a
             >
           </li>
           <li class="sider-body-nav-item">
             <a
               href="/admin/songs"
-              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link"
+              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/songs")) { %>act<% } %>"
               ><span
                 ><i class="fa-solid fa-music me-2"></i>Quản lý bài hát</span
               ></a
@@ -42,23 +42,64 @@
           <li class="sider-body-nav-item">
             <a
               href="/admin/singers"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link"
+              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/singers")) { %>act<% } %>"
               ><i class="fa-solid fa-microphone-lines me-2"></i>Quản lý ca sĩ</a
             >
           </li>
           <li class="sider-body-nav-item">
             <a
               href="/admin/topics"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link"
+              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/topics")) { %>act<% } %>"
               ><i class="fa-solid fa-icons me-2"></i>Quản lý chủ đề</a
             >
           </li>
           <li class="sider-body-nav-item">
             <a
               href="/admin/admins"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link"
+              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admins")) { %>act<% } %>"
               ><i class="fa-solid fa-user-tie me-2"></i>Quản lý quản trị viên</a
             >
+          </li>
+          <li class="sider-body-nav-item">
+            <a
+              href="#roleCollapse"
+              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admin-roles") || pathname.startsWith("/admin/user-roles")) { %>act<% } %>"
+              data-bs-toggle="collapse"
+              data-bs-target="#roleCollapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="roleCollapse"
+              ><span class="d-flex align-items-center"
+                ><i class="fa-solid fa-key me-2"></i>Quản lý vai trò</span
+              >
+              <span><i class="fa-solid fa-caret-down"></i></span
+            ></a>
+            <ul class="collapse ps-2 mt-1 sider-body-nav-collapse" id="roleCollapse">
+              <a
+                href="/admin/admin-roles"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admin-roles")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Vai trò quản trị
+                viên</a
+              >
+              <a
+                href="/admin/roles/user"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/roles/user")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Vai trò người
+                dùng</a
+              >
+              <a
+                href="/admin/roles/admin/permission"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/roles/admin/permission")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Phân quyền quản
+                trị</a
+              >
+              <a
+                href="/admin/roles/user/permission"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/roles/user/permission")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Phân quyền người
+                dùng</a
+              >
+            </ul>
           </li>
         </ul>
       </nav>

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import activeSider from "../../helpers/admin/activeSider.helper";
 import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
@@ -14,6 +15,7 @@ import {
 
 // [GET]: /admin/topics
 const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
+  const pathname = activeSider(req.originalUrl);
   let find: any = { deleted: false };
 
   // Handle pagination
@@ -80,6 +82,7 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
 
   res.render("admin/pages/topic/topic.view.ejs", {
     pageTitle: "Danh sách chủ đề",
+    pathname,
     topicList,
     pagination,
     keyword,
@@ -94,8 +97,11 @@ const createANewTopicGet = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const pathname = activeSider(req.originalUrl);
+
   res.render("admin/pages/topic/create.view.ejs", {
     pageTitle: "Thêm mới chủ đề",
+    pathname,
   });
 };
 
@@ -143,6 +149,7 @@ const createANewTopicPost = async (
 // [GET]: /admin/topics/update/:topicId
 const getATopicByIdGet = async (req: Request, res: Response): Promise<void> => {
   try {
+    const pathname = activeSider(req.originalUrl);
     let topicId: string = "";
 
     if (req.params.topicId) topicId = req.params.topicId as string;
@@ -163,6 +170,7 @@ const getATopicByIdGet = async (req: Request, res: Response): Promise<void> => {
 
     res.render("admin/pages/topic/update.view.ejs", {
       pageTitle: `Chỉnh sửa chủ đề ${topic.title}`,
+      pathname,
       topic,
     });
   } catch (error) {

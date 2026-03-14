@@ -24,8 +24,9 @@
     <link rel="stylesheet" href="/admin/styles/partials/imagePreview.css" />
   </head>
   <body>
-    <%-include('../../partials/sider.view.ejs') %>
+    <%-include('../../partials/sider.view.ejs', { pathname: pathname }) %>
     <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/modal.view.ejs') %>
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">

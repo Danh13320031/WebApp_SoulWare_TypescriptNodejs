@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
@@ -23,6 +24,7 @@ const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/songs
 const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     let find = { deleted: false };
     // Handle pagination
     let page = 1;
@@ -95,6 +97,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }).select("title");
     res.render("admin/pages/song/song.view.ejs", {
         pageTitle: "Danh sách bài hát",
+        pathname,
         songList,
         pagination,
         keyword,
@@ -109,6 +112,7 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 // [GET]: /admin/songs/create
 const createANewSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     const singerList = yield singer_model_1.default.find({
         deleted: false,
     }).select("stageName");
@@ -117,6 +121,7 @@ const createANewSongGet = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }).select("title");
     res.render("admin/pages/song/create.view.ejs", {
         pageTitle: "Thêm mới bài hát",
+        pathname,
         singerList,
         topicList,
     });
@@ -166,6 +171,7 @@ const createANewSongPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
 // [GET]: /admin/songs/update/:songId
 const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let songId = "";
         if (req.params.songId)
             songId = req.params.songId;
@@ -192,6 +198,7 @@ const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         res.render("admin/pages/song/update.view.ejs", {
             pageTitle: `Chỉnh sửa bài hát ${song.title}`,
+            pathname,
             song,
             singerList,
             topicList,

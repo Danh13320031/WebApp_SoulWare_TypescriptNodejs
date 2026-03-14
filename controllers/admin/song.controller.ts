@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import activeSider from "../../helpers/admin/activeSider.helper";
 import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
@@ -16,6 +17,7 @@ import {
 
 // [GET]: /admin/songs
 const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
+  const pathname = activeSider(req.originalUrl);
   let find: any = { deleted: false };
 
   // Handle pagination
@@ -116,6 +118,7 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
 
   res.render("admin/pages/song/song.view.ejs", {
     pageTitle: "Danh sách bài hát",
+    pathname,
     songList,
     pagination,
     keyword,
@@ -134,6 +137,8 @@ const createANewSongGet = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const pathname = activeSider(req.originalUrl);
+
   const singerList = await SingerModel.find({
     deleted: false,
   }).select("stageName");
@@ -144,6 +149,7 @@ const createANewSongGet = async (
 
   res.render("admin/pages/song/create.view.ejs", {
     pageTitle: "Thêm mới bài hát",
+    pathname,
     singerList,
     topicList,
   });
@@ -199,6 +205,7 @@ const createANewSongPost = async (
 // [GET]: /admin/songs/update/:songId
 const getASongByIdGet = async (req: Request, res: Response): Promise<void> => {
   try {
+    const pathname = activeSider(req.originalUrl);
     let songId: string = "";
 
     if (req.params.songId) songId = req.params.songId as string;
@@ -232,6 +239,7 @@ const getASongByIdGet = async (req: Request, res: Response): Promise<void> => {
 
     res.render("admin/pages/song/update.view.ejs", {
       pageTitle: `Chỉnh sửa bài hát ${song.title}`,
+      pathname,
       song,
       singerList,
       topicList,

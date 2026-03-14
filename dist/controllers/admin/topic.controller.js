@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.topicController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
@@ -22,6 +23,7 @@ const handlePagination_helper_1 = __importDefault(require("../../helpers/handleP
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/topics
 const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     let find = { deleted: false };
     // Handle pagination
     let page = 1;
@@ -70,6 +72,7 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         .limit(pagination.limitPage);
     res.render("admin/pages/topic/topic.view.ejs", {
         pageTitle: "Danh sách chủ đề",
+        pathname,
         topicList,
         pagination,
         keyword,
@@ -80,8 +83,10 @@ const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 // [GET]: /admin/topics/create
 const createANewTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     res.render("admin/pages/topic/create.view.ejs", {
         pageTitle: "Thêm mới chủ đề",
+        pathname,
     });
 });
 // [POST]: /admin/songs/create
@@ -122,6 +127,7 @@ const createANewTopicPost = (req, res) => __awaiter(void 0, void 0, void 0, func
 // [GET]: /admin/topics/update/:topicId
 const getATopicByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let topicId = "";
         if (req.params.topicId)
             topicId = req.params.topicId;
@@ -139,6 +145,7 @@ const getATopicByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, functio
         }
         res.render("admin/pages/topic/update.view.ejs", {
             pageTitle: `Chỉnh sửa chủ đề ${topic.title}`,
+            pathname,
             topic,
         });
     }

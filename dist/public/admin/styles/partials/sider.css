@@ -20,6 +20,10 @@
   background-color: var(--light-color);
   color: var(--primary-color);
 }
+#sider .sider-content .sider-body .sider-body-nav .sider-body-nav-link.act {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+}
 
 #sider .sider-overlay {
   position: fixed;
