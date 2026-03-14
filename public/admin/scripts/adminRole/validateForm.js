@@ -9,8 +9,6 @@ const statusError = document.querySelector(".form-status-error");
 const validateAdminRoleForm = () => {
   let isValid = true;
 
-  if (typeof tinymce !== "undefined") tinymce.triggerSave();
-
   nameError.textContent = "";
   statusError.textContent = "";
 
