@@ -86,7 +86,7 @@
           <div class="card-body admin-role-card-body main-card-body">
             <% if (adminRoleList && adminRoleList.length > 0) { %>
             <div class="overflow-auto table-responsive">
-              <table class="table table-border table-hover mb-0 admin-role-table main-table" id="main-table" data-type="topics">
+              <table class="table table-border table-hover mb-0 admin-role-table main-table" id="main-table" data-type="admin-roles">
                 <thead class="admin-role-table-header main-table-header">
                   <tr>
                     <th scope="col">
@@ -189,7 +189,7 @@
                 { value: 'hard-delete', label: 'Xoá cứng tất cả' },
               ]
             }) %>
-            <%#-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
+            <%-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
           </div>
         </div>
       </section>
