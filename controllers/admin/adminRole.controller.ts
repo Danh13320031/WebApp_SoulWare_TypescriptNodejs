@@ -11,10 +11,16 @@ const getAllAdminRoleGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find = { deleted: false };
+
+    const adminRoleList = await AdminRoleModel.find(find).sort({
+      position: "desc",
+    });
 
     res.render("admin/pages/adminRole/adminRole.view.ejs", {
       pageTitle: "Danh sách vai trò quản trị viên",
       pathname,
+      adminRoleList,
     });
   } catch (error) {
     console.log(error);

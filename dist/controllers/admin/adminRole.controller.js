@@ -20,9 +20,14 @@ const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"
 const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const adminRoleList = yield adminRole_model_1.default.find(find).sort({
+            position: "desc",
+        });
         res.render("admin/pages/adminRole/adminRole.view.ejs", {
             pageTitle: "Danh sách vai trò quản trị viên",
             pathname,
+            adminRoleList,
         });
     }
     catch (error) {

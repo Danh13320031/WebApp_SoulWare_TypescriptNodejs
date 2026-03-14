@@ -29,9 +29,9 @@
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">
-      <section class="topic-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <section class="admin-role-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
         <h1
-        class="topic-title main-title"
+        class="admin-role-title main-title"
         style="
           font-size: var(--font-size-xxl);
           font-weight: var(--font-weight-bold);
@@ -44,13 +44,13 @@
           Thêm mới <i class="fa-solid fa-plus"></i>
         </a>
       </section>
-      <section class="topic-content main-content">
+      <section class="admin-role-content main-content">
         <div
-          class="card my-2 shadow-sm topic-card main-card"
+          class="card my-2 shadow-sm admin-role-card main-card"
           style="border-color: var(--primary-color)"
         >
           <div
-            class="card-header py-3 bg-white topic-card-header main-card-header"
+            class="card-header py-3 bg-white admin-role-card-header main-card-header"
           >
             <div class="d-flex flex-column gap-2 main-card-filter">
               <h5 class="mb-0 d-flex align-items-center main-card-filter-title" style="color: var(--primary-color); font-weight: var(--font-weight-bold); font-size: var(--font-size-lg);">
@@ -83,11 +83,11 @@
               </div>
             </div>
           </div>
-          <div class="card-body topic-card-body main-card-body">
-            <%# if (topicList && topicList.length > 0) { %>
+          <div class="card-body admin-role-card-body main-card-body">
+            <% if (adminRoleList && adminRoleList.length > 0) { %>
             <div class="overflow-auto table-responsive">
-              <table class="table table-border table-hover mb-0 topic-table main-table" id="main-table" data-type="topics">
-                <thead class="topic-table-header main-table-header">
+              <table class="table table-border table-hover mb-0 admin-role-table main-table" id="main-table" data-type="topics">
+                <thead class="admin-role-table-header main-table-header">
                   <tr>
                     <th scope="col">
                       <div class="form-check">
@@ -109,7 +109,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <%# topicList.forEach((topic, index) => { %>
+                  <% adminRoleList.forEach((adminRole, index) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -118,39 +118,39 @@
                         value=""
                         class="form-check-input form-check-single"
                         form-check-single
-                        data-id="<%#= topic._id %>"
+                        data-id="<%= adminRole._id %>"
                         />
                       </div>
                     </td>
-                    <td><%#= index + 1 %></td>
-                    <td></td>
-                    <td><%#= topic.title %></td>
-                    <td><%#= topic.position %></td>
+                    <td><%= index + 1 %></td>
+                    <td><%= adminRole.name %></td>
+                    <td><%- adminRole.description %></td>
+                    <td><%= adminRole.position %></td>
                     <td>
                       <select 
                         name="status" 
-                        class="badge status-select topic-status-select"
+                        class="badge status-select admin-role-status-select"
                         status-select
-                        topic-status-select
-                        data-id="<%#= topic._id %>"
-                        <%# if(topic.status === 'active') { %>
+                        admin-role-status-select
+                        data-id="<%= adminRole._id %>"
+                        <% if(adminRole.status === 'active') { %>
                           style="color: var(--success-color); border-color: var(--success-color);"
                           value="active"
-                        <%# } else if(topic.status === 'inactive') { %>
+                        <% } else if(adminRole.status === 'inactive') { %>
                           style="color: var(--error-color); border-color: var(--error-color);"
                           value="inactive"
-                        <%# } %>
+                        <% } %>
                         >
-                          <option value="active" <%#= topic.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
-                          <option value="inactive" <%#= topic.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                          <option value="active" <%= adminRole.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= adminRole.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
                       </select>
                     </td>
                     <td>
                       <div class="d-flex gap-2">
-                        <a href="<%#= prefixAdminPath %>/topics/update/<%#= topic._id %>" type="button" class="button-icon-info text-decoration-none">
+                        <a href="<%= prefixAdminPath %>/adminRoles/update/<%= adminRole._id %>" type="button" class="button-icon-info text-decoration-none">
                           <i class="fas fa-pen"></i>
                         </a>
-                        <button type="button" class="button-icon-danger button-delete" data-id="<%#= topic._id %>" data-type="topics">
+                        <button type="button" class="button-icon-danger button-delete" data-id="<%= adminRole._id %>" data-type="adminRoles">
                           <i class="fas fa-trash"></i>
                         </button>
                         <button type="button" class="button-secondary">
@@ -159,11 +159,11 @@
                       </div>
                     </td>
                   </tr>
-                  <%# }) %>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
-            <%# } else { %>
+            <% } else { %>
             <div
               class="d-flex flex-column align-items-center justify-content-center gap-3"
               style="height: 200px"
@@ -176,7 +176,7 @@
                 Không có dữ liệu hiển thị.
               </p>
             </div>
-            <%# } %>
+            <% } %>
           </div>
           <div
             class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap topic-card-footer main-card-footer"
