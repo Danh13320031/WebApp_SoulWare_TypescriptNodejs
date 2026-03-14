@@ -32,10 +32,10 @@
 
     <main class="main" id="main">
       <section
-        class="topic-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3"
+        class="admin-role-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3"
       >
         <h1
-          class="topic-title main-title"
+          class="admin-role-title main-title"
           style="
             font-size: var(--font-size-xxl);
             font-weight: var(--font-weight-bold);
@@ -46,82 +46,40 @@
         </h1>
       </section>
 
-      <section class="mb-5 topic-content main-content">
+      <section class="mb-5 admin-role-content main-content">
         <div class="card">
           <div class="card-header bg-white"></div>
           <div class="card-body">
             <form
-              action="<%= prefixAdminPath %>/topics/create"
+              action="<%= prefixAdminPath %>/admin-roles/create"
               method="POST"
-              enctype="multipart/form-data"
-              class="topic-create-form"
-              id="topic-form"
-              topic-create-form
+              class="admin-role-create-form"
+              id="admin-role-form"
+              admin-role-create-form
             >
               <div class="container-fluid">
                 <div class="row g-3">
-                  <div class="col-12 mb-3">
-                    <div
-                      class="d-flex flex-column gap-3 form-group create-image-group"
-                    >
-                      <div
-                        class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-image-preview"
-                        form-image-preview
-                      >
-                        <div
-                          class="p-3 d-flex flex-column justify-content-center align-items-center position-relative gap-3 form-image-container"
-                        >
-                          <button
-                            type="button"
-                            class="position-absolute top-0 end-0 m-2 button-icon-danger form-image-remove"
-                            form-image-remove
-                          >
-                            <i class="fa-solid fa-xmark"></i>
-                          </button>
-                          <img
-                            src=""
-                            alt="Ảnh bài hát"
-                            class="form-image-view"
-                            form-image-view
-                          />
-                          <label
-                            for="form-image-input"
-                            class="button-primary text-decoration-none mb-0"
-                            >Tải ảnh lên <i class="fa-solid fa-upload"></i>
-                            <input
-                              type="file"
-                              name="avatar"
-                              accept="image/*"
-                              class="form-control d-none form-image-input"
-                              id="form-image-input"
-                              form-image-input
-                          /></label>
-                        </div>
-                        <span class="form-error form-image-error"></span>
-                      </div>
-                    </div>
-                  </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-title-group">
+                    <div class="form-group create-name-group">
                       <label
-                        for="topic-create-title"
-                        class="form-label create-title-label"
-                        >Tên bài hát</label
+                        for="admin-role-name"
+                        class="form-label create-name-label"
+                        >Tên vai trò</label
                       >
                       <input
                         type="text"
-                        name="title"
-                        placeholder="Nhập tên bài hát..."
-                        class="form-control create-title-input"
-                        id="topic-title"
+                        name="name"
+                        placeholder="Nhập tên vai trò..."
+                        class="form-control create-name-input"
+                        id="admin-role-name"
                       />
-                      <span class="form-error form-title-error"></span>
+                      <span class="form-error form-name-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
                     <div class="form-group create-position-group">
                       <label
-                        for="topic-position"
+                        for="admin-role-position"
                         class="form-label create-position-label"
                         >Vị trí</label
                       >
@@ -131,7 +89,7 @@
                         min="1"
                         placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
                         class="form-control create-position-input"
-                        id="topic-position"
+                        id="admin-role-position"
                       />
                       <span class="form-error form-position-error"></span>
                     </div>
@@ -139,11 +97,11 @@
                   <div class="col-lg-4 col-md-6 mb-3">
                     <div class="form-group create-status-group">
                       <label
-                        for="topic-status"
+                        for="admin-role-status"
                         class="form-label create-status-label"
                         >Trạng thái</label
                       >
-                      <select name="status" id="topic-status">
+                      <select name="status" id="admin-role-status">
                         <option value="" disabled selected>
                           Chọn trạng thái...
                         </option>
@@ -156,14 +114,14 @@
                   <div class="col-12">
                     <div class="form-group create-description-group">
                       <label
-                        for="topic-description"
+                        for="admin-role-description"
                         class="form-label create-description-label"
                         >Mô tả</label
                       >
                       <textarea
                         name="description"
                         class="create-description-input tinymce-editor"
-                        id="topic-description"
+                        id="admin-role-description"
                       ></textarea>
                       <span class="form-error form-description-error"></span>
                     </div>
@@ -176,7 +134,7 @@
                         type="submit"
                         class="button-primary text-decoration-none"
                       >
-                        Tạo chủ đề <i class="fa-solid fa-plus"></i>
+                        Tạo vai trò <i class="fa-solid fa-plus"></i>
                       </button>
                     </div>
                   </div>
@@ -199,8 +157,8 @@
     <script src="/tinymce/tinymce.min.js"></script>
     <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
 
-    <script src="/admin/scripts/topic/validateForm.js"></script>
-    <script src="/admin/scripts/topic/handleFormSubmit.js"></script>
+    <script src="/admin/scripts/adminRole/validateForm.js"></script>
+    <script src="/admin/scripts/adminRole/handleFormSubmit.js"></script>
     <script src="/admin/scripts/index.js"></script>
   </body>
 </html>

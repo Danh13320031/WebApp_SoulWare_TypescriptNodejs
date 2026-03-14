@@ -14,19 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const admin_model_1 = __importDefault(require("../../models/admin.model"));
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
+const admin_model_1 = __importDefault(require("../../models/admin.model"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     res.render("admin/pages/admin/admin.view.ejs", {
         pageTitle: "Danh sách quản trị viên",
+        pathname,
     });
 });
 // [GET]: /admin/admins/create
 const createANewAdminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         res.render("admin/pages/admin/create.view.ejs", {
             pageTitle: "Tạo mới quản trị viên",
+            pathname,
         });
     }
     catch (error) {

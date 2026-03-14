@@ -8,12 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dashboardController = void 0;
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 // [GET]: /admin/dashboard
 const dashboardGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     res.render("admin/pages/dashboard/dashboard.view.ejs", {
         pageTitle: "Trang tổng quan",
+        pathname,
     });
 });
 exports.dashboardController = {

@@ -1,13 +1,17 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import AdminModel from "../../models/admin.model";
+import activeSider from "../../helpers/admin/activeSider.helper";
 import hashPassword from "../../helpers/hashPassword.helper";
+import AdminModel from "../../models/admin.model";
 import { TDataBodyCreateAdmin } from "../../types/admin.type";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
+  const pathname = activeSider(req.originalUrl);
+
   res.render("admin/pages/admin/admin.view.ejs", {
     pageTitle: "Danh sách quản trị viên",
+    pathname,
   });
 };
 
@@ -17,8 +21,11 @@ const createANewAdminGet = async (
   res: Response,
 ): Promise<void> => {
   try {
+    const pathname = activeSider(req.originalUrl);
+
     res.render("admin/pages/admin/create.view.ejs", {
       pageTitle: "Tạo mới quản trị viên",
+      pathname,
     });
   } catch (error) {
     console.log(error);
