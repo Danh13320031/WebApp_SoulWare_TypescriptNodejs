@@ -6,6 +6,7 @@ import handlePagination from "../../helpers/handlePagination.helper";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataAdminRoleCreate } from "../../types/adminRole.type";
 import { TPagination } from "../../types/index.type";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = async (
@@ -34,6 +35,25 @@ const getAllAdminRoleGet = async (
       count,
     );
 
+    // Handle search filter
+    let keyword: string = "";
+    let keywordRegex: RegExp = new RegExp("", "i");
+    let slugRegex: RegExp = new RegExp("", "i");
+
+    if (req.query.keyword) keyword = req.query.keyword as string;
+    if (keyword) {
+      keywordRegex = new RegExp(keyword, "i");
+      slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+      find = {
+        ...find,
+        $or: [
+          { name: { $regex: keywordRegex } },
+          { slug: { $regex: slugRegex } },
+        ],
+      };
+    }
+
     const adminRoleList = await AdminRoleModel.find(find).sort({
       position: "desc",
     });
@@ -43,6 +63,7 @@ const getAllAdminRoleGet = async (
       pathname,
       adminRoleList,
       pagination,
+      keyword,
     });
   } catch (error) {
     console.log(error);
