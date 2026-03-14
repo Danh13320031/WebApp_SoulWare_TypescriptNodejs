@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handlePagination from "../../helpers/handlePagination.helper";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataAdminRoleCreate } from "../../types/adminRole.type";
+import { TPagination } from "../../types/index.type";
 
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = async (
@@ -11,7 +14,25 @@ const getAllAdminRoleGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
-    let find = { deleted: false };
+    let find: any = { deleted: false };
+
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit)
+      limit = Number(req.query.limit) || APP_ADMIN_PAGINATION_LIMIT;
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await AdminRoleModel.countDocuments(find);
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
+    );
 
     const adminRoleList = await AdminRoleModel.find(find).sort({
       position: "desc",
@@ -21,6 +42,7 @@ const getAllAdminRoleGet = async (
       pageTitle: "Danh sách vai trò quản trị viên",
       pathname,
       adminRoleList,
+      pagination,
     });
   } catch (error) {
     console.log(error);

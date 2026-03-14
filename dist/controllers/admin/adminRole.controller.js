@@ -14,13 +14,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminRoleController = void 0;
 const http_status_codes_1 = require("http-status-codes");
+const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
+        // Handle pagination
+        let page = 1;
+        let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+        let type = "";
+        if (req.query.page)
+            page = Number(req.query.page);
+        if (req.query.limit)
+            limit = Number(req.query.limit) || app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+        if (req.query.type)
+            type = req.query.type;
+        const count = yield adminRole_model_1.default.countDocuments(find);
+        const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
         const adminRoleList = yield adminRole_model_1.default.find(find).sort({
             position: "desc",
         });
@@ -28,6 +42,7 @@ const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, funct
             pageTitle: "Danh sách vai trò quản trị viên",
             pathname,
             adminRoleList,
+            pagination,
         });
     }
     catch (error) {
