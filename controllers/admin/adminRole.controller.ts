@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataAdminRoleCreate } from "../../types/adminRole.type";
-import { TPagination } from "../../types/index.type";
-import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = async (
@@ -54,6 +55,19 @@ const getAllAdminRoleGet = async (
       };
     }
 
+    // Handle status filter
+    let status: string = "";
+    if (req.query.status) status = req.query.status as string;
+    if (req.query.status === "all") status = "";
+
+    const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+    if (status)
+      find = {
+        ...find,
+        status,
+      };
+
     const adminRoleList = await AdminRoleModel.find(find).sort({
       position: "desc",
     });
@@ -64,6 +78,8 @@ const getAllAdminRoleGet = async (
       adminRoleList,
       pagination,
       keyword,
+      status,
+      statusFilter,
     });
   } catch (error) {
     console.log(error);
