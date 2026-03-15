@@ -51,78 +51,80 @@
           <div class="card-header bg-white"></div>
           <div class="card-body">
             <form
-              action="<%= prefixAdminPath %>/admin-roles/create"
+              action="<%= prefixAdminPath %>/admin-roles/update/<%= adminRole._id %>"
               method="POST"
-              class="admin-role-create-form"
+              class="admin-role-update-form"
               id="admin-role-form"
-              admin-role-create-form
+              admin-role-update-form
             >
               <div class="container-fluid">
                 <div class="row g-3">
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-name-group">
+                    <div class="form-group update-name-group">
                       <label
                         for="admin-role-name"
-                        class="form-label create-name-label"
+                        class="form-label update-name-label"
                         >Tên vai trò</label
                       >
                       <input
                         type="text"
                         name="name"
+                        value="<%= adminRole.name %>"
                         placeholder="Nhập tên vai trò..."
-                        class="form-control create-name-input"
+                        class="form-control update-name-input"
                         id="admin-role-name"
                       />
                       <span class="form-error form-name-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-position-group">
+                    <div class="form-group update-position-group">
                       <label
                         for="admin-role-position"
-                        class="form-label create-position-label"
+                        class="form-label update-position-label"
                         >Vị trí</label
                       >
                       <input
                         type="number"
                         name="position"
+                        value="<%= adminRole.position %>"
                         min="1"
                         placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
-                        class="form-control create-position-input"
+                        class="form-control update-position-input"
                         id="admin-role-position"
                       />
                       <span class="form-error form-position-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-status-group">
+                    <div class="form-group update-status-group">
                       <label
                         for="admin-role-status"
-                        class="form-label create-status-label"
+                        class="form-label update-status-label"
                         >Trạng thái</label
                       >
                       <select name="status" id="admin-role-status">
-                        <option value="" disabled selected>
+                        <option value="" disabled <%= !adminRole.status ? 'selected' : '' %>>
                           Chọn trạng thái...
                         </option>
-                        <option value="active">Hoạt động</option>
-                        <option value="inactive">Vô hiệu hóa</option>
+                        <option value="active" <%= adminRole.status === 'active' ? 'selected' : '' %>>Hoạt động</option>
+                        <option value="inactive" <%= adminRole.status === 'inactive' ? 'selected' : '' %>>Vô hiệu hóa</option>
                       </select>
                       <span class="form-error form-status-error"></span>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="form-group create-description-group">
+                    <div class="form-group update-description-group">
                       <label
                         for="admin-role-description"
-                        class="form-label create-description-label"
+                        class="form-label update-description-label"
                         >Mô tả ngắn</label
                       >
                       <textarea
                         name="description"
-                        class="create-description-input"
+                        class="update-description-input"
                         id="admin-role-description"
-                      ></textarea>
+                      ><%= adminRole.description %></textarea>
                       <span class="form-error form-description-error"></span>
                     </div>
                   </div>
@@ -134,7 +136,7 @@
                         type="submit"
                         class="button-primary text-decoration-none"
                       >
-                        Tạo vai trò <i class="fa-solid fa-plus"></i>
+                        Cập nhật vai trò <i class="fa-solid fa-pen"></i>
                       </button>
                     </div>
                   </div>

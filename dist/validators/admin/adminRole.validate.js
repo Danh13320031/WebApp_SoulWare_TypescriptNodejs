@@ -20,7 +20,27 @@ const createANewAdminRoleValidate = (req, res, next) => {
     }
     next();
 };
+const updateAdminRolePatchValidate = (req, res, next) => {
+    if (!req.body.name) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Vui lòng nhập tên vai trò",
+        });
+        return;
+    }
+    if (!req.body.status) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            status: "Fail",
+            message: "Vui lòng chọn trạng thái",
+        });
+        return;
+    }
+    next();
+};
 const adminRoleValidate = {
     createANewAdminRoleValidate,
+    updateAdminRolePatchValidate,
 };
 exports.default = adminRoleValidate;

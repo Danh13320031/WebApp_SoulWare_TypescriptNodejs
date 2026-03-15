@@ -10,4 +10,6 @@ const adminRoleRoute = (0, express_1.Router)();
 adminRoleRoute.get("/", adminRole_controller_1.default.getAllAdminRoleGet);
 adminRoleRoute.get("/create", adminRole_controller_1.default.createANewAdminRoleGet);
 adminRoleRoute.post("/create", adminRole_validate_1.default.createANewAdminRoleValidate, adminRole_controller_1.default.createANewAdminRolePost);
+adminRoleRoute.get("/update/:adminRoleId", adminRole_controller_1.default.getAAdminRoleByIdGet);
+adminRoleRoute.patch("/update/:adminRoleId", adminRole_validate_1.default.updateAdminRolePatchValidate, adminRole_controller_1.default.updateAdminRolePatch);
 exports.default = adminRoleRoute;
