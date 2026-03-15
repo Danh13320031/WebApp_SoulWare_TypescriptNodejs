@@ -24,5 +24,9 @@ adminRoleRoute.patch(
   "/soft-delete/:adminRoleId",
   adminRoleController.softRemoveAdminRoleByIdPatch,
 );
+adminRoleRoute.patch(
+  "/change-status/:adminRoleId/:status",
+  adminRoleController.changeStatusAdminRolePatch,
+);
 
 export default adminRoleRoute;

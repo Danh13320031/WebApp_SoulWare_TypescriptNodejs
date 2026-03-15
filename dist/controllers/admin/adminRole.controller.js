@@ -241,6 +241,37 @@ const softRemoveAdminRoleByIdPatch = (req, res) => __awaiter(void 0, void 0, voi
         return;
     }
 });
+// [PATCH]: /admin/admin-roles/change-status/:adminRoleId/:status
+const changeStatusAdminRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const adminRoleId = req.params.adminRoleId;
+        const adminRoleStatus = req.params.status;
+        if (!adminRoleId) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy vai trò!",
+            });
+            return;
+        }
+        yield adminRole_model_1.default.findOneAndUpdate({ _id: adminRoleId }, { status: adminRoleStatus });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái vai trò thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - change status admin role",
+        });
+        return;
+    }
+});
 exports.adminRoleController = {
     getAllAdminRoleGet,
     createANewAdminRoleGet,
@@ -248,5 +279,6 @@ exports.adminRoleController = {
     getAAdminRoleByIdGet,
     updateAdminRolePatch,
     softRemoveAdminRoleByIdPatch,
+    changeStatusAdminRolePatch,
 };
 exports.default = exports.adminRoleController;

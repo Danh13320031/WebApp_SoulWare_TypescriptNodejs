@@ -290,6 +290,46 @@ const softRemoveAdminRoleByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/admin-roles/change-status/:adminRoleId/:status
+const changeStatusAdminRolePatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const adminRoleId: string = req.params.adminRoleId as string;
+    const adminRoleStatus = req.params.status as string;
+
+    if (!adminRoleId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy vai trò!",
+      });
+      return;
+    }
+
+    await AdminRoleModel.findOneAndUpdate(
+      { _id: adminRoleId },
+      { status: adminRoleStatus },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái vai trò thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - change status admin role",
+    });
+    return;
+  }
+};
+
 type TAdminRoleController = {
   getAllAdminRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminRoleGet: (req: Request, res: Response) => Promise<void>;
@@ -297,6 +337,7 @@ type TAdminRoleController = {
   getAAdminRoleByIdGet: (req: Request, res: Response) => Promise<void>;
   updateAdminRolePatch: (req: Request, res: Response) => Promise<void>;
   softRemoveAdminRoleByIdPatch: (req: Request, res: Response) => Promise<void>;
+  changeStatusAdminRolePatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminRoleController: TAdminRoleController = {
@@ -306,6 +347,7 @@ export const adminRoleController: TAdminRoleController = {
   getAAdminRoleByIdGet,
   updateAdminRolePatch,
   softRemoveAdminRoleByIdPatch,
+  changeStatusAdminRolePatch,
 };
 
 export default adminRoleController;
