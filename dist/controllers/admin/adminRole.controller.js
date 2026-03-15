@@ -143,9 +143,79 @@ const createANewAdminRolePost = (req, res) => __awaiter(void 0, void 0, void 0, 
         return;
     }
 });
+// [GET]: /admin/admin-roles/update/:adminRoleId
+const getAAdminRoleByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        const adminRoleId = req.params.adminRoleId;
+        const adminRole = yield adminRole_model_1.default.findOne({
+            _id: adminRoleId,
+            deleted: false,
+        }).select("-deleted -deletedAt -createdAt -updatedAt -__v");
+        if (!adminRole) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy vai trò quản trị viên",
+            });
+            return;
+        }
+        res.render("admin/pages/adminRole/update.view.ejs", {
+            pageTitle: `Cập nhật vai trò "${adminRole.name}"`,
+            pathname,
+            adminRole,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - get admin role by id",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/admin-roles/update/:adminRoleId
+const updateAdminRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const adminRoleId = req.params.adminRoleId;
+        if (!adminRoleId) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy vai trò quản trị viên",
+            });
+            return;
+        }
+        const dataBodyUpdateAdminRole = {
+            name: req.body.name || "",
+            status: req.body.status || "active",
+            description: req.body.description || "",
+        };
+        yield adminRole_model_1.default.findOneAndUpdate({ _id: adminRoleId }, dataBodyUpdateAdminRole, { new: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật vai trò quản trị viên thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update admin role",
+        });
+        return;
+    }
+});
 exports.adminRoleController = {
     getAllAdminRoleGet,
     createANewAdminRoleGet,
     createANewAdminRolePost,
+    getAAdminRoleByIdGet,
+    updateAdminRolePatch,
 };
 exports.default = exports.adminRoleController;

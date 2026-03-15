@@ -11,5 +11,14 @@ adminRoleRoute.post(
   adminRoleValidate.createANewAdminRoleValidate,
   adminRoleController.createANewAdminRolePost,
 );
+adminRoleRoute.get(
+  "/update/:adminRoleId",
+  adminRoleController.getAAdminRoleByIdGet,
+);
+adminRoleRoute.patch(
+  "/update/:adminRoleId",
+  adminRoleValidate.updateAdminRolePatchValidate,
+  adminRoleController.updateAdminRolePatch,
+);
 
 export default adminRoleRoute;
