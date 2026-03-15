@@ -16,9 +16,10 @@ exports.adminRoleController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -50,6 +51,15 @@ const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     { slug: { $regex: slugRegex } },
                 ] });
         }
+        // Handle status filter
+        let status = "";
+        if (req.query.status)
+            status = req.query.status;
+        if (req.query.status === "all")
+            status = "";
+        const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+        if (status)
+            find = Object.assign(Object.assign({}, find), { status });
         const adminRoleList = yield adminRole_model_1.default.find(find).sort({
             position: "desc",
         });
@@ -59,6 +69,8 @@ const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, funct
             adminRoleList,
             pagination,
             keyword,
+            status,
+            statusFilter,
         });
     }
     catch (error) {
