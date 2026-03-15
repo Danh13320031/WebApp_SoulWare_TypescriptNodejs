@@ -254,6 +254,26 @@
                       <span class="form-error form-status-error"></span>
                     </div>
                   </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <% if (adminRoleList || adminRoleList.length > 0) { %>
+                    <div class="form-group create-role-group">
+                      <label
+                        for="admin-status"
+                        class="form-label create-role-label"
+                        >Vai trò</label
+                      >
+                      <select name="roleId" id="admin-status">
+                        <option value="" disabled selected>
+                          Chọn vai trò...
+                        </option>
+                        <% adminRoleList.forEach((role) => { %>
+                        <option value="<%= role.id %>"><%= role.name %></option>
+                        <% }); %>
+                      </select>
+                      <span class="form-error form-role-error"></span>
+                    </div>
+                    <% } %>
+                  </div>
                   <div class="col-12">
                     <div class="form-group create-description-group">
                       <label

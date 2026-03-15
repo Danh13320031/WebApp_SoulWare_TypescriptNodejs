@@ -9,4 +9,5 @@ export type TDataBodyCreateAdmin = {
   description?: string;
   status: string;
   position?: number;
+  roleId: string;
 };
