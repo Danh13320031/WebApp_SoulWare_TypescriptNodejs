@@ -330,6 +330,70 @@ const changeStatusAdminRolePatch = async (
   }
 };
 
+// [PATCH]: /admin/admin-roles/update-multi
+const updateMultiAdminRolePatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active":
+        await AdminRoleModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      case "status-inactive":
+        await AdminRoleModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      case "soft-delete":
+        await AdminRoleModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      case "hard-delete":
+        await AdminRoleModel.deleteMany({ _id: { $in: ids } });
+        break;
+      default:
+        break;
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật vai trò thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update multi admin role",
+    });
+    return;
+  }
+};
+
 type TAdminRoleController = {
   getAllAdminRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminRoleGet: (req: Request, res: Response) => Promise<void>;
@@ -338,6 +402,7 @@ type TAdminRoleController = {
   updateAdminRolePatch: (req: Request, res: Response) => Promise<void>;
   softRemoveAdminRoleByIdPatch: (req: Request, res: Response) => Promise<void>;
   changeStatusAdminRolePatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiAdminRolePatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminRoleController: TAdminRoleController = {
@@ -348,6 +413,7 @@ export const adminRoleController: TAdminRoleController = {
   updateAdminRolePatch,
   softRemoveAdminRoleByIdPatch,
   changeStatusAdminRolePatch,
+  updateMultiAdminRolePatch,
 };
 
 export default adminRoleController;
