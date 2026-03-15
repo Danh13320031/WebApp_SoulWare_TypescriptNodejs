@@ -251,12 +251,52 @@ const updateAdminRolePatch = async (
   }
 };
 
+// [PATCH]: /admin/admin-roles/soft-delete/:adminRoleId
+const softRemoveAdminRoleByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const adminRoleId: string = req.params.adminRoleId as string;
+
+    if (!adminRoleId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy vai trò quản trị viên",
+      });
+      return;
+    }
+
+    await AdminRoleModel.findOneAndUpdate(
+      { _id: adminRoleId },
+      { deleted: true },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Xóa vai trò quản trị viên thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - soft remove admin role by id",
+    });
+    return;
+  }
+};
+
 type TAdminRoleController = {
   getAllAdminRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminRolePost: (req: Request, res: Response) => Promise<void>;
   getAAdminRoleByIdGet: (req: Request, res: Response) => Promise<void>;
   updateAdminRolePatch: (req: Request, res: Response) => Promise<void>;
+  softRemoveAdminRoleByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminRoleController: TAdminRoleController = {
@@ -265,6 +305,7 @@ export const adminRoleController: TAdminRoleController = {
   createANewAdminRolePost,
   getAAdminRoleByIdGet,
   updateAdminRolePatch,
+  softRemoveAdminRoleByIdPatch,
 };
 
 export default adminRoleController;

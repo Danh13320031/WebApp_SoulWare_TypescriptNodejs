@@ -12,4 +12,5 @@ adminRoleRoute.get("/create", adminRole_controller_1.default.createANewAdminRole
 adminRoleRoute.post("/create", adminRole_validate_1.default.createANewAdminRoleValidate, adminRole_controller_1.default.createANewAdminRolePost);
 adminRoleRoute.get("/update/:adminRoleId", adminRole_controller_1.default.getAAdminRoleByIdGet);
 adminRoleRoute.patch("/update/:adminRoleId", adminRole_validate_1.default.updateAdminRolePatchValidate, adminRole_controller_1.default.updateAdminRolePatch);
+adminRoleRoute.patch("/soft-delete/:adminRoleId", adminRole_controller_1.default.softRemoveAdminRoleByIdPatch);
 exports.default = adminRoleRoute;
