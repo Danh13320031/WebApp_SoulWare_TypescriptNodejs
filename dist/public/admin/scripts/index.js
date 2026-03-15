@@ -300,6 +300,9 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       case "topics":
         messageSubStr = "chủ đề";
         break;
+      case "admin-roles":
+        messageSubStr = "vai trò";
+        break;
       default:
         messageSubStr = "dữ liệu";
     }
