@@ -20,6 +20,7 @@ const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -60,9 +61,16 @@ const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
         if (status)
             find = Object.assign(Object.assign({}, find), { status });
-        const adminRoleList = yield adminRole_model_1.default.find(find).sort({
-            position: "desc",
-        });
+        // Handle sort filter
+        let sort = "";
+        if (req.query.sort)
+            sort = req.query.sort;
+        const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
+        const adminRoleList = yield adminRole_model_1.default.find(find)
+            .select("-deleted -deletedAt -updatedAt -createdAt -__v")
+            .sort(sortFilter.sortOptions)
+            .skip(pagination.skipPage)
+            .limit(pagination.limitPage);
         res.render("admin/pages/adminRole/adminRole.view.ejs", {
             pageTitle: "Danh sách vai trò quản trị viên",
             pathname,
@@ -71,6 +79,7 @@ const getAllAdminRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, funct
             keyword,
             status,
             statusFilter,
+            sort: sortFilter.sort,
         });
     }
     catch (error) {

@@ -8,6 +8,7 @@ import handlePagination from "../../helpers/handlePagination.helper";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataAdminRoleCreate } from "../../types/adminRole.type";
 import { TPagination, TStatusFilter } from "../../types/index.type";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/admin-roles
 const getAllAdminRoleGet = async (
@@ -68,9 +69,17 @@ const getAllAdminRoleGet = async (
         status,
       };
 
-    const adminRoleList = await AdminRoleModel.find(find).sort({
-      position: "desc",
-    });
+    // Handle sort filter
+    let sort: string = "";
+    if (req.query.sort) sort = req.query.sort as string;
+
+    const sortFilter = handleSortFilter(sort);
+
+    const adminRoleList = await AdminRoleModel.find(find)
+      .select("-deleted -deletedAt -updatedAt -createdAt -__v")
+      .sort(sortFilter.sortOptions)
+      .skip(pagination.skipPage)
+      .limit(pagination.limitPage);
 
     res.render("admin/pages/adminRole/adminRole.view.ejs", {
       pageTitle: "Danh sách vai trò quản trị viên",
@@ -80,6 +89,7 @@ const getAllAdminRoleGet = async (
       keyword,
       status,
       statusFilter,
+      sort: sortFilter.sort,
     });
   } catch (error) {
     console.log(error);
