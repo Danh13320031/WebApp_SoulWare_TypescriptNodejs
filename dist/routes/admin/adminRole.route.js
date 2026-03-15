@@ -14,4 +14,5 @@ adminRoleRoute.get("/update/:adminRoleId", adminRole_controller_1.default.getAAd
 adminRoleRoute.patch("/update/:adminRoleId", adminRole_validate_1.default.updateAdminRolePatchValidate, adminRole_controller_1.default.updateAdminRolePatch);
 adminRoleRoute.patch("/soft-delete/:adminRoleId", adminRole_controller_1.default.softRemoveAdminRoleByIdPatch);
 adminRoleRoute.patch("/change-status/:adminRoleId/:status", adminRole_controller_1.default.changeStatusAdminRolePatch);
+adminRoleRoute.patch("/update-multi", adminRole_controller_1.default.updateMultiAdminRolePatch);
 exports.default = adminRoleRoute;

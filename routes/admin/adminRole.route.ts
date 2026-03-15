@@ -28,5 +28,9 @@ adminRoleRoute.patch(
   "/change-status/:adminRoleId/:status",
   adminRoleController.changeStatusAdminRolePatch,
 );
+adminRoleRoute.patch(
+  "/update-multi",
+  adminRoleController.updateMultiAdminRolePatch,
+);
 
 export default adminRoleRoute;

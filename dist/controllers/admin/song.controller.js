@@ -379,6 +379,7 @@ const updateMultiSongPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
             message: "Cập nhật bài hát thành công",
             data: ids,
         });
+        return;
     }
     catch (error) {
         console.error("Lỗi hệ thống::: ", error);
