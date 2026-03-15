@@ -85,7 +85,7 @@
             </div>
           </div>
           <div class="card-body admin-card-body main-card-body">
-            <%# if (adminList && adminList.length > 0) { %>
+            <% if (adminList && adminList.length > 0) { %>
             <div class="overflow-auto table-responsive">
               <table class="table table-border table-hover mb-0 admin-table main-table" id="main-table" data-type="admins">
                 <thead class="admin-table-header main-table-header">
@@ -103,18 +103,17 @@
                     </th>
                     <th>STT</th>
                     <th scope="col" class="text-uppercase">Ảnh đại diện</th>
-                    <th scope="col" class="text-uppercase">Tên bài hát</th>
-                    <th scope="col" class="text-uppercase">Ca sĩ</th>
-                    <th scope="col" class="text-uppercase">Chủ đề</th>
-                    <th scope="col" class="text-uppercase">Lượt nghe</th>
-                    <th scope="col" class="text-uppercase">Lượt thích</th>
+                    <th scope="col" class="text-uppercase">Họ và tên</th>
+                    <th scope="col" class="text-uppercase">Địa chỉ email</th>
+                    <th scope="col" class="text-uppercase">Số điện thoại</th>
+                    <th scope="col" class="text-uppercase">Vai trò</th>
                     <th scope="col" class="text-uppercase">Vị trí</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
                     <th scope="col" class="text-uppercase">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <%# adminList.forEach((admin, index) => { %>
+                  <% adminList.forEach((admin, index) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -123,51 +122,50 @@
                         value=""
                         class="form-check-input form-check-single"
                         form-check-single
-                        data-id="<%#= admin._id %>"
+                        data-id="<%= admin._id %>"
                         />
                       </div>
                     </td>
-                    <td><%#= index + 1 %></td>
+                    <td><%= index + 1 %></td>
                     <td>
                       <img
-                        src="<%#= admin?.avatar %>"
-                        alt="<%#= admin.title %>"
+                        src="<%= admin?.avatar %>"
+                        alt="<%= admin.fullName %>"
                         width="50px"
                         height="50px"
                         class="rounded-circle"
                       />
                     </td>
-                    <td><%#= admin.title %></td>
-                    <td><%#= admin?.singerId?.stageName %></td>
-                    <td><%#= admin?.topicId?.title %></td>
-                    <td><%#= admin.listen %></td>
-                    <td><%#= admin.like %></td>
-                    <td><%#= admin.position %></td>
+                    <td><%= admin.fullName %></td>
+                    <td><%= admin.email %></td>
+                    <td><%= admin.phone %></td>
+                    <td><%= admin?.roleId?.name %></td>
+                    <td><%= admin.position %></td>
                     <td>
                       <select 
                         name="status" 
                         class="badge status-select admin-status-select"
                         status-select
                         admin-status-select
-                        data-id="<%#= admin._id %>"
-                        <%# if(admin.status === 'active') { %>
+                        data-id="<%= admin._id %>"
+                        <% if(admin.status === 'active') { %>
                           style="color: var(--success-color); border-color: var(--success-color);"
                           value="active"
-                        <%# } else if(admin.status === 'inactive') { %>
+                        <% } else if(admin.status === 'inactive') { %>
                           style="color: var(--error-color); border-color: var(--error-color);"
                           value="inactive"
-                        <%# } %>
+                        <% } %>
                         >
-                          <option value="active" <%#= admin.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
-                          <option value="inactive" <%#= admin.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                          <option value="active" <%= admin.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= admin.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
                       </select>
                     </td>
                     <td>
                       <div class="d-flex gap-2">
-                        <a href="<%= prefixAdminPath %>/admins/update/<%#= admin._id %>" type="button" class="button-icon-info text-decoration-none">
+                        <a href="<%= prefixAdminPath %>/admins/update/<%= admin._id %>" type="button" class="button-icon-info text-decoration-none">
                           <i class="fas fa-pen"></i>
                         </a>
-                        <button type="button" class="button-icon-danger button-delete" data-id="<%#= admin._id %>" data-type="songs">
+                        <button type="button" class="button-icon-danger button-delete" data-id="<%= admin._id %>" data-type="songs">
                           <i class="fas fa-trash"></i>
                         </button>
                         <button type="button" class="button-secondary">
@@ -176,11 +174,11 @@
                       </div>
                     </td>
                   </tr>
-                  <%# }) %>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
-            <%# } else { %>
+            <% } else { %>
             <div
               class="d-flex flex-column align-items-center justify-content-center gap-3"
               style="height: 200px"
@@ -193,7 +191,7 @@
                 Không có dữ liệu hiển thị.
               </p>
             </div>
-            <%# } %>
+            <% } %>
           </div>
           <div
             class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"
