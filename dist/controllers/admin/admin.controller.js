@@ -17,6 +17,7 @@ const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
+const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -29,9 +30,12 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const createANewAdminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const adminRoleList = yield adminRole_model_1.default.find(find).select("name");
         res.render("admin/pages/admin/create.view.ejs", {
             pageTitle: "Tạo mới quản trị viên",
             pathname,
+            adminRoleList,
         });
     }
     catch (error) {
@@ -70,6 +74,7 @@ const createANewAdminPost = (req, res) => __awaiter(void 0, void 0, void 0, func
             position: req.body.position
                 ? Number(req.body.position)
                 : countDocument + 1,
+            roleId: req.body.roleId ? req.body.roleId : "",
         };
         const newAdmin = new admin_model_1.default(dataBodyCreateAdmin);
         yield newAdmin.save();

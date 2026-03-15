@@ -4,6 +4,7 @@ import activeSider from "../../helpers/admin/activeSider.helper";
 import hashPassword from "../../helpers/hashPassword.helper";
 import AdminModel from "../../models/admin.model";
 import { TDataBodyCreateAdmin } from "../../types/admin.type";
+import AdminRoleModel from "../../models/adminRole.model";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
@@ -22,10 +23,14 @@ const createANewAdminGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find = { deleted: false };
+
+    const adminRoleList = await AdminRoleModel.find(find).select("name");
 
     res.render("admin/pages/admin/create.view.ejs", {
       pageTitle: "Tạo mới quản trị viên",
       pathname,
+      adminRoleList,
     });
   } catch (error) {
     console.log(error);
@@ -66,6 +71,7 @@ const createANewAdminPost = async (
       position: req.body.position
         ? Number(req.body.position)
         : countDocument + 1,
+      roleId: req.body.roleId ? req.body.roleId : "",
     };
 
     const newAdmin = new AdminModel(dataBodyCreateAdmin);

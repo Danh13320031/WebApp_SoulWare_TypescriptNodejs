@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
+import AdminRoleModel from "./adminRole.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
@@ -21,7 +22,7 @@ const objSchema = {
   position: { type: Number, required: true, default: 1 },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
-  roleId: { type: Schema.Types.ObjectId, ref: "AdminRole", required: false },
+  roleId: { type: Schema.Types.ObjectId, ref: AdminRoleModel, required: true },
 };
 
 const AdminSchema = new Schema(objSchema, { timestamps: true });

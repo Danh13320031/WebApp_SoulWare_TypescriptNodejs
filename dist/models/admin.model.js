@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
+const adminRole_model_1 = __importDefault(require("./adminRole.model"));
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
     email: { type: String, required: true, unique: true },
@@ -34,7 +35,7 @@ const objSchema = {
     position: { type: Number, required: true, default: 1 },
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
-    roleId: { type: Schema.Types.ObjectId, ref: "AdminRole", required: false },
+    roleId: { type: Schema.Types.ObjectId, ref: adminRole_model_1.default, required: true },
 };
 const AdminSchema = new Schema(objSchema, { timestamps: true });
 AdminSchema.pre("save", function () {
