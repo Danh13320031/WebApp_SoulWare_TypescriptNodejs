@@ -9,10 +9,17 @@ import AdminRoleModel from "../../models/adminRole.model";
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
   const pathname = activeSider(req.originalUrl);
+  let find = { deleted: false };
+
+  const adminList = await AdminModel.find(find)
+    .select("-deleted -deletedAt")
+    .populate("roleId", "name")
+    .sort({ position: "desc" });
 
   res.render("admin/pages/admin/admin.view.ejs", {
     pageTitle: "Danh sách quản trị viên",
     pathname,
+    adminList,
   });
 };
 

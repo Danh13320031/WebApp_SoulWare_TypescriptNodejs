@@ -21,9 +21,15 @@ const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+    let find = { deleted: false };
+    const adminList = yield admin_model_1.default.find(find)
+        .select("-deleted -deletedAt")
+        .populate("roleId", "name")
+        .sort({ position: "desc" });
     res.render("admin/pages/admin/admin.view.ejs", {
         pageTitle: "Danh sách quản trị viên",
         pathname,
+        adminList,
     });
 });
 // [GET]: /admin/admins/create
