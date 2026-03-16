@@ -67,12 +67,24 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.query.sort)
         sort = req.query.sort;
     const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
+    // Handle singer filter
+    let role = "all";
+    if (req.query.role)
+        role = req.query.role;
+    if (role && role !== "all")
+        find = Object.assign(Object.assign({}, find), { roleId: {
+                _id: role,
+            } });
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
         .sort(sortFilter.sortOptions)
         .populate("roleId", "name")
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
+    const adminRoleList = yield adminRole_model_1.default.find({
+        deleted: false,
+        status: "active",
+    }).select("name");
     res.render("admin/pages/admin/admin.view.ejs", {
         pageTitle: "Danh sách quản trị viên",
         pathname,
@@ -82,6 +94,8 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         status,
         statusFilter,
         sort: sortFilter.sort,
+        adminRoleList,
+        role,
     });
 });
 // [GET]: /admin/admins/create

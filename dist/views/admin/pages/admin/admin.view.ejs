@@ -77,6 +77,19 @@
                         ] 
                       }) %>
                     </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <div class="main-card-filter-role" id="main-card-filter-role">
+                        <label for="main-card-role-select" class="mb-0 main-card-role-label">Vai trò</label>
+                        <select name="role" class="main-card-role-select" id="main-card-role-select">
+                          <option value="all">Tất cả</option>
+                          <% if (adminRoleList && adminRoleList.length > 0) { %>
+                            <% for (let i = 0; i < adminRoleList.length; i++) { %>
+                            <option value="<%= adminRoleList[i]._id %>" <% if(adminRoleList[i]._id == role) { %>selected<% } %>><%= adminRoleList[i].name %></option>
+                            <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
