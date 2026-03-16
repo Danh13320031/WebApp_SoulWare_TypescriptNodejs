@@ -21,6 +21,7 @@ const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPasswor
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -51,6 +52,15 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 { slug: { $regex: slugRegex } },
             ] });
     }
+    // Handle status filter
+    let status = "";
+    if (req.query.status)
+        status = req.query.status;
+    if (req.query.status === "all")
+        status = "";
+    const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+    if (status)
+        find = Object.assign(Object.assign({}, find), { status });
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
         .sort({ position: "desc" })
@@ -63,6 +73,8 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         adminList,
         pagination,
         keyword,
+        status,
+        statusFilter,
     });
 });
 // [GET]: /admin/admins/create

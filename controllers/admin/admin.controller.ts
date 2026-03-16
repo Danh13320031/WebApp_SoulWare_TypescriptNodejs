@@ -7,8 +7,9 @@ import hashPassword from "../../helpers/hashPassword.helper";
 import AdminModel from "../../models/admin.model";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataBodyCreateAdmin } from "../../types/admin.type";
-import { TPagination } from "../../types/index.type";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
@@ -52,6 +53,19 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     };
   }
 
+  // Handle status filter
+  let status: string = "";
+  if (req.query.status) status = req.query.status as string;
+  if (req.query.status === "all") status = "";
+
+  const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+  if (status)
+    find = {
+      ...find,
+      status,
+    };
+
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
     .sort({ position: "desc" })
@@ -65,6 +79,8 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     adminList,
     pagination,
     keyword,
+    status,
+    statusFilter,
   });
 };
 
