@@ -73,12 +73,29 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
 
   const sortFilter = handleSortFilter(sort);
 
+  // Handle singer filter
+  let role: string = "all";
+  if (req.query.role) role = req.query.role as string;
+
+  if (role && role !== "all")
+    find = {
+      ...find,
+      roleId: {
+        _id: role,
+      },
+    };
+
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
     .sort(sortFilter.sortOptions)
     .populate("roleId", "name")
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
+
+  const adminRoleList = await AdminRoleModel.find({
+    deleted: false,
+    status: "active",
+  }).select("name");
 
   res.render("admin/pages/admin/admin.view.ejs", {
     pageTitle: "Danh sách quản trị viên",
@@ -89,6 +106,8 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     status,
     statusFilter,
     sort: sortFilter.sort,
+    adminRoleList,
+    role,
   });
 };
 

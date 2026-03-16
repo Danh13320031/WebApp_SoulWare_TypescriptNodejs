@@ -711,3 +711,28 @@ if (buttonShowPassword) {
   });
 }
 // End handle show password
+
+// Handle role filter
+const mainCardFilterRole = document.getElementById("main-card-filter-role");
+
+if (mainCardFilterRole) {
+  const url = new URL(window.location.href);
+  const mainCardRoleSelect = mainCardFilterRole.querySelector(
+    ".main-card-role-select",
+  );
+
+  if (url && mainCardRoleSelect) {
+    mainCardRoleSelect.addEventListener("change", (e) => {
+      const role = e.target.value;
+
+      if (url.searchParams.get("role") === "all") {
+        url.searchParams.delete("role");
+      } else {
+        url.searchParams.set("role", role);
+      }
+
+      window.location.href = url.href;
+    });
+  }
+}
+// End handle role filter
