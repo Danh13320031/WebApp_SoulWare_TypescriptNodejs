@@ -22,6 +22,7 @@ const admin_model_1 = __importDefault(require("../../models/admin.model"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -61,9 +62,14 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
     if (status)
         find = Object.assign(Object.assign({}, find), { status });
+    // Handle sort filter
+    let sort = "";
+    if (req.query.sort)
+        sort = req.query.sort;
+    const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
-        .sort({ position: "desc" })
+        .sort(sortFilter.sortOptions)
         .populate("roleId", "name")
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
@@ -75,6 +81,7 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         keyword,
         status,
         statusFilter,
+        sort: sortFilter.sort,
     });
 });
 // [GET]: /admin/admins/create
