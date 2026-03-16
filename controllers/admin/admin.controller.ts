@@ -1,25 +1,49 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handlePagination from "../../helpers/handlePagination.helper";
 import hashPassword from "../../helpers/hashPassword.helper";
 import AdminModel from "../../models/admin.model";
-import { TDataBodyCreateAdmin } from "../../types/admin.type";
 import AdminRoleModel from "../../models/adminRole.model";
+import { TDataBodyCreateAdmin } from "../../types/admin.type";
+import { TPagination } from "../../types/index.type";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
   const pathname = activeSider(req.originalUrl);
   let find = { deleted: false };
 
+  // Handle pagination
+  let page: number = 1;
+  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+  let type: string = "";
+
+  if (req.query.page) page = Number(req.query.page);
+  if (req.query.limit) limit = Number(req.query.limit);
+  if (req.query.type) type = req.query.type as string;
+
+  const count = await AdminModel.countDocuments(find);
+
+  const pagination: TPagination = await handlePagination(
+    page,
+    limit,
+    type,
+    count,
+  );
+
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
+    .sort({ position: "desc" })
     .populate("roleId", "name")
-    .sort({ position: "desc" });
+    .skip(pagination.skipPage)
+    .limit(pagination.limitPage);
 
   res.render("admin/pages/admin/admin.view.ejs", {
     pageTitle: "Danh sách quản trị viên",
     pathname,
     adminList,
+    pagination,
   });
 };
 
