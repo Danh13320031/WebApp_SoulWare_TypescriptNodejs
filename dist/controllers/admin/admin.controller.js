@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
+const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
@@ -22,14 +24,29 @@ const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     let find = { deleted: false };
+    // Handle pagination
+    let page = 1;
+    let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+    let type = "";
+    if (req.query.page)
+        page = Number(req.query.page);
+    if (req.query.limit)
+        limit = Number(req.query.limit);
+    if (req.query.type)
+        type = req.query.type;
+    const count = yield admin_model_1.default.countDocuments(find);
+    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
+        .sort({ position: "desc" })
         .populate("roleId", "name")
-        .sort({ position: "desc" });
+        .skip(pagination.skipPage)
+        .limit(pagination.limitPage);
     res.render("admin/pages/admin/admin.view.ejs", {
         pageTitle: "Danh sách quản trị viên",
         pathname,
         adminList,
+        pagination,
     });
 });
 // [GET]: /admin/admins/create
