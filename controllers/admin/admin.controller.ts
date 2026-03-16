@@ -10,6 +10,7 @@ import { TDataBodyCreateAdmin } from "../../types/admin.type";
 import { TPagination, TStatusFilter } from "../../types/index.type";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
@@ -66,9 +67,15 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
       status,
     };
 
+  // Handle sort filter
+  let sort: string = "";
+  if (req.query.sort) sort = req.query.sort as string;
+
+  const sortFilter = handleSortFilter(sort);
+
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
-    .sort({ position: "desc" })
+    .sort(sortFilter.sortOptions)
     .populate("roleId", "name")
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
@@ -81,6 +88,7 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     keyword,
     status,
     statusFilter,
+    sort: sortFilter.sort,
   });
 };
 
