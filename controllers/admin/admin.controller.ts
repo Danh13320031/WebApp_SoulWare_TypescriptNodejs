@@ -8,11 +8,12 @@ import AdminModel from "../../models/admin.model";
 import AdminRoleModel from "../../models/adminRole.model";
 import { TDataBodyCreateAdmin } from "../../types/admin.type";
 import { TPagination } from "../../types/index.type";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
   const pathname = activeSider(req.originalUrl);
-  let find = { deleted: false };
+  let find: any = { deleted: false };
 
   // Handle pagination
   let page: number = 1;
@@ -32,6 +33,25 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     count,
   );
 
+  // Handle search filter
+  let keyword: string = "";
+  let keywordRegex: RegExp = new RegExp("", "i");
+  let slugRegex: RegExp = new RegExp("", "i");
+
+  if (req.query.keyword) keyword = req.query.keyword as string;
+  if (keyword) {
+    keywordRegex = new RegExp(keyword, "i");
+    slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+    find = {
+      ...find,
+      $or: [
+        { fullName: { $regex: keywordRegex } },
+        { slug: { $regex: slugRegex } },
+      ],
+    };
+  }
+
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
     .sort({ position: "desc" })
@@ -44,6 +64,7 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
     pathname,
     adminList,
     pagination,
+    keyword,
   });
 };
 
