@@ -20,6 +20,7 @@ const handlePagination_helper_1 = __importDefault(require("../../helpers/handleP
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -36,6 +37,20 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         type = req.query.type;
     const count = yield admin_model_1.default.countDocuments(find);
     const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
+    // Handle search filter
+    let keyword = "";
+    let keywordRegex = new RegExp("", "i");
+    let slugRegex = new RegExp("", "i");
+    if (req.query.keyword)
+        keyword = req.query.keyword;
+    if (keyword) {
+        keywordRegex = new RegExp(keyword, "i");
+        slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+        find = Object.assign(Object.assign({}, find), { $or: [
+                { fullName: { $regex: keywordRegex } },
+                { slug: { $regex: slugRegex } },
+            ] });
+    }
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
         .sort({ position: "desc" })
@@ -47,6 +62,7 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         pathname,
         adminList,
         pagination,
+        keyword,
     });
 });
 // [GET]: /admin/admins/create
