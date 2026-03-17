@@ -32,5 +32,6 @@ adminRoute.patch(
   "/change-status/:adminId/:status",
   adminController.changeStatusAdminPatch,
 );
+adminRoute.patch("/update-multi", adminController.updateMultiAdminPatch);
 
 export default adminRoute;

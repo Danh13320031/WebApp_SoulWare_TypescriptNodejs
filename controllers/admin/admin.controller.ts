@@ -387,6 +387,67 @@ const changeStatusAdminPatch = async (
   }
 };
 
+// [PATCH]: /admin/admins/update-multi
+const updateMultiAdminPatch = async (req: Request, res: Response) => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active":
+        await AdminModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      case "status-inactive":
+        await AdminModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      case "soft-deleted":
+        await AdminModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      case "hard-deleted":
+        await AdminModel.deleteMany({ _id: { $in: ids } });
+        break;
+      default:
+        break;
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật quản trị viên thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update multi admin",
+    });
+    return;
+  }
+};
+
 type TAdminController = {
   adminGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminGet: (req: Request, res: Response) => Promise<void>;
@@ -395,6 +456,7 @@ type TAdminController = {
   updateAAdminByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveAdminByIdPatch: (req: Request, res: Response) => Promise<void>;
   changeStatusAdminPatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiAdminPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminController: TAdminController = {
@@ -405,6 +467,7 @@ export const adminController: TAdminController = {
   updateAAdminByIdPatch,
   softRemoveAdminByIdPatch,
   changeStatusAdminPatch,
+  updateMultiAdminPatch,
 };
 
 export default adminController;
