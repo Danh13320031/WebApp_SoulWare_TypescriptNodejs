@@ -2,15 +2,18 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import hashPassword from "../../helpers/hashPassword.helper";
 import AdminModel from "../../models/admin.model";
 import AdminRoleModel from "../../models/adminRole.model";
-import { TDataBodyCreateAdmin } from "../../types/admin.type";
+import {
+  TDataBodyCreateAdmin,
+  TDataBodyUpdateAdmin,
+} from "../../types/admin.type";
 import { TPagination, TStatusFilter } from "../../types/index.type";
-import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
-import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
-import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/admin
 const adminGet = async (req: Request, res: Response): Promise<void> => {
@@ -189,16 +192,127 @@ const createANewAdminPost = async (
   }
 };
 
+// [GET]: /admin/admins/update/:adminId
+const getAAdminByIdGet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const pathname = activeSider(req.originalUrl);
+    let adminId: string = "";
+
+    if (req.params.adminId) adminId = req.params.adminId as string;
+
+    const admin = await AdminModel.findOne({
+      _id: adminId,
+      deleted: false,
+    }).select("-deleted -deletedAt");
+    const adminRoleList = await AdminRoleModel.find({
+      deleted: false,
+      status: "active",
+    }).select("name");
+
+    if (!admin) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy quản trị viên!",
+      });
+      return;
+    }
+
+    res.render("admin/pages/admin/update.view.ejs", {
+      pageTitle: "Cập nhật quản trị viên",
+      pathname,
+      admin,
+      adminRoleList,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update admin",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/admins/update/:adminId
+const updateAAdminByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let adminId: string = "";
+    let avatar: string = "";
+    let password: string = "";
+
+    if (req.params.adminId) adminId = req.params.adminId as string;
+
+    const admin = await AdminModel.findOne({
+      _id: adminId,
+      deleted: false,
+    });
+
+    if (!admin) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy quản trị viên!",
+      });
+      return;
+    }
+
+    if (req.body.avatar) avatar = req.body.avatar;
+    if (req.body.password) password = await hashPassword(req.body.password);
+
+    const dataBodyUpdateAdmin: TDataBodyUpdateAdmin = {
+      email: req.body.email ? req.body.email : admin.email,
+      password: password ? password : admin.password,
+      phone: req.body.phone ? req.body.phone : admin.phone,
+      avatar: avatar ? avatar : admin.avatar,
+      fullName: req.body.fullName ? req.body.fullName : admin.fullName,
+      birthday: req.body.birthday ? req.body.birthday : admin.birthday,
+      address: req.body.address ? req.body.address : admin.address,
+      description: req.body.description
+        ? req.body.description
+        : admin.description,
+      status: req.body.status ? req.body.status : admin.status,
+      position: req.body.position ? req.body.position : admin.position,
+      roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+    };
+
+    await AdminModel.updateOne({ _id: adminId }, dataBodyUpdateAdmin);
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật quản trị viên thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update admin",
+    });
+    return;
+  }
+};
+
 type TAdminController = {
   adminGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminPost: (req: Request, res: Response) => Promise<void>;
+  getAAdminByIdGet: (req: Request, res: Response) => Promise<void>;
+  updateAAdminByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminController: TAdminController = {
   adminGet,
   createANewAdminGet,
   createANewAdminPost,
+  getAAdminByIdGet,
+  updateAAdminByIdPatch,
 };
 
 export default adminController;

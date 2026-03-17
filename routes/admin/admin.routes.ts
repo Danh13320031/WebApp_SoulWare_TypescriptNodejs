@@ -16,5 +16,13 @@ adminRoute.post(
   adminValidate.createANewAdminValidate,
   adminController.createANewAdminPost,
 );
+adminRoute.get("/update/:adminId", adminController.getAAdminByIdGet);
+adminRoute.patch(
+  "/update/:adminId",
+  upload.single("avatar"),
+  uploadCloud.uploadSingerField,
+  adminValidate.updateAAdminByIdValidate,
+  adminController.updateAAdminByIdPatch,
+);
 
 export default adminRoute;

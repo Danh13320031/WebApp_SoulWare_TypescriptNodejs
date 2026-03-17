@@ -58,13 +58,13 @@
               <div class="main-card-filter-content">
                 <div class="px-0 container-fluid">
                   <div class="row g-2">
-                    <div class="col-lg-4 col-md-6 col-12">
+                    <div class="col-lg-3 col-md-6 col-12">
                       <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm người dùng', keyword: keyword, placeholder: 'Tìm kiếm người dùng...' }) %>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
+                    <div class="col-lg-3 col-md-6 col-12">
                       <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái người dùng', status: status, statusFilter: statusFilter }) %>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
+                    <div class="col-lg-3 col-md-6 col-12">
                       <%-include('../../partials/sortFilter.view.ejs', { 
                         label: 'Vị trí sắp xếp', 
                         sortArr: [
@@ -77,7 +77,7 @@
                         ] 
                       }) %>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
+                    <div class="col-lg-3 col-md-6 col-12">
                       <div class="main-card-filter-role" id="main-card-filter-role">
                         <label for="main-card-role-select" class="mb-0 main-card-role-label">Vai trò</label>
                         <select name="role" class="main-card-role-select" id="main-card-role-select">
