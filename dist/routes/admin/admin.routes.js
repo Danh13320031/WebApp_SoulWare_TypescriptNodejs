@@ -15,4 +15,5 @@ adminRoute.get("/create", admin_controller_1.default.createANewAdminGet);
 adminRoute.post("/create", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, admin_validate_1.default.createANewAdminValidate, admin_controller_1.default.createANewAdminPost);
 adminRoute.get("/update/:adminId", admin_controller_1.default.getAAdminByIdGet);
 adminRoute.patch("/update/:adminId", upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, admin_validate_1.default.updateAAdminByIdValidate, admin_controller_1.default.updateAAdminByIdPatch);
+adminRoute.patch("/soft-delete/:adminId", admin_controller_1.default.softRemoveAdminByIdPatch);
 exports.default = adminRoute;

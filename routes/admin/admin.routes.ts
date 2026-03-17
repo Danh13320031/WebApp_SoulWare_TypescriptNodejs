@@ -24,5 +24,9 @@ adminRoute.patch(
   adminValidate.updateAAdminByIdValidate,
   adminController.updateAAdminByIdPatch,
 );
+adminRoute.patch(
+  "/soft-delete/:adminId",
+  adminController.softRemoveAdminByIdPatch,
+);
 
 export default adminRoute;
