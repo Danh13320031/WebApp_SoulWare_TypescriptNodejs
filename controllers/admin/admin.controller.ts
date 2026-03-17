@@ -342,6 +342,51 @@ const softRemoveAdminByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/admins/change-status/:adminId/:status
+const changeStatusAdminPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let adminId: string = "";
+    let status: string = "";
+
+    if (req.params.adminId) adminId = req.params.adminId as string;
+    if (req.params.status) status = req.params.status as string;
+
+    const admin = await AdminModel.findOne({
+      _id: adminId,
+      deleted: false,
+    });
+
+    if (!admin) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy quản trị viên!",
+      });
+      return;
+    }
+
+    await AdminModel.updateOne({ _id: adminId }, { status: status });
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái quản trị viên thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - change status admin",
+    });
+    return;
+  }
+};
+
 type TAdminController = {
   adminGet: (req: Request, res: Response) => Promise<void>;
   createANewAdminGet: (req: Request, res: Response) => Promise<void>;
@@ -349,6 +394,7 @@ type TAdminController = {
   getAAdminByIdGet: (req: Request, res: Response) => Promise<void>;
   updateAAdminByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveAdminByIdPatch: (req: Request, res: Response) => Promise<void>;
+  changeStatusAdminPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 export const adminController: TAdminController = {
@@ -358,6 +404,7 @@ export const adminController: TAdminController = {
   getAAdminByIdGet,
   updateAAdminByIdPatch,
   softRemoveAdminByIdPatch,
+  changeStatusAdminPatch,
 };
 
 export default adminController;
