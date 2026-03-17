@@ -300,6 +300,45 @@ const softRemoveAdminByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0,
         return;
     }
 });
+// [PATCH]: /admin/admins/change-status/:adminId/:status
+const changeStatusAdminPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let adminId = "";
+        let status = "";
+        if (req.params.adminId)
+            adminId = req.params.adminId;
+        if (req.params.status)
+            status = req.params.status;
+        const admin = yield admin_model_1.default.findOne({
+            _id: adminId,
+            deleted: false,
+        });
+        if (!admin) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy quản trị viên!",
+            });
+            return;
+        }
+        yield admin_model_1.default.updateOne({ _id: adminId }, { status: status });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái quản trị viên thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - change status admin",
+        });
+        return;
+    }
+});
 exports.adminController = {
     adminGet,
     createANewAdminGet,
@@ -307,5 +346,6 @@ exports.adminController = {
     getAAdminByIdGet,
     updateAAdminByIdPatch,
     softRemoveAdminByIdPatch,
+    changeStatusAdminPatch,
 };
 exports.default = exports.adminController;
