@@ -22,6 +22,9 @@ const positionError = document.querySelector(".form-position-error");
 const statusSelect = document.getElementById("admin-status");
 const statusError = document.querySelector(".form-status-error");
 
+const roleSelect = document.getElementById("admin-role");
+const roleError = document.querySelector(".form-role-error");
+
 let imageValid = imageView && imageView.getAttribute("src") ? true : false;
 
 imageInput.addEventListener("change", function () {
@@ -62,6 +65,7 @@ imageInput.addEventListener("change", function () {
 
 const validateAdminForm = () => {
   let isValid = true;
+  const isUpdate = form.classList.contains("admin-update-form");
 
   if (typeof tinymce !== "undefined") tinymce.triggerSave();
 
@@ -72,6 +76,7 @@ const validateAdminForm = () => {
   positionError.textContent = "";
   emailError.textContent = "";
   statusError.textContent = "";
+  roleError.textContent = "";
 
   const hasOldImage =
     imageView &&
@@ -106,14 +111,22 @@ const validateAdminForm = () => {
   const passwordRegex =
     /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
-  if (!passwordInput.value) {
-    passwordError.textContent = "Mật khẩu không được để trống";
-    isValid = false;
-  }
-  if (passwordInput.value && !passwordRegex.test(passwordInput.value)) {
-    passwordError.textContent =
-      "Mật khẩu phải bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự";
-    isValid = false;
+  if (!isUpdate) {
+    if (!passwordInput.value) {
+      passwordError.textContent = "Mật khẩu không được để trống";
+      isValid = false;
+    }
+    if (passwordInput.value && !passwordRegex.test(passwordInput.value)) {
+      passwordError.textContent =
+        "Mật khẩu phải bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự";
+      isValid = false;
+    }
+  } else {
+    if (passwordInput.value && !passwordRegex.test(passwordInput.value)) {
+      passwordError.textContent =
+        "Mật tự phải bao gồm cả chữ hoa, chữ thuong, số, ký tự đặc biệt và ít nhất 8 ký tự";
+      isValid = false;
+    }
   }
 
   const phoneRegex = /^(03|05|07|08|09)[0-9]{8}$/;
@@ -134,6 +147,11 @@ const validateAdminForm = () => {
 
   if (!statusSelect.value) {
     statusError.textContent = "Vui lòng chọn trạng thái";
+    isValid = false;
+  }
+
+  if (!roleSelect.value) {
+    roleError.textContent = "Vui lòng chọn vai trò";
     isValid = false;
   }
 

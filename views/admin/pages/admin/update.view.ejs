@@ -51,18 +51,18 @@
           <div class="card-header bg-white"></div>
           <div class="card-body">
             <form
-              action="<%= prefixAdminPath %>/admins/create"
+              action="<%= prefixAdminPath %>/admins/update/<%= admin._id %>"
               method="POST"
               enctype="multipart/form-data"
-              class="admin-create-form"
+              class="admin-update-form"
               id="admin-form"
-              admin-create-form
+              admin-update-form
             >
               <div class="container-fluid">
                 <div class="row g-3">
                   <div class="col-12 mb-3">
                     <div
-                      class="d-flex flex-column gap-3 form-group create-image-group"
+                      class="d-flex flex-column gap-3 form-group update-image-group"
                     >
                       <div
                         class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-image-preview"
@@ -79,8 +79,8 @@
                             <i class="fa-solid fa-xmark"></i>
                           </button>
                           <img
-                            src=""
-                            alt="Ảnh đại diện"
+                            src="<%= admin.avatar %>"
+                            alt="<%= admin.name %>"
                             class="form-image-view"
                             form-image-view
                           />
@@ -88,6 +88,7 @@
                             for="form-image-input"
                             class="button-primary text-decoration-none mb-0"
                             >Tải ảnh lên <i class="fa-solid fa-upload"></i>
+                            <input type="hidden" name="oldAvatar" value="<%= admin.avatar %>" class="form-avatar-view" form-avatar-view />
                             <input
                               type="file"
                               name="avatar"
@@ -102,44 +103,46 @@
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-name-group">
+                    <div class="form-group update-name-group">
                       <label
                         for="admin-name"
-                        class="form-label create-name-label"
+                        class="form-label update-name-label"
                         >Họ & tên</label
                       >
                       <input
                         type="text"
                         name="name"
+                        value="<%= admin.fullName %>"
                         placeholder="Nhập họ & tên..."
-                        class="form-control create-name-input"
+                        class="form-control update-name-input"
                         id="admin-name"
                       />
                       <span class="form-error form-name-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-email-group">
+                    <div class="form-group update-email-group">
                       <label
                         for="admin-email"
-                        class="form-label create-email-label"
+                        class="form-label update-email-label"
                         >Địa chỉ email</label
                       >
                       <input
                         type="text"
                         name="email"
+                        value="<%= admin.email %>"
                         placeholder="Nhập địa chi email..."
-                        class="form-control create-email-input"
+                        class="form-control update-email-input"
                         id="admin-email"
                       />
                       <span class="form-error form-email-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-password-group">
+                    <div class="form-group update-password-group">
                       <label
                         for="admin-password"
-                        class="form-label create-password-label"
+                        class="form-label update-password-label"
                         >Mật khẩu</label
                       >
                       <div class="d-flex">
@@ -147,7 +150,7 @@
                           type="password"
                           name="password"
                           placeholder="Nhập mật khẩu..."
-                          class="form-control create-password-input"
+                          class="form-control update-password-input"
                           id="admin-password"
                           input-password
                         />
@@ -170,104 +173,108 @@
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-phone-group">
+                    <div class="form-group update-phone-group">
                       <label
                         for="admin-phone"
-                        class="form-label create-phone-label"
+                        class="form-label update-phone-label"
                         >Số điện thoại</label
                       >
                       <input
                         type="text"
                         name="phone"
+                        value="<%= admin.phone %>"
                         placeholder="Nhập số điện thoại..."
-                        class="form-control create-phone-input"
+                        class="form-control update-phone-input"
                         id="admin-phone"
                       />
                       <span class="form-error form-phone-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-birthday-group">
+                    <div class="form-group update-birthday-group">
                       <label
                         for="admin-birthday"
-                        class="form-label create-birthday-label"
+                        class="form-label update-birthday-label"
                         >Ngày sinh</label
                       >
                       <input
                         type="date"
                         name="birthday"
-                        class="form-control create-birthday-input"
+                        value="<%= dayjs(admin.birthday).format("YYYY-MM-DD") %>"
+                        class="form-control update-birthday-input"
                         id="admin-birthday"
                       />
                       <span class="form-error form-birthday-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-address-group">
+                    <div class="form-group update-address-group">
                       <label
                         for="admin-address"
-                        class="form-label create-address-label"
+                        class="form-label update-address-label"
                         >Địa chỉ</label
                       >
                       <input
                         type="text"
                         name="address"
+                        value="<%= admin.address %>"
                         placeholder="Nhập địa chi..."
-                        class="form-control create-address-input"
+                        class="form-control update-address-input"
                         id="admin-address"
                       />
                       <span class="form-error form-address-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-position-group">
+                    <div class="form-group update-position-group">
                       <label
                         for="admin-position"
-                        class="form-label create-position-label"
+                        class="form-label update-position-label"
                         >Vị trí</label
                       >
                       <input
                         type="number"
                         name="position"
+                        value="<%= admin.position %>"
                         min="1"
                         placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
-                        class="form-control create-position-input"
+                        class="form-control update-position-input"
                         id="admin-position"
                       />
                       <span class="form-error form-position-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <div class="form-group create-status-group">
+                    <div class="form-group update-status-group">
                       <label
                         for="admin-status"
-                        class="form-label create-status-label"
+                        class="form-label update-status-label"
                         >Trạng thái</label
                       >
                       <select name="status" id="admin-status">
-                        <option value="" disabled selected>
+                        <option value="" disabled selected <%= !admin.status ? 'selected' : '' %>>
                           Chọn trạng thái...
                         </option>
-                        <option value="active">Hoạt động</option>
-                        <option value="inactive">Vô hiệu hóa</option>
+                        <option value="active" <%= admin.status == 'active' ? 'selected' : '' %>>Hoạt động</option>
+                        <option value="inactive" <%= admin.status == 'inactive' ? 'selected' : '' %>>Vô hiệu hóa</option>
                       </select>
                       <span class="form-error form-status-error"></span>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
                     <% if (adminRoleList || adminRoleList.length > 0) { %>
-                    <div class="form-group create-role-group">
+                    <div class="form-group update-role-group">
                       <label
                         for="admin-role"
-                        class="form-label create-role-label"
+                        class="form-label update-role-label"
                         >Vai trò</label
                       >
                       <select name="roleId" id="admin-role">
-                        <option value="" disabled selected>
+                        <option value="" disabled <% !admin.roleId ? 'selected' : '' %>>
                           Chọn vai trò...
                         </option>
                         <% adminRoleList.forEach((role) => { %>
-                        <option value="<%= role.id %>"><%= role.name %></option>
+                        <option value="<%= role.id %>" <%= admin?.roleId?._id == role.id ? 'selected' : '' %>><%= role.name %></option>
                         <% }); %>
                       </select>
                       <span class="form-error form-role-error"></span>
@@ -275,17 +282,17 @@
                     <% } %>
                   </div>
                   <div class="col-12">
-                    <div class="form-group create-description-group">
+                    <div class="form-group update-description-group">
                       <label
                         for="admin-description"
-                        class="form-label create-description-label"
+                        class="form-label update-description-label"
                         >Mô tả</label
                       >
                       <textarea
                         name="description"
-                        class="create-description-input tinymce-editor"
+                        class="update-description-input tinymce-editor"
                         id="admin-description"
-                      ></textarea>
+                      ><%= admin.description %></textarea>
                       <span class="form-error form-description-error"></span>
                     </div>
                   </div>
@@ -297,7 +304,7 @@
                         type="submit"
                         class="button-primary text-decoration-none"
                       >
-                        Tạo người dùng <i class="fa-solid fa-plus"></i>
+                        Cập nhật người dùng <i class="fa-solid fa-pen"></i>
                       </button>
                     </div>
                   </div>

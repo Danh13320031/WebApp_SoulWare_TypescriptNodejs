@@ -16,13 +16,13 @@ exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
 const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
-const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
-const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/admin
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -167,9 +167,108 @@ const createANewAdminPost = (req, res) => __awaiter(void 0, void 0, void 0, func
         return;
     }
 });
+// [GET]: /admin/admins/update/:adminId
+const getAAdminByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let adminId = "";
+        if (req.params.adminId)
+            adminId = req.params.adminId;
+        const admin = yield admin_model_1.default.findOne({
+            _id: adminId,
+            deleted: false,
+        }).select("-deleted -deletedAt");
+        const adminRoleList = yield adminRole_model_1.default.find({
+            deleted: false,
+            status: "active",
+        }).select("name");
+        if (!admin) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy quản trị viên!",
+            });
+            return;
+        }
+        res.render("admin/pages/admin/update.view.ejs", {
+            pageTitle: "Cập nhật quản trị viên",
+            pathname,
+            admin,
+            adminRoleList,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update admin",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/admins/update/:adminId
+const updateAAdminByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let adminId = "";
+        let avatar = "";
+        let password = "";
+        if (req.params.adminId)
+            adminId = req.params.adminId;
+        const admin = yield admin_model_1.default.findOne({
+            _id: adminId,
+            deleted: false,
+        });
+        if (!admin) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy quản trị viên!",
+            });
+            return;
+        }
+        if (req.body.avatar)
+            avatar = req.body.avatar;
+        if (req.body.password)
+            password = yield (0, hashPassword_helper_1.default)(req.body.password);
+        const dataBodyUpdateAdmin = {
+            email: req.body.email ? req.body.email : admin.email,
+            password: password ? password : admin.password,
+            phone: req.body.phone ? req.body.phone : admin.phone,
+            avatar: avatar ? avatar : admin.avatar,
+            fullName: req.body.fullName ? req.body.fullName : admin.fullName,
+            birthday: req.body.birthday ? req.body.birthday : admin.birthday,
+            address: req.body.address ? req.body.address : admin.address,
+            description: req.body.description
+                ? req.body.description
+                : admin.description,
+            status: req.body.status ? req.body.status : admin.status,
+            position: req.body.position ? req.body.position : admin.position,
+            roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+        };
+        yield admin_model_1.default.updateOne({ _id: adminId }, dataBodyUpdateAdmin);
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật quản trị viên thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update admin",
+        });
+        return;
+    }
+});
 exports.adminController = {
     adminGet,
     createANewAdminGet,
     createANewAdminPost,
+    getAAdminByIdGet,
+    updateAAdminByIdPatch,
 };
 exports.default = exports.adminController;
