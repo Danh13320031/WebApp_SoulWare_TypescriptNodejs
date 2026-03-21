@@ -116,11 +116,36 @@ const loginPost = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// [GET]: /admin/auth/logout
+const logoutGet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const admin = res.locals.adminAccount ? res.locals.adminAccount : null;
+
+    if (admin)
+      await AdminModel.updateOne({ _id: admin._id }, { refreshToken: "" });
+
+    res.clearCookie("accessTokenAdmin");
+    res.clearCookie("refreshTokenAdmin");
+
+    res.redirect("/admin/auth/login");
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - logout",
+    });
+    return;
+  }
+};
+
 type TAuthController = {
   loginGet: (req: Request, res: Response) => Promise<void>;
   loginPost: (req: Request, res: Response) => Promise<void>;
+  logoutGet: (req: Request, res: Response) => Promise<void>;
 };
 
-const authController: TAuthController = { loginGet, loginPost };
+const authController: TAuthController = { loginGet, loginPost, logoutGet };
 
 export default authController;
