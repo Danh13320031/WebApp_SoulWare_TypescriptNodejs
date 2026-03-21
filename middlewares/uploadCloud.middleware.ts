@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import uploadCloudConfig from "../configs/uploadCloud.config";
 import uploadToCloudinary from "../helpers/uploadToCloudinary.helper";
-import { StatusCodes } from "http-status-codes";
 
 uploadCloudConfig();
 

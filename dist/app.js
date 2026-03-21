@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const database_config_1 = __importDefault(require("./configs/database.config"));
 const prefixAdminPath_config_1 = __importDefault(require("./configs/prefixAdminPath.config"));
 const reqBody_config_1 = __importDefault(require("./configs/reqBody.config"));
+const reqCookie_config_1 = __importDefault(require("./configs/reqCookie.config"));
 const staticFile_config_1 = __importDefault(require("./configs/staticFile.config"));
 const systemTime_config_1 = __importDefault(require("./configs/systemTime.config"));
 const textEditor_config_1 = __importDefault(require("./configs/textEditor.config"));
@@ -21,6 +22,8 @@ const host = app_constant_1.APP_HOST;
 const port = app_constant_1.APP_PORT;
 // Config req body
 (0, reqBody_config_1.default)(app);
+// Config req cookie
+(0, reqCookie_config_1.default)(app);
 // Config system time
 (0, systemTime_config_1.default)(app);
 // Config static file
