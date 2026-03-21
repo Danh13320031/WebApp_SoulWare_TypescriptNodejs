@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AUTH_COOKIE_OPTIONS = exports.AUTH_ACCESS_TOKEN_COOKIE_MAX_AGE_ADMIN = exports.AUTH_REFRESH_TOKEN_COOKIE_MAX_AGE_ADMIN = exports.AUTH_ACCESS_TOKEN_EXPIRES_IN_ADMIN = exports.AUTH_ACCESS_TOKEN_SECRET_ADMIN = exports.AUTH_REFRESH_TOKEN_EXPIRES_IN_ADMIN = exports.AUTH_REFRESH_TOKEN_SECRET_ADMIN = exports.AUTH_SALT_ROUND = void 0;
+require("dotenv/config");
+exports.AUTH_SALT_ROUND = 10;
+exports.AUTH_REFRESH_TOKEN_SECRET_ADMIN = process.env
+    .AUTH_REFRESH_TOKEN_SECRET_ADMIN;
+exports.AUTH_REFRESH_TOKEN_EXPIRES_IN_ADMIN = process.env
+    .AUTH_REFRESH_TOKEN_EXPIRES_IN_ADMIN;
+exports.AUTH_ACCESS_TOKEN_SECRET_ADMIN = process.env
+    .AUTH_ACCESS_TOKEN_SECRET_ADMIN;
+exports.AUTH_ACCESS_TOKEN_EXPIRES_IN_ADMIN = process.env
+    .AUTH_ACCESS_TOKEN_EXPIRES_IN_ADMIN;
+exports.AUTH_REFRESH_TOKEN_COOKIE_MAX_AGE_ADMIN = 1000 * 60 * 60 * 24 * 3;
+exports.AUTH_ACCESS_TOKEN_COOKIE_MAX_AGE_ADMIN = 1000 * 60 * 15;
+exports.AUTH_COOKIE_OPTIONS = {
+    httpOnly: true,
+    // secure: true,
+    sameSite: "strict",
+};

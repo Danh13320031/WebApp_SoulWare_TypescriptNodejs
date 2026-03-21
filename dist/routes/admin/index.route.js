@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_constant_1 = require("../../constants/app.constant");
 const admin_routes_1 = __importDefault(require("./admin.routes"));
 const adminRole_route_1 = __importDefault(require("./adminRole.route"));
+const auth_route_1 = __importDefault(require("./auth.route"));
 const dashboard_route_1 = __importDefault(require("./dashboard.route"));
 const song_route_1 = __importDefault(require("./song.route"));
 const topic_route_1 = __importDefault(require("./topic.route"));
@@ -18,6 +19,7 @@ const createAdminRoute = (app) => {
     app.use(`${pathAdmin}/upload`, upload_route_1.default);
     app.use(`${pathAdmin}/admins`, admin_routes_1.default);
     app.use(`${pathAdmin}/admin-roles`, adminRole_route_1.default);
+    app.use(`${pathAdmin}/auth`, auth_route_1.default);
     return;
 };
 exports.default = createAdminRoute;

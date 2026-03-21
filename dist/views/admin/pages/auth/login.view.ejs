@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
+  </head>
+  <body>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/modal.view.ejs') %>
+
+    <main class="main ms-0 p-0 bg-white" id="main">
+      <section
+        class="w-100 min-vh-100 d-flex align-items-center justify-content-center login-content main-content"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-8">
+              <div
+                class="card shadow-lg"
+                style="border: 2px solid var(--dark-primary-color)"
+              >
+                <div
+                  class="card-header border-0"
+                  style="background-color: var(--light-primary-color)"
+                >
+                  <h4
+                    class="text-center text-uppercase my-2 login-title"
+                    style="
+                      color: var(--dark-primary-color);
+                      font-weight: var(--font-weight-bold);
+                      font-size: var(--font-size-lg);
+                    "
+                  >
+                    <%= pageTitle %>
+                  </h4>
+                </div>
+                <div class="card-body border-0">
+                  <form
+                    action="<%= prefixAdminPath %>/auth/login"
+                    method="POST"
+                    class="login-form"
+                    id="login-form"
+                  >
+                    <div class="mb-3">
+                      <div class="form-group create-email-group">
+                        <label
+                          for="login-email"
+                          class="form-label mb-1 d-flex align-items-center gap-1 create-email-label"
+                          ><i class="fa-solid fa-envelope"></i>Địa chỉ
+                          email</label
+                        >
+                        <input
+                          type="text"
+                          name="email"
+                          placeholder="Nhập địa chi email..."
+                          class="form-control create-email-input"
+                          id="login-email"
+                          style="color: var(--dark-primary-color)"
+                        />
+                        <span class="form-error form-email-error"></span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="form-group create-password-group">
+                        <label
+                          for="login-password"
+                          class="form-label mb-1 d-flex align-items-center gap-1 create-password-label"
+                          ><i class="fa-solid fa-lock"></i>Mật khẩu</label
+                        >
+                        <div class="d-flex">
+                          <input
+                            type="password"
+                            name="password"
+                            placeholder="Nhập mật khẩu..."
+                            class="form-control create-password-input"
+                            id="login-password"
+                            input-password
+                            style="color: var(--dark-primary-color)"
+                          />
+                          <button
+                            type="button"
+                            class="button-primary"
+                            id="button-show-password"
+                          >
+                            <i
+                              class="fa-solid fa-eye d-none"
+                              id="icon-show-password"
+                            ></i
+                            ><i
+                              class="fa-solid fa-eye-slash"
+                              id="icon-hide-password"
+                            ></i>
+                          </button>
+                        </div>
+                        <span class="form-error form-password-error"></span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="button-primary">
+                        <%= pageTitle %>
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/admin/scripts/auth/validateForm.js"></script>
+    <script src="/admin/scripts/auth/handleFormSubmit.js"></script>
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>

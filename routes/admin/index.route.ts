@@ -2,6 +2,7 @@ import { Express } from "express";
 import { APP_PREFIX_ADMIN } from "../../constants/app.constant";
 import adminRoute from "./admin.routes";
 import adminRoleRoute from "./adminRole.route";
+import authRoute from "./auth.route";
 import dashboardRoute from "./dashboard.route";
 import songRoute from "./song.route";
 import topicRoute from "./topic.route";
@@ -16,6 +17,7 @@ const createAdminRoute = (app: Express): void => {
   app.use(`${pathAdmin}/upload`, uploadRoute);
   app.use(`${pathAdmin}/admins`, adminRoute);
   app.use(`${pathAdmin}/admin-roles`, adminRoleRoute);
+  app.use(`${pathAdmin}/auth`, authRoute);
 
   return;
 };

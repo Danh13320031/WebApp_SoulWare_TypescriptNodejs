@@ -10,6 +10,7 @@ const objSchema = {
   slug: { type: String, index: true, unique: true },
   avatar: { type: String, required: true },
   fullName: { type: String, required: true },
+  refreshToken: { type: String, required: false },
   birthday: { type: Date },
   address: { type: String },
   description: { type: String },

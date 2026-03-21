@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import connectDbConfig from "./configs/database.config";
 import setPrefixAdminPathConfig from "./configs/prefixAdminPath.config";
 import reqBodyConfig from "./configs/reqBody.config";
+import reqCookieConfig from "./configs/reqCookie.config";
 import setStaticFileConfig from "./configs/staticFile.config";
 import timeConfig from "./configs/systemTime.config";
 import textEditorConfig from "./configs/textEditor.config";
@@ -19,6 +20,9 @@ const port: number = APP_PORT;
 
 // Config req body
 reqBodyConfig(app);
+
+// Config req cookie
+reqCookieConfig(app);
 
 // Config system time
 timeConfig(app);

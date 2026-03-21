@@ -63,24 +63,83 @@
           </ul>
         </div>
       </div>
-      <div class="position-relative header-setting-user">
-        <a
-          href=""
-          class="text-decoration-none d-flex align-items-center gap-2 header-setting-user-link"
+      
+      <% if (adminAccount) { %>
+      <div class="header-setting-user">
+        <div
+          class="text-decoration-none d-flex align-items-center gap-2 dropdown header-setting-user-link"
         >
-          <span
-            class="border border-2 rounded-circle p-1 header-setting-user-link-avatar"
+          <div
+            data-bs-toggle="dropdown"
+            class="border border-2 rounded-circle p-1 dropdown-toggle header-setting-user-avatar"
           >
             <img
-              src="https://i.pravatar.cc/300?img=2"
-              alt="Avatar"
+              src="<%= adminAccount.avatar %>"
+              alt="<%= adminAccount.fullName %>"
               width="32"
               height="32"
-              class="rounded-circle header-setting-user-link-avatar-img"
+              class="rounded-circle"
             />
-          </span>
-          <span class="header-setting-user-link-name">Admin</span>
-        </a>
+          </div>
+
+          <div class="dropdown-menu border-0 header-setting-user-menu">
+            <div
+              class="bg-white p-3 rounded-3 shadow d-flex flex-column gap-2 header-setting-user-action"
+            >
+              <div class="header-setting-user-name">
+                <span
+                  class="text-nowrap"
+                  style="
+                    color: var(--secondary-color);
+                    font-weight: var(--font-weight-semibold);
+                    font-size: var(--font-size-md);
+                  "
+                  >Xin chào, <%= adminAccount.fullName %></span
+                >
+              </div>
+              <ul
+                class="list-unstyled mb-0 d-flex flex-column gap-1 header-setting-user-list"
+              >
+                <li class="header-setting-user-item">
+                  <a
+                    href="/admin/auth/profile"
+                    class="text-decoration-none d-flex align-items-center gap-2 p-2 rounded-2 header-setting-user-link"
+                    style="
+                      background-color: var(--light-color);
+                      color: var(--dark-gray-color);
+                      font-size: var(--font-size-sm);
+                    "
+                  >
+                    <span class="header-setting-user-link-icon">
+                      <i class="fa-solid fa-user"></i>
+                    </span>
+                    <span class="header-setting-user-link-content">
+                      Thông tin tài khoản
+                    </span>
+                  </a>
+                </li>
+                <li class="header-setting-user-item">
+                  <a
+                    href="/admin/auth/logout"
+                    class="text-decoration-none d-flex align-items-center gap-2 p-2 rounded-2 header-setting-user-link"
+                    style="
+                      background-color: var(--light-color);
+                      color: var(--dark-gray-color);
+                      font-size: var(--font-size-sm);
+                    "
+                  >
+                    <span class="header-setting-user-link-icon">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+                    <span class="header-setting-user-link-content"
+                      >Đăng xuất</span
+                    >
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         <div
           class="position-absolute d-none end-0 top-100 p-3 rounded-3 shadow bg-white header-setting-user-menu"
@@ -103,6 +162,7 @@
           </ul>
         </div>
       </div>
+      <% } %>
     </div>
   </div>
 </header>

@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const app_constant_1 = require("../constants/app.constant");
+const auth_constant_1 = require("../constants/auth.constant");
 const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
-    const salt = yield bcrypt_1.default.genSalt(app_constant_1.APP_SALT_ROUND);
+    const salt = yield bcrypt_1.default.genSalt(auth_constant_1.AUTH_SALT_ROUND);
     const hash = yield bcrypt_1.default.hash(password, salt);
     return hash;
 });

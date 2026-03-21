@@ -1,24 +1,35 @@
 import { Router } from "express";
 import multer from "multer";
 import adminController from "../../controllers/admin/admin.controller";
+import authMiddleware from "../../middlewares/admin/auth.middleware";
 import uploadCloud from "../../middlewares/uploadCloud.middleware";
 import adminValidate from "../../validators/admin/admin.validate";
 
 const adminRoute: Router = Router();
 const upload = multer();
 
-adminRoute.get("/", adminController.adminGet);
-adminRoute.get("/create", adminController.createANewAdminGet);
+adminRoute.get("/", authMiddleware.auth, adminController.adminGet);
+adminRoute.get(
+  "/create",
+  authMiddleware.auth,
+  adminController.createANewAdminGet,
+);
 adminRoute.post(
   "/create",
+  authMiddleware.auth,
   upload.single("avatar"),
   uploadCloud.uploadSingerField,
   adminValidate.createANewAdminValidate,
   adminController.createANewAdminPost,
 );
-adminRoute.get("/update/:adminId", adminController.getAAdminByIdGet);
+adminRoute.get(
+  "/update/:adminId",
+  authMiddleware.auth,
+  adminController.getAAdminByIdGet,
+);
 adminRoute.patch(
   "/update/:adminId",
+  authMiddleware.auth,
   upload.single("avatar"),
   uploadCloud.uploadSingerField,
   adminValidate.updateAAdminByIdValidate,
@@ -26,12 +37,18 @@ adminRoute.patch(
 );
 adminRoute.patch(
   "/soft-delete/:adminId",
+  authMiddleware.auth,
   adminController.softRemoveAdminByIdPatch,
 );
 adminRoute.patch(
   "/change-status/:adminId/:status",
+  authMiddleware.auth,
   adminController.changeStatusAdminPatch,
 );
-adminRoute.patch("/update-multi", adminController.updateMultiAdminPatch);
+adminRoute.patch(
+  "/update-multi",
+  authMiddleware.auth,
+  adminController.updateMultiAdminPatch,
+);
 
 export default adminRoute;
