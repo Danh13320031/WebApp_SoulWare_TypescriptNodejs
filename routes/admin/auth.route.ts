@@ -5,5 +5,6 @@ const authRoute: Router = Router();
 
 authRoute.get("/login", authController.loginGet);
 authRoute.post("/login", authValidate.loginValidate, authController.loginPost);
+authRoute.get("/logout", authController.logoutGet);
 
 export default authRoute;

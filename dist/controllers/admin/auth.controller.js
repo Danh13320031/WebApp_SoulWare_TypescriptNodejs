@@ -92,5 +92,26 @@ const loginPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
 });
-const authController = { loginGet, loginPost };
+// [GET]: /admin/auth/logout
+const logoutGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admin = res.locals.adminAccount ? res.locals.adminAccount : null;
+        if (admin)
+            yield admin_model_1.default.updateOne({ _id: admin._id }, { refreshToken: "" });
+        res.clearCookie("accessTokenAdmin");
+        res.clearCookie("refreshTokenAdmin");
+        res.redirect("/admin/auth/login");
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - logout",
+        });
+        return;
+    }
+});
+const authController = { loginGet, loginPost, logoutGet };
 exports.default = authController;

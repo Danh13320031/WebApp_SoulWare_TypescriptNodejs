@@ -9,4 +9,5 @@ const auth_validate_1 = __importDefault(require("../../validators/admin/auth.val
 const authRoute = (0, express_1.Router)();
 authRoute.get("/login", auth_controller_1.default.loginGet);
 authRoute.post("/login", auth_validate_1.default.loginValidate, auth_controller_1.default.loginPost);
+authRoute.get("/logout", auth_controller_1.default.logoutGet);
 exports.default = authRoute;
