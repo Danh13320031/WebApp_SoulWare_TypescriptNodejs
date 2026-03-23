@@ -9,7 +9,7 @@ const auth_middleware_1 = __importDefault(require("../../middlewares/admin/auth.
 const adminRole_validate_1 = __importDefault(require("../../validators/admin/adminRole.validate"));
 const adminRoleRoute = (0, express_1.Router)();
 adminRoleRoute.get("/", auth_middleware_1.default.auth, adminRole_controller_1.default.getAllAdminRoleGet);
-adminRoleRoute.get("/create", adminRole_controller_1.default.createANewAdminRoleGet);
+adminRoleRoute.get("/create", auth_middleware_1.default.auth, adminRole_controller_1.default.createANewAdminRoleGet);
 adminRoleRoute.post("/create", auth_middleware_1.default.auth, adminRole_validate_1.default.createANewAdminRoleValidate, adminRole_controller_1.default.createANewAdminRolePost);
 adminRoleRoute.get("/update/:adminRoleId", auth_middleware_1.default.auth, adminRole_controller_1.default.getAAdminRoleByIdGet);
 adminRoleRoute.patch("/update/:adminRoleId", auth_middleware_1.default.auth, adminRole_validate_1.default.updateAdminRolePatchValidate, adminRole_controller_1.default.updateAdminRolePatch);

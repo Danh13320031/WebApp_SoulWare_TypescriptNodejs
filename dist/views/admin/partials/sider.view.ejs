@@ -70,7 +70,7 @@
               aria-expanded="false"
               aria-controls="roleCollapse"
               ><span class="d-flex align-items-center"
-                ><i class="fa-solid fa-key me-2"></i>Quản lý vai trò</span
+                ><i class="fa-solid fa-lock me-2"></i>Quản lý vai trò</span
               >
               <span><i class="fa-solid fa-caret-down"></i></span
             ></a>
@@ -87,15 +87,32 @@
                 ><i class="fa-solid fa-caret-right me-2"></i>Vai trò người
                 dùng</a
               >
+            </ul>
+          </li>
+          <li class="sider-body-nav-item">
+            <a
+              href="#authCollapse"
+              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/auth/admin-permissions") || pathname.startsWith("/admin/auth/user-permissions")) { %>act<% } %>"
+              data-bs-toggle="collapse"
+              data-bs-target="#authCollapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="authCollapse"
+              ><span class="d-flex align-items-center"
+                ><i class="fa-solid fa-key me-2"></i>Phân quyền vai trò</span
+              >
+              <span><i class="fa-solid fa-caret-down"></i></span
+            ></a>
+            <ul class="collapse ps-2 mt-1 sider-body-nav-collapse" id="authCollapse">
               <a
-                href="/admin/roles/admin/permission"
-                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/roles/admin/permission")) { %>act<% } %>"
+                href="/admin/auth/admin-permissions"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/auth/admin-permissions")) { %>act<% } %>"
                 ><i class="fa-solid fa-caret-right me-2"></i>Phân quyền quản
                 trị</a
               >
               <a
-                href="/admin/roles/user/permission"
-                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/roles/user/permission")) { %>act<% } %>"
+                href="/admin/auth/user-permissions"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/auth/user-permissions")) { %>act<% } %>"
                 ><i class="fa-solid fa-caret-right me-2"></i>Phân quyền người
                 dùng</a
               >

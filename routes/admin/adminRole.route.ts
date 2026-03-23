@@ -10,7 +10,11 @@ adminRoleRoute.get(
   authMiddleware.auth,
   adminRoleController.getAllAdminRoleGet,
 );
-adminRoleRoute.get("/create", adminRoleController.createANewAdminRoleGet);
+adminRoleRoute.get(
+  "/create",
+  authMiddleware.auth,
+  adminRoleController.createANewAdminRoleGet,
+);
 adminRoleRoute.post(
   "/create",
   authMiddleware.auth,

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css">
+    <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs', { pathname: pathname }) %>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/modal.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <section class="admin-permission-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <h1
+        class="admin-permission-title main-title"
+        style="
+          font-size: var(--font-size-xxl);
+          font-weight: var(--font-weight-bold);
+          color: var(--primary-color);
+        "
+        >
+          <%= pageTitle %>
+        </h1>
+        <a href="javascript:void(0)" class="button-primary text-decoration-none" id="permission-update-button">
+          Cập nhật <i class="fa-solid fa-pen"></i>
+        </a>
+      </section>
+      <section class="admin-permission-content main-content">
+        <div
+          class="card my-2 shadow-sm admin-permission-card main-card"
+          style="border-color: var(--primary-color)"
+        >
+          <div
+            class="card-header py-3 bg-white admin-permission-card-header main-card-header"
+          >
+          </div>
+          <div class="card-body admin-permission-card-body main-card-body">
+            <% if (adminRoleList && adminRoleList.length > 0) { %>
+            <div class="overflow-auto table-responsive">
+              <table class="table table-border table-hover mb-0 admin-permission-table main-table" id="main-table" data-type="admin-permissions">
+                <thead class="admin-permission-table-header main-table-header">
+                  <tr>
+                    <th scope="col" class="text-uppercase">Vai trò:</th>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <th scope="col" class="text-uppercase text-center" data-id="<%= role._id %>" th-role><%= role.name %></th>
+                    <% }) %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%# Quyen quan ly bai hat %>
+                  <tr>
+                    <td colspan="<%= adminRoleList.length + 1 %>" style="color: var(--secondary-color); font-weight: var(--font-weight-bold);">Các quyền về quản lý bài hát</td>
+                  </tr>
+                  <tr>
+                    <td>Thêm bài hát</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="create-song"
+                          <% if (role.permissions.includes('create-song')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xem bài hát</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="view-song"
+                          <% if (role.permissions.includes('view-song')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Sửa bài hát</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="update-song"
+                          <% if (role.permissions.includes('update-song')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xóa bài hát</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="delete-song"
+                          <% if (role.permissions.includes('delete-song')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+
+                  <%# Quyen quan ly ca sĩ %>
+                  <tr>
+                    <td colspan="<%= adminRoleList.length + 1 %>" style="color: var(--secondary-color); font-weight: var(--font-weight-bold);">Các quyền về quản lý ca sĩ</td>
+                  </tr>
+                  <tr>
+                    <td>Thêm ca sĩ</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="create-singer"
+                          <% if (role.permissions.includes('create-singer')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xem ca sĩ</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="view-singer"
+                          <% if (role.permissions.includes('view-singer')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Sửa ca sĩ</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="update-singer"
+                          <% if (role.permissions.includes('update-singer')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xóa ca sĩ</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="delete-singer"
+                          <% if (role.permissions.includes('delete-singer')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+
+                  <%# Quyen quan ly chủ đề %>
+                  <tr>
+                    <td colspan="<%= adminRoleList.length + 1 %>" style="color: var(--secondary-color); font-weight: var(--font-weight-bold);">Các quyền về quản lý chủ đề</td>
+                  </tr>
+                  <tr>
+                    <td>Thêm chủ đề</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="create-topic"
+                          <% if (role.permissions.includes('create-topic')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xem chủ đề</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="view-topic"
+                          <% if (role.permissions.includes('view-topic')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Sửa chủ đề</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="update-topic"
+                          <% if (role.permissions.includes('update-topic')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xoa chủ đề</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="delete-topic"
+                          <% if (role.permissions.includes('delete-topic')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+
+                  <%# Quyen quan ly quản trị viên %>
+                  <tr>
+                    <td colspan="<%= adminRoleList.length + 1 %>" style="color: var(--secondary-color); font-weight: var(--font-weight-bold);">Các quyền về quản lý quản trị viên</td>
+                  </tr>
+                  <tr>
+                    <td>Thêm quản trị viên</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="create-admin"
+                          <% if (role.permissions.includes('create-admin')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xem quản trị viên</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="view-admin"
+                          <% if (role.permissions.includes('view-admin')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Sửa quản trị viên</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="update-admin"
+                          <% if (role.permissions.includes('update-admin')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xóa quản trị viên</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="delete-admin"
+                          <% if (role.permissions.includes('delete-admin')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+
+                  <%# Quyen quan ly vai trò của quản trị viên %>
+                  <tr>
+                    <td colspan="<%= adminRoleList.length + 1 %>" style="color: var(--secondary-color); font-weight: var(--font-weight-bold);">Các quyền về quản lý vai trò của quản trị viên</td>
+                  </tr>
+                  <tr>
+                    <td>Thêm vai trò</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="create-admin-role"
+                          <% if (role.permissions.includes('create-admin-role')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xem vai trò</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="view-admin-role"
+                          <% if (role.permissions.includes('view-admin-role')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Sửa vai trò</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="update-admin-role"
+                          <% if (role.permissions.includes('update-admin-role')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                  <tr>
+                    <td>Xóa vai trò</td>
+                    <% adminRoleList.forEach((role, index) => { %>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          value="delete-admin-role"
+                          <% if (role.permissions.includes('delete-admin-role')) { %> checked <% } %>
+                          class="form-check-input"
+                          data-id="<%= role._id %>"
+                        />
+                      </td>
+                    <% }) %>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <% } else { %>
+            <div
+              class="d-flex flex-column align-items-center justify-content-center gap-3"
+              style="height: 200px"
+            >
+              <i
+                class="fas fa-folder-open"
+                style="font-size: var(--font-size-xxl); color: var(--secondary-color)"
+              ></i>
+              <p class="mb-0" style="color: var(--secondary-color)">
+                Không có dữ liệu hiển thị.
+              </p>
+            </div>
+            <% } %>
+          </div>
+          <div
+            class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"
+          >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/admin/scripts/auth/updatePermission.js"></script>
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>

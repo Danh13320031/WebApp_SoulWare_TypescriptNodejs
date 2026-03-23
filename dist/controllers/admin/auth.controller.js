@@ -18,6 +18,8 @@ const comparePassword_helper_1 = __importDefault(require("../../helpers/compareP
 const generateAccessToken_helper_1 = __importDefault(require("../../helpers/generateAccessToken.helper"));
 const generateRefreshToken_helper_1 = __importDefault(require("../../helpers/generateRefreshToken.helper"));
 const admin_model_1 = __importDefault(require("../../models/admin.model"));
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"));
 // [GET]: /admin/auth/login
 const loginGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -113,5 +115,57 @@ const logoutGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
 });
-const authController = { loginGet, loginPost, logoutGet };
+// [GET]: /admin/auth/admin-permissions
+const getAllAdminPermissionGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const adminRoleList = yield adminRole_model_1.default.find(find).select("name permissions");
+        res.render("admin/pages/auth/adminPermission.view.ejs", {
+            pageTitle: "Phân quyền quản trị",
+            pathname,
+            adminRoleList,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - getAllAdminPermission",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/auth/admin-permissions/update
+const updateAdminPermissionPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const permissionList = req.body;
+        for (const permission of permissionList) {
+            yield adminRole_model_1.default.updateOne({ _id: permission.roleId }, { permissions: permission.permissions });
+        }
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Câp nhật thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - updateAdminPermission",
+        });
+        return;
+    }
+});
+const authController = {
+    loginGet,
+    loginPost,
+    logoutGet,
+    getAllAdminPermissionGet,
+    updateAdminPermissionPatch,
+};
 exports.default = authController;
