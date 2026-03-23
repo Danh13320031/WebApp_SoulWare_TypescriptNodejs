@@ -17,6 +17,8 @@ import {
   TDataAccessTokenPayload,
   TDataRefreshTokenPayload,
 } from "../../types/auth.type";
+import activeSider from "../../helpers/admin/activeSider.helper";
+import AdminRoleModel from "../../models/adminRole.model";
 
 // [GET]: /admin/auth/login
 const loginGet = async (req: Request, res: Response): Promise<void> => {
@@ -140,12 +142,80 @@ const logoutGet = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// [GET]: /admin/auth/admin-permissions
+const getAllAdminPermissionGet = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const pathname = activeSider(req.originalUrl);
+    let find = { deleted: false };
+
+    const adminRoleList =
+      await AdminRoleModel.find(find).select("name permissions");
+
+    res.render("admin/pages/auth/adminPermission.view.ejs", {
+      pageTitle: "Phân quyền quản trị",
+      pathname,
+      adminRoleList,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - getAllAdminPermission",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/auth/admin-permissions/update
+const updateAdminPermissionPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const permissionList = req.body;
+
+    for (const permission of permissionList) {
+      await AdminRoleModel.updateOne(
+        { _id: permission.roleId },
+        { permissions: permission.permissions },
+      );
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Câp nhật thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - updateAdminPermission",
+    });
+    return;
+  }
+};
+
 type TAuthController = {
   loginGet: (req: Request, res: Response) => Promise<void>;
   loginPost: (req: Request, res: Response) => Promise<void>;
   logoutGet: (req: Request, res: Response) => Promise<void>;
+  getAllAdminPermissionGet: (req: Request, res: Response) => Promise<void>;
+  updateAdminPermissionPatch: (req: Request, res: Response) => Promise<void>;
 };
 
-const authController: TAuthController = { loginGet, loginPost, logoutGet };
+const authController: TAuthController = {
+  loginGet,
+  loginPost,
+  logoutGet,
+  getAllAdminPermissionGet,
+  updateAdminPermissionPatch,
+};
 
 export default authController;

@@ -12,7 +12,7 @@ const song_validate_1 = __importDefault(require("../../validators/admin/song.val
 const songRoute = (0, express_1.Router)();
 const upload = (0, multer_1.default)();
 songRoute.get("", auth_middleware_1.default.auth, song_controller_1.default.getAllSongGet);
-songRoute.get("/create", song_controller_1.default.createANewSongGet);
+songRoute.get("/create", auth_middleware_1.default.auth, song_controller_1.default.createANewSongGet);
 songRoute.post("/create", auth_middleware_1.default.auth, upload.fields([
     { name: "avatar", maxCount: 1 },
     { name: "audio", maxCount: 1 },

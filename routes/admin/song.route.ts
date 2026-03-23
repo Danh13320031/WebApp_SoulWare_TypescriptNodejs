@@ -9,7 +9,7 @@ const songRoute: Router = Router();
 const upload = multer();
 
 songRoute.get("", authMiddleware.auth, songController.getAllSongGet);
-songRoute.get("/create", songController.createANewSongGet);
+songRoute.get("/create", authMiddleware.auth, songController.createANewSongGet);
 songRoute.post(
   "/create",
   authMiddleware.auth,
