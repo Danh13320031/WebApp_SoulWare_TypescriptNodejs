@@ -263,6 +263,8 @@ const updateASongByIdPatch = async (
   try {
     const songId: string = req.params.songId as string;
 
+    console.log(req.body);
+
     const song = await SongModel.findOne({
       _id: songId,
       deleted: false,

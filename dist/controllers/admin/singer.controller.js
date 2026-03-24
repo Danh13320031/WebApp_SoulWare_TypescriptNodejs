@@ -37,7 +37,67 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
         return;
     }
 });
+// [GET]: /admin/singers/create
+const createANewSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        res.render("admin/pages/singer/create.view.ejs", {
+            pageTitle: "Tạo mới ca sĩ",
+            pathname,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - createANewSinger",
+        });
+        return;
+    }
+});
+// [POST]: /admin/singers/create
+const createANewSingerPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const countDocument = yield singer_model_1.default.countDocuments();
+        let avatar = "";
+        let fullName = "";
+        if (req.body.avatar)
+            avatar = req.body.avatar;
+        if (req.body.name)
+            fullName = req.body.name;
+        const dataBodyCreateSinger = {
+            avatar: avatar ? avatar : "",
+            fullName: fullName ? fullName : "",
+            stageName: req.body.stageName ? req.body.stageName : "",
+            description: req.body.description ? req.body.description : null,
+            status: req.body.status ? req.body.status : "active",
+            position: req.body.position
+                ? Number(req.body.position)
+                : countDocument + 1,
+        };
+        const newSinger = new singer_model_1.default(dataBodyCreateSinger);
+        yield newSinger.save();
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+            code: http_status_codes_1.StatusCodes.CREATED,
+            status: "Success",
+            message: "Tạo mới ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - createANewSinger",
+        });
+        return;
+    }
+});
 const singerController = {
     getAllSingerGet,
+    createANewSingerGet,
+    createANewSingerPost,
 };
 exports.default = singerController;
