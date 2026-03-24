@@ -17,6 +17,7 @@ const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 // [GET]: /admin/singers
 const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -34,6 +35,20 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             type = req.query.type;
         const count = yield singer_model_1.default.countDocuments(find);
         const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
+        // Handle search filter
+        let keyword = "";
+        let keywordRegex = new RegExp("", "i");
+        let slugRegex = new RegExp("", "i");
+        if (req.query.keyword)
+            keyword = req.query.keyword;
+        if (keyword) {
+            keywordRegex = new RegExp(keyword, "i");
+            slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+            find = Object.assign(Object.assign({}, find), { $or: [
+                    { fullName: { $regex: keywordRegex } },
+                    { slug: { $regex: slugRegex } },
+                ] });
+        }
         const singerList = yield singer_model_1.default.find(find)
             .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
             .sort({ position: "desc" })
@@ -44,6 +59,7 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             pathname,
             singerList,
             pagination,
+            keyword,
         });
     }
     catch (error) {

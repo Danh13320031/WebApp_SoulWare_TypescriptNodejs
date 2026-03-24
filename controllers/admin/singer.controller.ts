@@ -6,6 +6,7 @@ import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
 import { TPagination } from "../../types/index.type";
 import { TDataBodyCreateSinger } from "../../types/signer.type";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 
 // [GET]: /admin/singers
 const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
@@ -31,6 +32,25 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
       count,
     );
 
+    // Handle search filter
+    let keyword: string = "";
+    let keywordRegex: RegExp = new RegExp("", "i");
+    let slugRegex: RegExp = new RegExp("", "i");
+
+    if (req.query.keyword) keyword = req.query.keyword as string;
+    if (keyword) {
+      keywordRegex = new RegExp(keyword, "i");
+      slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+      find = {
+        ...find,
+        $or: [
+          { fullName: { $regex: keywordRegex } },
+          { slug: { $regex: slugRegex } },
+        ],
+      };
+    }
+
     const singerList = await SingerModel.find(find)
       .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
       .sort({ position: "desc" })
@@ -42,6 +62,7 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
       pathname,
       singerList,
       pagination,
+      keyword,
     });
   } catch (error) {
     console.log(error);
