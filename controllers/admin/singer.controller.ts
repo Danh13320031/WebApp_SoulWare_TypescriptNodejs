@@ -4,9 +4,10 @@ import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
-import { TPagination } from "../../types/index.type";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 import { TDataBodyCreateSinger } from "../../types/signer.type";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 
 // [GET]: /admin/singers
 const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
@@ -51,6 +52,19 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
       };
     }
 
+    // Handle status filter
+    let status: string = "";
+    if (req.query.status) status = req.query.status as string;
+    if (req.query.status === "all") status = "";
+
+    const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+    if (status)
+      find = {
+        ...find,
+        status,
+      };
+
     const singerList = await SingerModel.find(find)
       .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
       .sort({ position: "desc" })
@@ -63,6 +77,8 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
       singerList,
       pagination,
       keyword,
+      status,
+      statusFilter,
     });
   } catch (error) {
     console.log(error);

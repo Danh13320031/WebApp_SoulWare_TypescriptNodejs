@@ -18,6 +18,7 @@ const activeSider_helper_1 = __importDefault(require("../../helpers/admin/active
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 // [GET]: /admin/singers
 const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -49,6 +50,15 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
                     { slug: { $regex: slugRegex } },
                 ] });
         }
+        // Handle status filter
+        let status = "";
+        if (req.query.status)
+            status = req.query.status;
+        if (req.query.status === "all")
+            status = "";
+        const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+        if (status)
+            find = Object.assign(Object.assign({}, find), { status });
         const singerList = yield singer_model_1.default.find(find)
             .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
             .sort({ position: "desc" })
@@ -60,6 +70,8 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             singerList,
             pagination,
             keyword,
+            status,
+            statusFilter,
         });
     }
     catch (error) {

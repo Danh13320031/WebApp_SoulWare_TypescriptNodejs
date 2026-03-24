@@ -59,13 +59,13 @@
               <div class="main-card-filter-content">
                 <div class="px-0 container-fluid">
                   <div class="row g-2">
-                    <div class="col-lg-3 col-md-6 col-12">
+                    <div class="col-lg-4 col-md-6 col-12">
                       <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm ca sĩ', keyword: keyword, placeholder: 'Tìm kiếm ca sĩ...' }) %>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                      <%#-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái người dùng', status: status, statusFilter: statusFilter }) %>
+                    <div class="col-lg-4 col-md-6 col-12">
+                      <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái ca sĩ', status: status, statusFilter: statusFilter }) %>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12">
+                    <div class="col-lg-4 col-md-6 col-12">
                       <%#-include('../../partials/sortFilter.view.ejs', { 
                         label: 'Vị trí sắp xếp', 
                         sortArr: [
