@@ -174,7 +174,7 @@
                           Chọn nghệ sĩ...
                         </option>
                         <% singerList.forEach((singer) => { %>
-                          <option value="<%= singer._id %>" <%= song.singerId == singer._id ? 'selected' : '' %>><%= singer.stageName %></option>
+                          <option value="<%= singer._id %>" <% if (song?.singerId._id.toString() == singer._id.toString()) { %>selected<% } %>><%= singer.stageName %></option>
                         <% }) %>
                       </select>
                       <span class="form-error form-singer-error"></span>
@@ -194,7 +194,7 @@
                           Chọn chủ đề...
                         </option>
                         <% topicList.forEach((topic) => { %>
-                          <option value="<%= topic._id %>" <%= song.topicId == topic._id ? 'selected' : '' %>><%= topic.title %></option>
+                          <option value="<%= topic._id %>" <%= song.topicId._id.toString() == topic._id.toString() ? 'selected' : '' %>><%= topic.title %></option>
                         <% }) %>
                       </select>
                       <span class="form-error form-topic-error"></span>

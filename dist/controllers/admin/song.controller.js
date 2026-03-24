@@ -218,6 +218,7 @@ const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
 const updateASongByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const songId = req.params.songId;
+        console.log(req.body);
         const song = yield song_model_1.default.findOne({
             _id: songId,
             deleted: false,
