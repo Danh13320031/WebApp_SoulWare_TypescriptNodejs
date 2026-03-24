@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
+import { TPagination } from "../../types/index.type";
 import { TDataBodyCreateSinger } from "../../types/signer.type";
 
 // [GET]: /admin/singers
@@ -10,14 +13,35 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    const singerList = await SingerModel.find(find).select(
-      "-deleted -deletedAt -createdAt -updatedAt -slug -__v",
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit) limit = Number(req.query.limit);
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await SingerModel.countDocuments(find);
+
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
     );
+
+    const singerList = await SingerModel.find(find)
+      .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
+      .sort({ position: "desc" })
+      .skip(pagination.skipPage)
+      .limit(pagination.limitPage);
 
     res.render("admin/pages/singer/singer.view.ejs", {
       pageTitle: "Danh sách ca sĩ",
       pathname,
       singerList,
+      pagination,
     });
   } catch (error) {
     console.log(error);
