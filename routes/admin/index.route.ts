@@ -4,6 +4,7 @@ import adminRoute from "./admin.routes";
 import adminRoleRoute from "./adminRole.route";
 import authRoute from "./auth.route";
 import dashboardRoute from "./dashboard.route";
+import singerRoute from "./singer.route";
 import songRoute from "./song.route";
 import topicRoute from "./topic.route";
 import uploadRoute from "./upload.route";
@@ -14,6 +15,7 @@ const createAdminRoute = (app: Express): void => {
   app.use(`${pathAdmin}/dashboard`, dashboardRoute);
   app.use(`${pathAdmin}/topics`, topicRoute);
   app.use(`${pathAdmin}/songs`, songRoute);
+  app.use(`${pathAdmin}/singers`, singerRoute);
   app.use(`${pathAdmin}/upload`, uploadRoute);
   app.use(`${pathAdmin}/admins`, adminRoute);
   app.use(`${pathAdmin}/admin-roles`, adminRoleRoute);

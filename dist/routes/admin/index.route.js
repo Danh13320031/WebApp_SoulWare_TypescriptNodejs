@@ -8,6 +8,7 @@ const admin_routes_1 = __importDefault(require("./admin.routes"));
 const adminRole_route_1 = __importDefault(require("./adminRole.route"));
 const auth_route_1 = __importDefault(require("./auth.route"));
 const dashboard_route_1 = __importDefault(require("./dashboard.route"));
+const singer_route_1 = __importDefault(require("./singer.route"));
 const song_route_1 = __importDefault(require("./song.route"));
 const topic_route_1 = __importDefault(require("./topic.route"));
 const upload_route_1 = __importDefault(require("./upload.route"));
@@ -16,6 +17,7 @@ const createAdminRoute = (app) => {
     app.use(`${pathAdmin}/dashboard`, dashboard_route_1.default);
     app.use(`${pathAdmin}/topics`, topic_route_1.default);
     app.use(`${pathAdmin}/songs`, song_route_1.default);
+    app.use(`${pathAdmin}/singers`, singer_route_1.default);
     app.use(`${pathAdmin}/upload`, upload_route_1.default);
     app.use(`${pathAdmin}/admins`, admin_routes_1.default);
     app.use(`${pathAdmin}/admin-roles`, adminRole_route_1.default);
