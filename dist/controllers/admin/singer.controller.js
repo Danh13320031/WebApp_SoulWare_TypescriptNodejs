@@ -13,18 +13,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
+const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 // [GET]: /admin/singers
 const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
-        const singerList = yield singer_model_1.default.find(find).select("-deleted -deletedAt -createdAt -updatedAt -slug -__v");
+        // Handle pagination
+        let page = 1;
+        let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+        let type = "";
+        if (req.query.page)
+            page = Number(req.query.page);
+        if (req.query.limit)
+            limit = Number(req.query.limit);
+        if (req.query.type)
+            type = req.query.type;
+        const count = yield singer_model_1.default.countDocuments(find);
+        const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
+        const singerList = yield singer_model_1.default.find(find)
+            .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
+            .sort({ position: "desc" })
+            .skip(pagination.skipPage)
+            .limit(pagination.limitPage);
         res.render("admin/pages/singer/singer.view.ejs", {
             pageTitle: "Danh sách ca sĩ",
             pathname,
             singerList,
+            pagination,
         });
     }
     catch (error) {
