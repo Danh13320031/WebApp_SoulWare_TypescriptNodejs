@@ -13,6 +13,7 @@ const objSchema = {
     default: "active",
   },
   slug: { type: String, required: true },
+  position: { type: Number, required: true, default: 1 },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
 };
