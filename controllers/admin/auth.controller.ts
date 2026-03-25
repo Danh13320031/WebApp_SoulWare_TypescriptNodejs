@@ -149,7 +149,7 @@ const getAllAdminPermissionGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
-    let find = { deleted: false };
+    let find = { deleted: false, status: "active" };
 
     const adminRoleList =
       await AdminRoleModel.find(find).select("name permissions");
