@@ -119,7 +119,7 @@ const logoutGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getAllAdminPermissionGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
-        let find = { deleted: false };
+        let find = { deleted: false, status: "active" };
         const adminRoleList = yield adminRole_model_1.default.find(find).select("name permissions");
         res.render("admin/pages/auth/adminPermission.view.ejs", {
             pageTitle: "Phân quyền quản trị",

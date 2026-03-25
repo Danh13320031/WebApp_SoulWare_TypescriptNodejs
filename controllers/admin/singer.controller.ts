@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
 import { TDataBodyCreateSinger } from "../../types/signer.type";
-import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
-import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 
 // [GET]: /admin/singers
 const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
@@ -65,9 +66,15 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
         status,
       };
 
+    // Handle sort filter
+    let sort: string = "";
+    if (req.query.sort) sort = req.query.sort as string;
+
+    const sortFilter = handleSortFilter(sort);
+
     const singerList = await SingerModel.find(find)
       .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
-      .sort({ position: "desc" })
+      .sort(sortFilter.sortOptions)
       .skip(pagination.skipPage)
       .limit(pagination.limitPage);
 
@@ -79,6 +86,7 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
       keyword,
       status,
       statusFilter,
+      sort: sortFilter.sort,
     });
   } catch (error) {
     console.log(error);

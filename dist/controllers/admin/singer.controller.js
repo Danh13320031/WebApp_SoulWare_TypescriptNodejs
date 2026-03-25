@@ -15,10 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const app_constant_1 = require("../../constants/app.constant");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
-const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 // [GET]: /admin/singers
 const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -59,9 +60,14 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
         const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
         if (status)
             find = Object.assign(Object.assign({}, find), { status });
+        // Handle sort filter
+        let sort = "";
+        if (req.query.sort)
+            sort = req.query.sort;
+        const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
         const singerList = yield singer_model_1.default.find(find)
             .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
-            .sort({ position: "desc" })
+            .sort(sortFilter.sortOptions)
             .skip(pagination.skipPage)
             .limit(pagination.limitPage);
         res.render("admin/pages/singer/singer.view.ejs", {
@@ -72,6 +78,7 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             keyword,
             status,
             statusFilter,
+            sort: sortFilter.sort,
         });
     }
     catch (error) {
