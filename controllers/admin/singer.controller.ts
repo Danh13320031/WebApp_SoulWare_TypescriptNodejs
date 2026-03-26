@@ -353,6 +353,70 @@ const changeStatusSingerPatch = async (
   }
 };
 
+// [PATCH]: /admin/singers/update-multi
+const updateMultiSingerPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active":
+        await SingerModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      case "status-inactive":
+        await SingerModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      case "soft-deleted":
+        await SingerModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      case "hard-deleted":
+        await SingerModel.deleteMany({ _id: { $in: ids } });
+        break;
+      default:
+        break;
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật ca sĩ thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update multi singer",
+    });
+    return;
+  }
+};
+
 type TSingerController = {
   getAllSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGet: (req: Request, res: Response) => Promise<void>;
@@ -361,6 +425,7 @@ type TSingerController = {
   updateASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
   changeStatusSingerPatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiSingerPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const singerController: TSingerController = {
@@ -371,6 +436,7 @@ const singerController: TSingerController = {
   updateASingerByIdPatch,
   softRemoveASingerByIdPatch,
   changeStatusSingerPatch,
+  updateMultiSingerPatch,
 };
 
 export default singerController;

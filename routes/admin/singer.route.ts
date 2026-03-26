@@ -45,5 +45,10 @@ singerRoute.patch(
   authMiddleware.auth,
   singerController.changeStatusSingerPatch,
 );
+singerRoute.patch(
+  "/update-multi",
+  authMiddleware.auth,
+  singerController.updateMultiSingerPatch,
+);
 
 export default singerRoute;

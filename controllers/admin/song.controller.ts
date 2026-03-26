@@ -222,7 +222,7 @@ const getASongByIdGet = async (req: Request, res: Response): Promise<void> => {
 
     const singerList = await SingerModel.find({
       deleted: false,
-    }).select("stageName");
+    }).select("avatar stageName");
 
     const topicList = await TopicModel.find({
       deleted: false,
