@@ -236,11 +236,48 @@ const updateASingerByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, f
         return;
     }
 });
+// [PATCH]: /admin/singers/soft-delete/:singerId
+const softRemoveASingerByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let singerId = "";
+        if (req.params.singerId)
+            singerId = req.params.singerId;
+        const singer = yield singer_model_1.default.findOne({
+            _id: singerId,
+            deleted: false,
+        });
+        if (!singer) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy ca sĩ!",
+            });
+            return;
+        }
+        yield singer_model_1.default.updateOne({ _id: singerId }, { deleted: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Xóa ca sĩ thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - soft remove admin",
+        });
+        return;
+    }
+});
 const singerController = {
     getAllSingerGet,
     createANewSingerGet,
     createANewSingerPost,
     getASingerByIdGet,
     updateASingerByIdPatch,
+    softRemoveASingerByIdPatch,
 };
 exports.default = singerController;

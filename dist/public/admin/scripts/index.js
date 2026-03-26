@@ -303,6 +303,12 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       case "admin-roles":
         messageSubStr = "vai trò";
         break;
+      case "admins":
+        messageSubStr = "quản trị viên";
+        break;
+      case "singers":
+        messageSubStr = "ca sĩ";
+        break;
       default:
         messageSubStr = "dữ liệu";
     }
