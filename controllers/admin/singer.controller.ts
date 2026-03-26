@@ -19,24 +19,6 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    // Handle pagination
-    let page: number = 1;
-    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
-    let type: string = "";
-
-    if (req.query.page) page = Number(req.query.page);
-    if (req.query.limit) limit = Number(req.query.limit);
-    if (req.query.type) type = req.query.type as string;
-
-    const count = await SingerModel.countDocuments(find);
-
-    const pagination: TPagination = await handlePagination(
-      page,
-      limit,
-      type,
-      count,
-    );
-
     // Handle search filter
     let keyword: string = "";
     let keywordRegex: RegExp = new RegExp("", "i");
@@ -74,6 +56,24 @@ const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
     if (req.query.sort) sort = req.query.sort as string;
 
     const sortFilter = handleSortFilter(sort);
+
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit) limit = Number(req.query.limit);
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await SingerModel.countDocuments(find);
+
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
+    );
 
     const singerList = await SingerModel.find(find)
       .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
@@ -308,6 +308,51 @@ const softRemoveASingerByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/admins/change-status/:singerId/:status
+const changeStatusSingerPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let singerId: string = "";
+    let status: string = "";
+
+    if (req.params.singerId) singerId = req.params.singerId as string;
+    if (req.params.status) status = req.params.status as string;
+
+    const admin = await SingerModel.findOne({
+      _id: singerId,
+      deleted: false,
+    });
+
+    if (!admin) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy ca sĩ!",
+      });
+      return;
+    }
+
+    await SingerModel.updateOne({ _id: singerId }, { status: status });
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái ca sĩ thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - change status admin",
+    });
+    return;
+  }
+};
+
 type TSingerController = {
   getAllSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGet: (req: Request, res: Response) => Promise<void>;
@@ -315,6 +360,7 @@ type TSingerController = {
   getASingerByIdGet: (req: Request, res: Response) => Promise<void>;
   updateASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
+  changeStatusSingerPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const singerController: TSingerController = {
@@ -324,6 +370,7 @@ const singerController: TSingerController = {
   getASingerByIdGet,
   updateASingerByIdPatch,
   softRemoveASingerByIdPatch,
+  changeStatusSingerPatch,
 };
 
 export default singerController;

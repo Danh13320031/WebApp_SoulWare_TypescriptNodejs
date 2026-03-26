@@ -55,10 +55,32 @@
           </li>
           <li class="sider-body-nav-item">
             <a
-              href="/admin/admins"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admins")) { %>act<% } %>"
-              ><i class="fa-solid fa-user-tie me-2"></i>Quản lý quản trị viên</a
-            >
+              href="#userCollapse"
+              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admins") || pathname.startsWith("/admin/users")) { %>act<% } %>"
+              data-bs-toggle="collapse"
+              data-bs-target="#userCollapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="userCollapse"
+              ><span class="d-flex align-items-center"
+                ><i class="fa-solid fa-user-tie me-2"></i>Quản lý người dùng</span
+              >
+              <span><i class="fa-solid fa-caret-down"></i></span
+            ></a>
+            <ul class="collapse ps-2 mt-1 sider-body-nav-collapse" id="userCollapse">
+              <a
+                href="/admin/admins"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/admins")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Quản trị viên
+                viên</a
+              >
+              <a
+                href="/admin/users"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/users")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Người dùng chung
+              </a
+              >
+            </ul>
           </li>
           <li class="sider-body-nav-item">
             <a
