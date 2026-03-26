@@ -25,18 +25,6 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
-        // Handle pagination
-        let page = 1;
-        let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
-        let type = "";
-        if (req.query.page)
-            page = Number(req.query.page);
-        if (req.query.limit)
-            limit = Number(req.query.limit);
-        if (req.query.type)
-            type = req.query.type;
-        const count = yield singer_model_1.default.countDocuments(find);
-        const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
         // Handle search filter
         let keyword = "";
         let keywordRegex = new RegExp("", "i");
@@ -65,6 +53,18 @@ const getAllSingerGet = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (req.query.sort)
             sort = req.query.sort;
         const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
+        // Handle pagination
+        let page = 1;
+        let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+        let type = "";
+        if (req.query.page)
+            page = Number(req.query.page);
+        if (req.query.limit)
+            limit = Number(req.query.limit);
+        if (req.query.type)
+            type = req.query.type;
+        const count = yield singer_model_1.default.countDocuments(find);
+        const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
         const singerList = yield singer_model_1.default.find(find)
             .select("-deleted -deletedAt -createdAt -updatedAt -slug -__v")
             .sort(sortFilter.sortOptions)
@@ -272,6 +272,45 @@ const softRemoveASingerByIdPatch = (req, res) => __awaiter(void 0, void 0, void 
         return;
     }
 });
+// [PATCH]: /admin/admins/change-status/:singerId/:status
+const changeStatusSingerPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let singerId = "";
+        let status = "";
+        if (req.params.singerId)
+            singerId = req.params.singerId;
+        if (req.params.status)
+            status = req.params.status;
+        const admin = yield singer_model_1.default.findOne({
+            _id: singerId,
+            deleted: false,
+        });
+        if (!admin) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy ca sĩ!",
+            });
+            return;
+        }
+        yield singer_model_1.default.updateOne({ _id: singerId }, { status: status });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái ca sĩ thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - change status admin",
+        });
+        return;
+    }
+});
 const singerController = {
     getAllSingerGet,
     createANewSingerGet,
@@ -279,5 +318,6 @@ const singerController = {
     getASingerByIdGet,
     updateASingerByIdPatch,
     softRemoveASingerByIdPatch,
+    changeStatusSingerPatch,
 };
 exports.default = singerController;

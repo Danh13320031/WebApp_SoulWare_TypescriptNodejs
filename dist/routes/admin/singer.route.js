@@ -17,4 +17,5 @@ singerRoute.post("/create", auth_middleware_1.default.auth, upload.single("avata
 singerRoute.get("/update/:singerId", auth_middleware_1.default.auth, singer_controller_1.default.getASingerByIdGet);
 singerRoute.patch("/update/:singerId", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, singer_validate_1.default.updateASingerByIdValidate, singer_controller_1.default.updateASingerByIdPatch);
 singerRoute.patch("/soft-delete/:singerId", auth_middleware_1.default.auth, singer_controller_1.default.softRemoveASingerByIdPatch);
+singerRoute.patch("/change-status/:singerId/:status", auth_middleware_1.default.auth, singer_controller_1.default.changeStatusSingerPatch);
 exports.default = singerRoute;
