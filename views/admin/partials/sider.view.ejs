@@ -41,17 +41,38 @@
           </li>
           <li class="sider-body-nav-item">
             <a
-              href="/admin/singers"
-              class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/singers")) { %>act<% } %>"
-              ><i class="fa-solid fa-microphone-lines me-2"></i>Quản lý ca sĩ</a
-            >
-          </li>
-          <li class="sider-body-nav-item">
-            <a
               href="/admin/topics"
               class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/topics")) { %>act<% } %>"
               ><i class="fa-solid fa-icons me-2"></i>Quản lý chủ đề</a
             >
+          </li>
+          <li class="sider-body-nav-item">
+            <a
+              href="#singerCollapse"
+              class="text-decoration-none w-100 d-flex align-items-center justify-content-between p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/singers") || pathname.startsWith("/admin/singer-groups")) { %>act<% } %>"
+              data-bs-toggle="collapse"
+              data-bs-target="#singerCollapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="singerCollapse"
+              ><span class="d-flex align-items-center"
+                ><i class="fa-solid fa-microphone-lines me-2"></i>Quản lý nhóm / ca sĩ</span
+              >
+              <span><i class="fa-solid fa-caret-down"></i></span
+            ></a>
+            <ul class="collapse ps-2 mt-1 sider-body-nav-collapse" id="singerCollapse">
+              <a
+                href="/admin/singers"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/singers")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Ca sĩ thể hiện</a
+              >
+              <a
+                href="/admin/singer-groups"
+                class="text-decoration-none w-100 d-flex align-items-center p-2 rounded-2 sider-body-nav-link <% if(pathname.startsWith("/admin/singer-groups")) { %>act<% } %>"
+                ><i class="fa-solid fa-caret-right me-2"></i>Nhóm ca sĩ thể hiện
+              </a
+              >
+            </ul>
           </li>
           <li class="sider-body-nav-item">
             <a

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
+import SingerGroupModel from "./singerGroup.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
