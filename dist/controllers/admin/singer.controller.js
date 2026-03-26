@@ -149,9 +149,98 @@ const createANewSingerPost = (req, res) => __awaiter(void 0, void 0, void 0, fun
         return;
     }
 });
+// [GET]: /admin/singers/update/:singerId
+const getASingerByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let singerId = "";
+        if (req.params.singerId)
+            singerId = req.params.singerId;
+        const singer = yield singer_model_1.default.findOne({
+            _id: singerId,
+            deleted: false,
+        }).select("-deleted -deletedAt -createdAt -updatedAt -slug -__v");
+        if (!singer) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy ca sĩ",
+            });
+            return;
+        }
+        res.render("admin/pages/singer/update.view.ejs", {
+            pageTitle: "Cập nhật ca sĩ",
+            pathname,
+            singer,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - getASingerById",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/singers/update/:singerId
+const updateASingerByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let singerId = "";
+        let avatar = "";
+        let fullName = "";
+        if (req.params.singerId)
+            singerId = req.params.singerId;
+        if (req.body.name)
+            fullName = req.body.name;
+        if (req.body.avatar)
+            avatar = req.body.avatar;
+        const singer = yield singer_model_1.default.findOne({
+            _id: singerId,
+            deleted: false,
+        });
+        if (!singer) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy ca sĩ",
+            });
+            return;
+        }
+        const dataBodyUpdateSinger = {
+            fullName: fullName ? fullName : singer.fullName,
+            stageName: req.body.stageName ? req.body.stageName : singer.stageName,
+            avatar: avatar ? avatar : singer.avatar,
+            description: req.body.description
+                ? req.body.description
+                : singer.description,
+            status: req.body.status ? req.body.status : singer.status,
+            position: req.body.position ? Number(req.body.position) : singer.position,
+        };
+        yield singer_model_1.default.updateOne({ _id: singerId }, dataBodyUpdateSinger);
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - updateASingerById",
+        });
+        return;
+    }
+});
 const singerController = {
     getAllSingerGet,
     createANewSingerGet,
     createANewSingerPost,
+    getASingerByIdGet,
+    updateASingerByIdPatch,
 };
 exports.default = singerController;
