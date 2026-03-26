@@ -311,6 +311,56 @@ const changeStatusSingerPatch = (req, res) => __awaiter(void 0, void 0, void 0, 
         return;
     }
 });
+// [PATCH]: /admin/singers/update-multi
+const updateMultiSingerPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let ids = [];
+        let type = "";
+        if (req.body.ids)
+            ids = req.body.ids;
+        if (req.body.type)
+            type = req.body.type;
+        if (!ids || !type || ids.length <= 0) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Tham số không hợp lệ",
+            });
+            return;
+        }
+        switch (type) {
+            case "status-active":
+                yield singer_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "active" });
+                break;
+            case "status-inactive":
+                yield singer_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "inactive" });
+                break;
+            case "soft-deleted":
+                yield singer_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { deleted: true });
+                break;
+            case "hard-deleted":
+                yield singer_model_1.default.deleteMany({ _id: { $in: ids } });
+                break;
+            default:
+                break;
+        }
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update multi singer",
+        });
+        return;
+    }
+});
 const singerController = {
     getAllSingerGet,
     createANewSingerGet,
@@ -319,5 +369,6 @@ const singerController = {
     updateASingerByIdPatch,
     softRemoveASingerByIdPatch,
     changeStatusSingerPatch,
+    updateMultiSingerPatch,
 };
 exports.default = singerController;

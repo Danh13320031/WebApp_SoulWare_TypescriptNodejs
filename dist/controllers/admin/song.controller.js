@@ -184,7 +184,7 @@ const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             .populate("topicId", "title");
         const singerList = yield singer_model_1.default.find({
             deleted: false,
-        }).select("stageName");
+        }).select("avatar stageName");
         const topicList = yield topic_model_1.default.find({
             deleted: false,
         }).select("title");
