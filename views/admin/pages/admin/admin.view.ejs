@@ -40,10 +40,17 @@
         >
           <%= pageTitle %>
         </h1>
-        <a href="/admin/admins/create" class="button-primary text-decoration-none">
+        <a 
+          <% if (adminAccount && adminAccount.roleId.permissions.includes('create-admin')) { %>
+            href="/admin/admins/create"
+          <% } else { %>
+            href="#"
+          <% } %> 
+          class="button-primary text-decoration-none">
           Thêm mới <i class="fa-solid fa-plus"></i>
         </a>
       </section>
+      <% if (adminAccount && adminAccount.roleId.permissions.includes('view-admin')) { %>
       <section class="admin-content main-content">
         <div
           class="card my-2 shadow-sm admin-card main-card"
@@ -220,6 +227,7 @@
           </div>
         </div>
       </section>
+      <% } %>
     </main>
 
     <%-include('../../partials/footer.view.ejs') %>

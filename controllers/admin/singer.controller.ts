@@ -8,7 +8,10 @@ import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
-import { TDataBodyCreateSinger } from "../../types/signer.type";
+import {
+  TDataBodyCreateSinger,
+  TDataBodyUpdateSinger,
+} from "../../types/signer.type";
 
 // [GET]: /admin/singers
 const getAllSingerGet = async (req: Request, res: Response): Promise<void> => {
@@ -163,16 +166,119 @@ const createANewSingerPost = async (req: Request, res: Response) => {
   }
 };
 
+// [GET]: /admin/singers/update/:singerId
+const getASingerByIdGet = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const pathname = activeSider(req.originalUrl);
+    let singerId: string = "";
+
+    if (req.params.singerId) singerId = req.params.singerId as string;
+
+    const singer = await SingerModel.findOne({
+      _id: singerId,
+      deleted: false,
+    }).select("-deleted -deletedAt -createdAt -updatedAt -slug -__v");
+
+    if (!singer) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy ca sĩ",
+      });
+      return;
+    }
+
+    res.render("admin/pages/singer/update.view.ejs", {
+      pageTitle: "Cập nhật ca sĩ",
+      pathname,
+      singer,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - getASingerById",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/singers/update/:singerId
+const updateASingerByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let singerId: string = "";
+    let avatar: string = "";
+    let fullName: string = "";
+
+    if (req.params.singerId) singerId = req.params.singerId as string;
+    if (req.body.name) fullName = req.body.name;
+    if (req.body.avatar) avatar = req.body.avatar;
+
+    const singer = await SingerModel.findOne({
+      _id: singerId,
+      deleted: false,
+    });
+
+    if (!singer) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy ca sĩ",
+      });
+      return;
+    }
+
+    const dataBodyUpdateSinger: TDataBodyUpdateSinger = {
+      fullName: fullName ? fullName : singer.fullName,
+      stageName: req.body.stageName ? req.body.stageName : singer.stageName,
+      avatar: avatar ? avatar : singer.avatar,
+      description: req.body.description
+        ? req.body.description
+        : singer.description,
+      status: req.body.status ? req.body.status : singer.status,
+      position: req.body.position ? Number(req.body.position) : singer.position,
+    };
+
+    await SingerModel.updateOne({ _id: singerId }, dataBodyUpdateSinger);
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật ca sĩ thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - updateASingerById",
+    });
+    return;
+  }
+};
+
 type TSingerController = {
   getAllSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerPost: (req: Request, res: Response) => Promise<void>;
+  getASingerByIdGet: (req: Request, res: Response) => Promise<void>;
+  updateASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const singerController: TSingerController = {
   getAllSingerGet,
   createANewSingerGet,
   createANewSingerPost,
+  getASingerByIdGet,
+  updateASingerByIdPatch,
 };
 
 export default singerController;

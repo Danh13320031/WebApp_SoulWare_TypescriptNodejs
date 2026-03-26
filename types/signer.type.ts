@@ -6,3 +6,12 @@ export type TDataBodyCreateSinger = {
   status: string;
   position: number;
 };
+
+export type TDataBodyUpdateSinger = {
+  fullName: string;
+  stageName: string;
+  avatar: string;
+  description?: string;
+  status: string;
+  position: number;
+};
