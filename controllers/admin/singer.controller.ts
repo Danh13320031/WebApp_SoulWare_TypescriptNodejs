@@ -265,12 +265,56 @@ const updateASingerByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/singers/soft-delete/:singerId
+const softRemoveASingerByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let singerId: string = "";
+
+    if (req.params.singerId) singerId = req.params.singerId as string;
+
+    const singer = await SingerModel.findOne({
+      _id: singerId,
+      deleted: false,
+    });
+
+    if (!singer) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy ca sĩ!",
+      });
+      return;
+    }
+
+    await SingerModel.updateOne({ _id: singerId }, { deleted: true });
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Xóa ca sĩ thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - soft remove admin",
+    });
+    return;
+  }
+};
+
 type TSingerController = {
   getAllSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerPost: (req: Request, res: Response) => Promise<void>;
   getASingerByIdGet: (req: Request, res: Response) => Promise<void>;
   updateASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
+  softRemoveASingerByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const singerController: TSingerController = {
@@ -279,6 +323,7 @@ const singerController: TSingerController = {
   createANewSingerPost,
   getASingerByIdGet,
   updateASingerByIdPatch,
+  softRemoveASingerByIdPatch,
 };
 
 export default singerController;
