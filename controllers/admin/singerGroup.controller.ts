@@ -9,10 +9,18 @@ import SingerGroupModel from "../../models/singerGroup.model";
 const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find: any = { deleted: false };
+
+    const singerGroupList = await SingerGroupModel.find(find)
+      .sort({
+        position: "desc",
+      })
+      .populate("singers", "fullName stageName");
 
     res.render("admin/pages/singerGroup/singerGroup.view.ejs", {
       pageTitle: "Danh sách nhóm ca sĩ",
       pathname,
+      singerGroupList,
     });
   } catch (error) {
     console.log(error);
