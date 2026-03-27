@@ -24,7 +24,7 @@ const objSchema = {
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
   topicId: { type: Schema.Types.ObjectId, ref: TopicModel, required: true },
-  singerId: { type: Schema.Types.ObjectId, ref: SingerModel, required: true },
+  singerId: { type: Schema.Types.ObjectId, ref: SingerModel, required: false },
 };
 
 const SongSchema = new Schema(objSchema, { timestamps: true });

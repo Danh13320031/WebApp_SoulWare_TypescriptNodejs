@@ -36,7 +36,7 @@ const objSchema = {
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
     topicId: { type: Schema.Types.ObjectId, ref: topic_model_1.default, required: true },
-    singerId: { type: Schema.Types.ObjectId, ref: singer_model_1.default, required: true },
+    singerId: { type: Schema.Types.ObjectId, ref: singer_model_1.default, required: false },
 };
 const SongSchema = new Schema(objSchema, { timestamps: true });
 SongSchema.pre("save", function () {

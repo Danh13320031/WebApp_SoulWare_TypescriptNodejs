@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="card-body singer-group-card-body main-card-body">
-            <%# if (singerList && singerList.length > 0) { %>
+            <% if (singerGroupList && singerGroupList.length > 0) { %>
             <div class="overflow-auto table-responsive">
               <table class="table table-border table-hover mb-0 singer-group-table main-table" id="main-table" data-type="singer-groups">
                 <thead class="singer-group-table-header main-table-header">
@@ -102,15 +102,15 @@
                     </th>
                     <th>STT</th>
                     <th scope="col" class="text-uppercase">Ảnh đại diện</th>
-                    <th scope="col" class="text-uppercase">Họ và tên</th>
-                    <th scope="col" class="text-uppercase">Nghệ danh</th>
+                    <th scope="col" class="text-uppercase">Tên nhóm</th>
+                    <th scope="col" class="text-uppercase">Các thành viên</th>
                     <th scope="col" class="text-uppercase">Vị trí</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
                     <th scope="col" class="text-uppercase">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <%# singerList.forEach((singer, index) => { %>
+                  <% singerGroupList.forEach((singerGroup, index) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -119,48 +119,52 @@
                         value=""
                         class="form-check-input form-check-single"
                         form-check-single
-                        data-id="<%#= singer._id %>"
+                        data-id="<%= singerGroup._id %>"
                         />
                       </div>
                     </td>
-                    <td><%#= index + 1 %></td>
+                    <td><%= index + 1 %></td>
                     <td>
                       <img
-                        src="<%#= singer?.avatar %>"
-                        alt="<%#= singer.fullName %>"
+                        src="<%= singerGroup?.avatar %>"
+                        alt="<%= singerGroup.name %>"
                         width="50px"
                         height="50px"
                         class="rounded-circle"
                       />
                     </td>
-                    <td><%#= singer.fullName %></td>
-                    <td><%#= singer.stageName %></td>
-                    <td><%#= singer.position %></td>
+                    <td><b><%= singerGroup.name %></b></td>
+                    <td><ul class="mb-0 list-unstyled">
+                      <% singerGroup.singers.forEach((singer) => { %>
+                        <li>- <%= singer.stageName %> (<%= singer.fullName %>)</li>
+                      <% }) %>
+                    </ul></td>
+                    <td><%= singerGroup.position %></td>
                     <td>
                       <select 
                         name="status" 
                         class="badge status-select singer-group-status-select"
                         status-select
                         singer-group-status-select
-                        data-id="<%#= singer._id %>"
-                        <%# if(singer.status === 'active') { %>
+                        data-id="<%= singerGroup._id %>"
+                        <% if(singerGroup.status === 'active') { %>
                           style="color: var(--success-color); border-color: var(--success-color);"
                           value="active"
-                        <%# } else if(singer.status === 'inactive') { %>
+                        <% } else if(singerGroup.status === 'inactive') { %>
                           style="color: var(--error-color); border-color: var(--error-color);"
                           value="inactive"
-                        <%# } %>
+                        <% } %>
                         >
-                          <option value="active" <%#= singer.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
-                          <option value="inactive" <%#= singer.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                          <option value="active" <%= singerGroup.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= singerGroup.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
                       </select>
                     </td>
                     <td>
                       <div class="d-flex gap-2">
-                        <a href="<%#= prefixAdminPath %>/singers/update/<%#= singer._id %>" type="button" class="button-icon-info text-decoration-none">
+                        <a href="<%= prefixAdminPath %>/singer-groups/update/<%= singerGroup._id %>" type="button" class="button-icon-info text-decoration-none">
                           <i class="fas fa-pen"></i>
                         </a>
-                        <button type="button" class="button-icon-danger button-delete" data-id="<%#= singer._id %>" data-type="singer-groups">
+                        <button type="button" class="button-icon-danger button-delete" data-id="<%= singerGroup._id %>" data-type="singer-groups">
                           <i class="fas fa-trash"></i>
                         </button>
                         <button type="button" class="button-secondary">
@@ -169,11 +173,11 @@
                       </div>
                     </td>
                   </tr>
-                  <%# }) %>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
-            <%# } else { %>
+            <% } else { %>
             <div
               class="d-flex flex-column align-items-center justify-content-center gap-3"
               style="height: 200px"
@@ -186,7 +190,7 @@
                 Không có dữ liệu hiển thị.
               </p>
             </div>
-            <%# } %>
+            <% } %>
           </div>
           <div
             class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"

@@ -20,9 +20,16 @@ const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.mo
 const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const singerGroupList = yield singerGroup_model_1.default.find(find)
+            .sort({
+            position: "desc",
+        })
+            .populate("singers", "fullName stageName");
         res.render("admin/pages/singerGroup/singerGroup.view.ejs", {
             pageTitle: "Danh sách nhóm ca sĩ",
             pathname,
+            singerGroupList,
         });
     }
     catch (error) {
