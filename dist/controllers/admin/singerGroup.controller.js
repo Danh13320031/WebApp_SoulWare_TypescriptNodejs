@@ -18,6 +18,7 @@ const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.model"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
 // [GET]: /admin/singer-groups
 const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -46,10 +47,13 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
         if (status)
             find = Object.assign(Object.assign({}, find), { status });
+        // Handle sort filter
+        let sort = "";
+        if (req.query.sort)
+            sort = req.query.sort;
+        const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
         const singerGroupList = yield singerGroup_model_1.default.find(find)
-            .sort({
-            position: "desc",
-        })
+            .sort(sortFilter.sortOptions)
             .populate("singers", "fullName stageName");
         res.render("admin/pages/singerGroup/singerGroup.view.ejs", {
             pageTitle: "Danh sách nhóm ca sĩ",
@@ -58,6 +62,7 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
             keyword,
             status,
             statusFilter,
+            sort: sortFilter.sort,
         });
     }
     catch (error) {
