@@ -7,6 +7,7 @@ import SingerModel from "../../models/singer.model";
 import SingerGroupModel from "../../models/singerGroup.model";
 import { TStatusFilter } from "../../types/index.type";
 import { TDataBodyCreateSingerGroup } from "../../types/singerGroup.type";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 
 // [GET]: /admin/singer-groups
 const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
@@ -46,10 +47,14 @@ const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
         status,
       };
 
+    // Handle sort filter
+    let sort: string = "";
+    if (req.query.sort) sort = req.query.sort as string;
+
+    const sortFilter = handleSortFilter(sort);
+
     const singerGroupList = await SingerGroupModel.find(find)
-      .sort({
-        position: "desc",
-      })
+      .sort(sortFilter.sortOptions)
       .populate("singers", "fullName stageName");
 
     res.render("admin/pages/singerGroup/singerGroup.view.ejs", {
@@ -59,6 +64,7 @@ const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
       keyword,
       status,
       statusFilter,
+      sort: sortFilter.sort,
     });
   } catch (error) {
     console.log(error);
