@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.model"));
@@ -36,6 +37,15 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     { slug: { $regex: slugRegex } },
                 ] });
         }
+        // Handle status filter
+        let status = "";
+        if (req.query.status)
+            status = req.query.status;
+        if (req.query.status === "all")
+            status = "";
+        const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+        if (status)
+            find = Object.assign(Object.assign({}, find), { status });
         const singerGroupList = yield singerGroup_model_1.default.find(find)
             .sort({
             position: "desc",
@@ -46,6 +56,8 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
             pathname,
             singerGroupList,
             keyword,
+            status,
+            statusFilter,
         });
     }
     catch (error) {

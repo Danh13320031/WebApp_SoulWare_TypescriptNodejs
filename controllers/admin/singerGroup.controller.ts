@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import SingerModel from "../../models/singer.model";
 import SingerGroupModel from "../../models/singerGroup.model";
+import { TStatusFilter } from "../../types/index.type";
 import { TDataBodyCreateSingerGroup } from "../../types/singerGroup.type";
 
 // [GET]: /admin/singer-groups
@@ -31,6 +33,19 @@ const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
       };
     }
 
+    // Handle status filter
+    let status: string = "";
+    if (req.query.status) status = req.query.status as string;
+    if (req.query.status === "all") status = "";
+
+    const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+    if (status)
+      find = {
+        ...find,
+        status,
+      };
+
     const singerGroupList = await SingerGroupModel.find(find)
       .sort({
         position: "desc",
@@ -42,6 +57,8 @@ const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
       pathname,
       singerGroupList,
       keyword,
+      status,
+      statusFilter,
     });
   } catch (error) {
     console.log(error);
