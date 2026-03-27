@@ -1,0 +1,41 @@
+.ts-wrapper {
+  padding: 0 !important;
+  border: none !important;
+}
+
+.ts-wrapper .ts-control {
+  padding: 1px !important;
+  border: none !important;
+}
+.ts-wrapper .ts-control .item {
+  color: var(--dark-primary-color) !important;
+  background-color: var(--light-primary-color) !important;
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-regular) !important;
+  padding: 7px 10px !important;
+}
+.ts-wrapper .ts-control input {
+  width: 100% !important;
+  line-height: 1.5 !important;
+  border: 1px solid var(--light-gray-color) !important;
+  background-color: white !important;
+  color: var(--text-color) !important;
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-regular) !important;
+  border-radius: 4px !important;
+  padding: 7px 10px !important;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
+.ts-wrapper .ts-control input:focus {
+  outline: none !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
+}
+
+.ts-wrapper .ts-dropdown {
+  color: var(--text-color) !important;
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-regular) !important;
+}

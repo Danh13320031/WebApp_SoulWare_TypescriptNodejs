@@ -4,8 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 const singerGroup_controller_1 = __importDefault(require("../../controllers/admin/singerGroup.controller"));
 const auth_middleware_1 = __importDefault(require("../../middlewares/admin/auth.middleware"));
+const uploadCloud_middleware_1 = __importDefault(require("../../middlewares/uploadCloud.middleware"));
 const singerGroupRoute = (0, express_1.Router)();
+const upload = (0, multer_1.default)();
 singerGroupRoute.get("/", auth_middleware_1.default.auth, singerGroup_controller_1.default.singerGroupGet);
+singerGroupRoute.get("/create", auth_middleware_1.default.auth, singerGroup_controller_1.default.createANewSingerGroupGet);
+singerGroupRoute.post("/create", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, singerGroup_controller_1.default.createANewSingerGroupPost);
 exports.default = singerGroupRoute;

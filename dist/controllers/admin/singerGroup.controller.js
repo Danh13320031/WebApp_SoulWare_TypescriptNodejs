@@ -14,6 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const singer_model_1 = __importDefault(require("../../models/singer.model"));
+const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.model"));
+// [GET]: /admin/singer-groups
 const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
@@ -32,7 +35,67 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
         return;
     }
 });
+// [GET]: /admin/singer-groups/create
+const createANewSingerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const singerList = yield singer_model_1.default.find(find).select("stageName");
+        res.render("admin/pages/singerGroup/create.view.ejs", {
+            pageTitle: "Tạo mới nhóm ca sĩ",
+            pathname,
+            singerList,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - createANewSingerGroupGet",
+        });
+        return;
+    }
+});
+// [POST]: /admin/singer-groups/create
+const createANewSingerGroupPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const countDocument = yield singerGroup_model_1.default.countDocuments();
+        let avatar = "";
+        if (req.body.avatar)
+            avatar = req.body.avatar;
+        const dataBodyCreateSingerGroup = {
+            avatar: avatar ? avatar : "",
+            name: req.body.name ? req.body.name : "",
+            description: req.body.description ? req.body.description : null,
+            status: req.body.status ? req.body.status : "active",
+            position: req.body.position
+                ? Number(req.body.position)
+                : countDocument + 1,
+            singers: req.body.singers ? req.body.singers : [],
+        };
+        const newSingerGroup = new singerGroup_model_1.default(dataBodyCreateSingerGroup);
+        yield newSingerGroup.save();
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+            code: http_status_codes_1.StatusCodes.CREATED,
+            status: "Success",
+            message: "Tạo mới nhóm ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - createANewSingerGroupPost",
+        });
+        return;
+    }
+});
 const singerGroupController = {
     singerGroupGet,
+    createANewSingerGroupGet,
+    createANewSingerGroupPost,
 };
 exports.default = singerGroupController;
