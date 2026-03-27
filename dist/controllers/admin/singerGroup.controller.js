@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
 const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.model"));
 // [GET]: /admin/singer-groups
@@ -21,6 +22,20 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
+        // Handle search filter
+        let keyword = "";
+        let keywordRegex = new RegExp("", "i");
+        let slugRegex = new RegExp("", "i");
+        if (req.query.keyword)
+            keyword = req.query.keyword;
+        if (keyword) {
+            keywordRegex = new RegExp(keyword, "i");
+            slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+            find = Object.assign(Object.assign({}, find), { $or: [
+                    { fullName: { $regex: keywordRegex } },
+                    { slug: { $regex: slugRegex } },
+                ] });
+        }
         const singerGroupList = yield singerGroup_model_1.default.find(find)
             .sort({
             position: "desc",
@@ -30,6 +45,7 @@ const singerGroupGet = (req, res) => __awaiter(void 0, void 0, void 0, function*
             pageTitle: "Danh sách nhóm ca sĩ",
             pathname,
             singerGroupList,
+            keyword,
         });
     }
     catch (error) {

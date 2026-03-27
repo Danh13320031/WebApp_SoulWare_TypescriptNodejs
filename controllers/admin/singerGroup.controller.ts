@@ -1,15 +1,35 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import SingerModel from "../../models/singer.model";
-import { TDataBodyCreateSingerGroup } from "../../types/singerGroup.type";
 import SingerGroupModel from "../../models/singerGroup.model";
+import { TDataBodyCreateSingerGroup } from "../../types/singerGroup.type";
 
 // [GET]: /admin/singer-groups
 const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
+
+    // Handle search filter
+    let keyword: string = "";
+    let keywordRegex: RegExp = new RegExp("", "i");
+    let slugRegex: RegExp = new RegExp("", "i");
+
+    if (req.query.keyword) keyword = req.query.keyword as string;
+    if (keyword) {
+      keywordRegex = new RegExp(keyword, "i");
+      slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+      find = {
+        ...find,
+        $or: [
+          { fullName: { $regex: keywordRegex } },
+          { slug: { $regex: slugRegex } },
+        ],
+      };
+    }
 
     const singerGroupList = await SingerGroupModel.find(find)
       .sort({
@@ -21,6 +41,7 @@ const singerGroupGet = async (req: Request, res: Response): Promise<void> => {
       pageTitle: "Danh sách nhóm ca sĩ",
       pathname,
       singerGroupList,
+      keyword,
     });
   } catch (error) {
     console.log(error);
