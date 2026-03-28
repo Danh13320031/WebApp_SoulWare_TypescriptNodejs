@@ -6,3 +6,11 @@ export type TDataBodyCreateSingerGroup = {
   position?: number;
   singers: string[];
 };
+
+export type TDataBodyUpdateSingerGroup = {
+  avatar?: string;
+  name?: string;
+  description?: string;
+  status?: string;
+  singers?: string[];
+};
