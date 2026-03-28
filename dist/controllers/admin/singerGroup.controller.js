@@ -279,6 +279,45 @@ const softRemoveASingerGroupByIdPatch = (req, res) => __awaiter(void 0, void 0, 
         return;
     }
 });
+// [PATCH]: /admin/singer-groups/change-status/:singerId/:status
+const changeStatusSingerGroupPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let singerGroupId = "";
+        let status = "";
+        if (req.params.singerGroupId)
+            singerGroupId = req.params.singerGroupId;
+        if (req.params.status)
+            status = req.params.status;
+        const singerGroup = yield singerGroup_model_1.default.findOne({
+            _id: singerGroupId,
+            deleted: false,
+        });
+        if (!singerGroup) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy nhóm ca sĩ",
+            });
+            return;
+        }
+        yield singerGroup_model_1.default.updateOne({ _id: singerGroupId }, { status: status });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - changeStatusSingerGroupPatch",
+        });
+        return;
+    }
+});
 const singerGroupController = {
     singerGroupGet,
     createANewSingerGroupGet,
@@ -286,5 +325,6 @@ const singerGroupController = {
     getASingerGroupByIdGet,
     updateASingerGroupByIdPatch,
     softRemoveASingerGroupByIdPatch,
+    changeStatusSingerGroupPatch,
 };
 exports.default = singerGroupController;

@@ -272,7 +272,7 @@ const softRemoveASingerByIdPatch = (req, res) => __awaiter(void 0, void 0, void 
         return;
     }
 });
-// [PATCH]: /admin/admins/change-status/:singerId/:status
+// [PATCH]: /admin/singers/change-status/:singerId/:status
 const changeStatusSingerPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let singerId = "";

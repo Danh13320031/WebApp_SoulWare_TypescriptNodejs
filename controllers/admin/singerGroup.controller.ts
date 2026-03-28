@@ -339,6 +339,52 @@ const softRemoveASingerGroupByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/singer-groups/change-status/:singerId/:status
+const changeStatusSingerGroupPatch = async (req: Request, res: Response) => {
+  try {
+    let singerGroupId: string = "";
+    let status: string = "";
+
+    if (req.params.singerGroupId)
+      singerGroupId = req.params.singerGroupId as string;
+    if (req.params.status) status = req.params.status as string;
+
+    const singerGroup = await SingerGroupModel.findOne({
+      _id: singerGroupId,
+      deleted: false,
+    });
+
+    if (!singerGroup) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy nhóm ca sĩ",
+      });
+      return;
+    }
+
+    await SingerGroupModel.updateOne(
+      { _id: singerGroupId },
+      { status: status },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - changeStatusSingerGroupPatch",
+    });
+    return;
+  }
+};
+
 type TSingerGroupController = {
   singerGroupGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGroupGet: (req: Request, res: Response) => Promise<void>;
@@ -346,6 +392,10 @@ type TSingerGroupController = {
   getASingerGroupByIdGet: (req: Request, res: Response) => Promise<void>;
   updateASingerGroupByIdPatch: (req: Request, res: Response) => Promise<void>;
   softRemoveASingerGroupByIdPatch: (
+    req: Request,
+    res: Response,
+  ) => Promise<void>;
+  changeStatusSingerGroupPatch: (
     req: Request,
     res: Response,
   ) => Promise<void>;
@@ -358,6 +408,7 @@ const singerGroupController: TSingerGroupController = {
   getASingerGroupByIdGet,
   updateASingerGroupByIdPatch,
   softRemoveASingerGroupByIdPatch,
+  changeStatusSingerGroupPatch,
 };
 
 export default singerGroupController;
