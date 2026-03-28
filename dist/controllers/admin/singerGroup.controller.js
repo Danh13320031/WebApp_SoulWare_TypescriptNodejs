@@ -318,6 +318,56 @@ const changeStatusSingerGroupPatch = (req, res) => __awaiter(void 0, void 0, voi
         return;
     }
 });
+// [PATCH]: /admin/singer-groups/update-multi
+const updateMultiSingerGroupPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let ids = [];
+        let type = "";
+        if (req.body.ids)
+            ids = req.body.ids;
+        if (req.body.type)
+            type = req.body.type;
+        if (!ids || !type || ids.length <= 0) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Tham số không hợp lệ",
+            });
+            return;
+        }
+        switch (type) {
+            case "status-active":
+                yield singerGroup_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "active" });
+                break;
+            case "status-inactive":
+                yield singerGroup_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { status: "inactive" });
+                break;
+            case "soft-delete":
+                yield singerGroup_model_1.default.updateMany({ _id: { $in: ids }, deleted: false }, { deleted: true });
+                break;
+            case "hard-delete":
+                yield singerGroup_model_1.default.deleteMany({ _id: { $in: ids } });
+                break;
+            default:
+                break;
+        }
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật nhóm ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - updateMultiSingerGroupPatch",
+        });
+        return;
+    }
+});
 const singerGroupController = {
     singerGroupGet,
     createANewSingerGroupGet,
@@ -326,5 +376,6 @@ const singerGroupController = {
     updateASingerGroupByIdPatch,
     softRemoveASingerGroupByIdPatch,
     changeStatusSingerGroupPatch,
+    updateMultiSingerGroupPatch,
 };
 exports.default = singerGroupController;

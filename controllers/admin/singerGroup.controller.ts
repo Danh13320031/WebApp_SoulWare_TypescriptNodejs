@@ -385,6 +385,67 @@ const changeStatusSingerGroupPatch = async (req: Request, res: Response) => {
   }
 };
 
+// [PATCH]: /admin/singer-groups/update-multi
+const updateMultiSingerGroupPatch = async (req: Request, res: Response) => {
+  try {
+    let ids: string[] = [];
+    let type: string = "";
+
+    if (req.body.ids) ids = req.body.ids as string[];
+    if (req.body.type) type = req.body.type as string;
+
+    if (!ids || !type || ids.length <= 0) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Tham số không hợp lệ",
+      });
+      return;
+    }
+
+    switch (type) {
+      case "status-active":
+        await SingerGroupModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "active" },
+        );
+        break;
+      case "status-inactive":
+        await SingerGroupModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { status: "inactive" },
+        );
+        break;
+      case "soft-delete":
+        await SingerGroupModel.updateMany(
+          { _id: { $in: ids }, deleted: false },
+          { deleted: true },
+        );
+        break;
+      case "hard-delete":
+        await SingerGroupModel.deleteMany({ _id: { $in: ids } });
+        break;
+      default:
+        break;
+    }
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật nhóm ca sĩ thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - updateMultiSingerGroupPatch",
+    });
+    return;
+  }
+};
+
 type TSingerGroupController = {
   singerGroupGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGroupGet: (req: Request, res: Response) => Promise<void>;
@@ -395,10 +456,8 @@ type TSingerGroupController = {
     req: Request,
     res: Response,
   ) => Promise<void>;
-  changeStatusSingerGroupPatch: (
-    req: Request,
-    res: Response,
-  ) => Promise<void>;
+  changeStatusSingerGroupPatch: (req: Request, res: Response) => Promise<void>;
+  updateMultiSingerGroupPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const singerGroupController: TSingerGroupController = {
@@ -409,6 +468,7 @@ const singerGroupController: TSingerGroupController = {
   updateASingerGroupByIdPatch,
   softRemoveASingerGroupByIdPatch,
   changeStatusSingerGroupPatch,
+  updateMultiSingerGroupPatch,
 };
 
 export default singerGroupController;
