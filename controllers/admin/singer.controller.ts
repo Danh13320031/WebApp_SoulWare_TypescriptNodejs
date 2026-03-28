@@ -308,7 +308,7 @@ const softRemoveASingerByIdPatch = async (
   }
 };
 
-// [PATCH]: /admin/admins/change-status/:singerId/:status
+// [PATCH]: /admin/singers/change-status/:singerId/:status
 const changeStatusSingerPatch = async (
   req: Request,
   res: Response,

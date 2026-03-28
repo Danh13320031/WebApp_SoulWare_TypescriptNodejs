@@ -46,5 +46,10 @@ singerGroupRoute.patch(
   authMiddleware.auth,
   singerGroupController.softRemoveASingerGroupByIdPatch,
 );
+singerGroupRoute.patch(
+  "/change-status/:singerGroupId/:status",
+  authMiddleware.auth,
+  singerGroupController.changeStatusSingerGroupPatch,
+);
 
 export default singerGroupRoute;
