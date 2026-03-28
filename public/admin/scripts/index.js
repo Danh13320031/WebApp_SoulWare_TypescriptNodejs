@@ -309,6 +309,9 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       case "singers":
         messageSubStr = "ca sĩ";
         break;
+      case "singer-groups":
+        messageSubStr = "nhóm ca sĩ";
+        break;
       default:
         messageSubStr = "dữ liệu";
     }

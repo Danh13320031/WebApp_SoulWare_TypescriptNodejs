@@ -295,12 +295,60 @@ const updateASingerGroupByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/singer-groups/soft-delete/:singerGroupId
+const softRemoveASingerGroupByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let singerGroupId: string = "";
+
+    if (req.params.singerGroupId)
+      singerGroupId = req.params.singerGroupId as string;
+
+    const singerGroup = await SingerGroupModel.findOne({
+      _id: singerGroupId,
+      deleted: false,
+    });
+
+    if (!singerGroup) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy nhóm ca sĩ",
+      });
+      return;
+    }
+
+    await SingerGroupModel.updateOne({ _id: singerGroupId }, { deleted: true });
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Xóa nhóm ca sĩ thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - softDeleteASingerGroupByIdPatch",
+    });
+    return;
+  }
+};
+
 type TSingerGroupController = {
   singerGroupGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGroupGet: (req: Request, res: Response) => Promise<void>;
   createANewSingerGroupPost: (req: Request, res: Response) => Promise<void>;
   getASingerGroupByIdGet: (req: Request, res: Response) => Promise<void>;
   updateASingerGroupByIdPatch: (req: Request, res: Response) => Promise<void>;
+  softRemoveASingerGroupByIdPatch: (
+    req: Request,
+    res: Response,
+  ) => Promise<void>;
 };
 
 const singerGroupController: TSingerGroupController = {
@@ -309,6 +357,7 @@ const singerGroupController: TSingerGroupController = {
   createANewSingerGroupPost,
   getASingerGroupByIdGet,
   updateASingerGroupByIdPatch,
+  softRemoveASingerGroupByIdPatch,
 };
 
 export default singerGroupController;
