@@ -16,4 +16,5 @@ singerGroupRoute.get("/create", auth_middleware_1.default.auth, singerGroup_cont
 singerGroupRoute.post("/create", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, singerGroup_validate_1.default.createANewSingerGroupValidate, singerGroup_controller_1.default.createANewSingerGroupPost);
 singerGroupRoute.get("/update/:singerGroupId", auth_middleware_1.default.auth, singerGroup_controller_1.default.getASingerGroupByIdGet);
 singerGroupRoute.patch("/update/:singerGroupId", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, singerGroup_validate_1.default.updateASingerGroupByIdValidate, singerGroup_controller_1.default.updateASingerGroupByIdPatch);
+singerGroupRoute.patch("/soft-delete/:singerGroupId", auth_middleware_1.default.auth, singerGroup_controller_1.default.softRemoveASingerGroupByIdPatch);
 exports.default = singerGroupRoute;

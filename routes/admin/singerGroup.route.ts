@@ -41,5 +41,10 @@ singerGroupRoute.patch(
   singerGroupValidate.updateASingerGroupByIdValidate,
   singerGroupController.updateASingerGroupByIdPatch,
 );
+singerGroupRoute.patch(
+  "/soft-delete/:singerGroupId",
+  authMiddleware.auth,
+  singerGroupController.softRemoveASingerGroupByIdPatch,
+);
 
 export default singerGroupRoute;

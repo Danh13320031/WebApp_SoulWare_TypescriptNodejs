@@ -243,11 +243,48 @@ const updateASingerGroupByIdPatch = (req, res) => __awaiter(void 0, void 0, void
         return;
     }
 });
+// [PATCH]: /admin/singer-groups/soft-delete/:singerGroupId
+const softRemoveASingerGroupByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let singerGroupId = "";
+        if (req.params.singerGroupId)
+            singerGroupId = req.params.singerGroupId;
+        const singerGroup = yield singerGroup_model_1.default.findOne({
+            _id: singerGroupId,
+            deleted: false,
+        });
+        if (!singerGroup) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy nhóm ca sĩ",
+            });
+            return;
+        }
+        yield singerGroup_model_1.default.updateOne({ _id: singerGroupId }, { deleted: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Xóa nhóm ca sĩ thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - softDeleteASingerGroupByIdPatch",
+        });
+        return;
+    }
+});
 const singerGroupController = {
     singerGroupGet,
     createANewSingerGroupGet,
     createANewSingerGroupPost,
     getASingerGroupByIdGet,
     updateASingerGroupByIdPatch,
+    softRemoveASingerGroupByIdPatch,
 };
 exports.default = singerGroupController;
