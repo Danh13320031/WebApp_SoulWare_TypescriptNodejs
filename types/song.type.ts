@@ -7,7 +7,8 @@ export type TDataBodyCreateSong = {
   position: number;
   status: string;
   topicId: string;
-  singerId: string;
+  singers?: string[];
+  singerGroups?: string[];
 };
 
 export type TDataBodyUpdateSong = {
@@ -19,5 +20,6 @@ export type TDataBodyUpdateSong = {
   position: number;
   status: string;
   topicId: string;
-  singerId: string;
+  singers?: string[];
+  singerGroups?: string[];
 };

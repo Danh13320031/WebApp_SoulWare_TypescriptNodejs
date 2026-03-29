@@ -128,7 +128,7 @@
                         class="form-label create-member-label"
                         >Thành viên</label
                       >
-                      <select name="singers[]" multiple placeholder="Chọn các thành viên..." autocomplete="off" class="form-control create-member-input" id="singer-group-member">
+                      <select name="singers[]" multiple placeholder="Chọn các thành viên..." autocomplete="off" class="form-control create-member-input tom-select" tom-select>
                         <% singerList.forEach((singer) => { %>
                         <option value="<%= singer._id %>"><%= singer.stageName %></option>
                         <% }) %>

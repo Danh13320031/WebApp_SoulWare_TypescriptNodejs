@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import slugify from "slugify";
 import SingerModel from "./singer.model";
 import TopicModel from "./topic.model";
+import SingerGroupModel from "./singerGroup.model";
 
 const Schema = mongoose.Schema;
 
@@ -24,7 +25,16 @@ const objSchema = {
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
   topicId: { type: Schema.Types.ObjectId, ref: TopicModel, required: true },
-  singerId: { type: Schema.Types.ObjectId, ref: SingerModel, required: false },
+  singers: {
+    type: [Schema.Types.ObjectId],
+    ref: SingerModel,
+    required: false,
+  },
+  singerGroups: {
+    type: [Schema.Types.ObjectId],
+    ref: SingerGroupModel,
+    required: false,
+  },
 };
 
 const SongSchema = new Schema(objSchema, { timestamps: true });

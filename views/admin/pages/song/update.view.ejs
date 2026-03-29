@@ -13,10 +13,12 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
     />
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.5.2/dist/css/tom-select.css" rel="stylesheet">
 
     <link rel="stylesheet" href="/admin/styles/setup.css" />
     <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
     <link rel="stylesheet" href="/admin/styles/lib/tinyMCE.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/tomselect.css" />
     <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
     <link rel="stylesheet" href="/admin/styles/partials/alert.css">
     <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
@@ -162,22 +164,36 @@
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-6 mb-3">
-                    <% if(singerList && singerList.length > 0) { %>
-                    <div class="form-group update-singer-group">
+                    <% if(newSingerList && newSingerList.length > 0) { %>
+                    <div class="form-group create-singer-group">
                       <label
                         for="song-singer"
-                        class="form-label update-singer-label"
-                        >Nghệ sĩ</label
+                        class="form-label create-singer-label"
+                        >Ca sĩ thể hiện</label
                       >
-                      <select name="singerId" id="song-singer">
-                        <option value="" disabled <%= !song.singerId ? 'selected' : '' %>>
-                          Chọn nghệ sĩ...
-                        </option>
-                        <% singerList.forEach((singer) => { %>
-                          <option value="<%= singer._id %>" <% if (song?.singerId._id.toString() == singer._id.toString()) { %>selected<% } %>><%= singer.stageName %></option>
+                      <select name="singers[]" multiple placeholder="Chọn các ca sĩ thể hiện..." autocomplete="off" class="tom-select" id="song-singer" tom-select>
+                        <% newSingerList.forEach((singer) => { %>
+                        <option value="<%= singer._id %>" <% if(singer.checked == true) { %>selected<% } %>><%= singer.stageName %></option>
                         <% }) %>
                       </select>
                       <span class="form-error form-singer-error"></span>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mb-3">
+                    <% if(newSingerGroupList && newSingerGroupList.length > 0) { %>
+                    <div class="form-group create-singer-group-group">
+                      <label
+                        for="song-singer"
+                        class="form-label create-singer-group-label"
+                        >Nhóm ca sĩ thể hiện</label
+                      >
+                      <select name="singerGroups[]" multiple placeholder="Chọn nhóm các ca sĩ thể hiện..." autocomplete="off" class="tom-select" id="song-singer-group" tom-select>
+                        <% newSingerGroupList.forEach((singerGroup) => { %>
+                        <option value="<%= singerGroup._id %>" <% if(singerGroup.checked == true) { %>selected<% } %>><%= singerGroup.name %></option>
+                        <% }) %>
+                      </select>
+                      <span class="form-error form-singer-group-error"></span>
                     </div>
                     <% } %>
                   </div>
@@ -297,6 +313,8 @@
       src="https://kit.fontawesome.com/aaf479b433.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.5.2/dist/js/tom-select.complete.min.js"></script>
+    <script src="/admin/scripts/lib/tomSelectConfig.js"></script>
     <script src="/tinymce/tinymce.min.js"></script>
     <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
 
