@@ -16,6 +16,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
 const singer_model_1 = __importDefault(require("./singer.model"));
 const topic_model_1 = __importDefault(require("./topic.model"));
+const singerGroup_model_1 = __importDefault(require("./singerGroup.model"));
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
     title: { type: String, required: true },
@@ -36,7 +37,16 @@ const objSchema = {
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
     topicId: { type: Schema.Types.ObjectId, ref: topic_model_1.default, required: true },
-    singerId: { type: Schema.Types.ObjectId, ref: singer_model_1.default, required: false },
+    singers: {
+        type: [Schema.Types.ObjectId],
+        ref: singer_model_1.default,
+        required: false,
+    },
+    singerGroups: {
+        type: [Schema.Types.ObjectId],
+        ref: singerGroup_model_1.default,
+        required: false,
+    },
 };
 const SongSchema = new Schema(objSchema, { timestamps: true });
 SongSchema.pre("save", function () {

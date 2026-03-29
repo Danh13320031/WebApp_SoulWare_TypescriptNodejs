@@ -130,7 +130,7 @@
                         class="form-label update-member-label"
                         >Thành viên</label
                       >
-                      <select name="singers[]" multiple placeholder="Chọn các thành viên..." autocomplete="off" class="form-control update-member-input" id="singer-group-member">
+                      <select name="singers[]" multiple placeholder="Chọn các thành viên..." autocomplete="off" class="form-control update-member-input tom-select" tom-select>
                         <% newSingerList.forEach((singer) => { %>
                         <option value="<%= singer._doc._id %>" <% if(singer.checked == true) { %>selected<% } %>><%= singer._doc.stageName %></option>
                         <% }) %>

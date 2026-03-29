@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const objSchema = {
   title: { type: String, required: true },
   avatar: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   status: {
     type: String,
     required: true,

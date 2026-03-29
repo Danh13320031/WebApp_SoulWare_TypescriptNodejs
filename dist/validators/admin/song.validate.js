@@ -26,11 +26,12 @@ const createANewSongValidate = (req, res, next) => {
         });
         return;
     }
-    if (!req.body.singerId) {
+    if ((!req.body.singers || req.body.singers.length <= 0) &&
+        (!req.body.singerGroups || req.body.singerGroups.length <= 0)) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
             code: http_status_codes_1.StatusCodes.BAD_REQUEST,
             status: "Fail",
-            message: "Vui lòng chọn ca sĩ",
+            message: "Vui lòng chọn ca sĩ hoặc nhóm ca sĩ",
         });
         return;
     }
@@ -89,11 +90,12 @@ const updateASongByIdValidate = (req, res, next) => {
         });
         return;
     }
-    if (!req.body.singerId) {
+    if ((!req.body.singers || req.body.singers.length <= 0) &&
+        (!req.body.singerGroups || req.body.singerGroups.length <= 0)) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
             code: http_status_codes_1.StatusCodes.BAD_REQUEST,
             status: "Fail",
-            message: "Vui lòng chọn ca sĩ",
+            message: "Vui lòng chọn ca sĩ hoặc nhóm ca sĩ",
         });
         return;
     }

@@ -130,6 +130,7 @@
                     <th scope="col" class="text-uppercase">Ảnh đại diện</th>
                     <th scope="col" class="text-uppercase">Tên bài hát</th>
                     <th scope="col" class="text-uppercase">Ca sĩ</th>
+                    <th scope="col" class="text-uppercase">Nhóm ca sĩ</th>
                     <th scope="col" class="text-uppercase">Chủ đề</th>
                     <th scope="col" class="text-uppercase">Lượt nghe</th>
                     <th scope="col" class="text-uppercase">Lượt thích</th>
@@ -163,7 +164,27 @@
                       />
                     </td>
                     <td><%= song.title %></td>
-                    <td><%= song?.singerId?.stageName %></td>
+                    <td>
+                    <% if (song.singers.length <= 0) { %>
+                      Không có
+                    <% } else { %>
+                    <ul class="mb-0 list-unstyled">
+                      <% song.singers.forEach((singer) => { %>
+                        <li><%= singer.stageName %> (<%= singer.fullName %>)</li>
+                      <% }) %>
+                    </ul>
+                    <% } %>
+                    </td>
+                    <td>
+                    <% if (song.singerGroups.length <= 0) { %>
+                      Không có
+                    <% } else { %>
+                    <ul class="mb-0 list-unstyled">
+                      <% song.singerGroups.forEach((singerGroup) => { %>
+                        <li><%= singerGroup.name %></li>
+                      <% }) %>
+                    </ul>
+                    <% } %></td>
                     <td><%= song?.topicId?.title %></td>
                     <td><%= song.listen %></td>
                     <td><%= song.like %></td>

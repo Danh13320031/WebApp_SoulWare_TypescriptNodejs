@@ -14,6 +14,9 @@ const titleError = document.querySelector(".form-title-error");
 const singerSelect = document.getElementById("song-singer");
 const singerError = document.querySelector(".form-singer-error");
 
+const singerGroupSelect = document.getElementById("song-singer-group");
+const singerGroupError = document.querySelector(".form-singer-group-error");
+
 const topicSelect = document.getElementById("song-topic");
 const topicError = document.querySelector(".form-topic-error");
 
@@ -73,6 +76,7 @@ const validateSongForm = () => {
   audioError.textContent = "";
   titleError.textContent = "";
   singerError.textContent = "";
+  singerGroupError.textContent = "";
   topicError.textContent = "";
   positionError.textContent = "";
   lyricsError.textContent = "";
@@ -108,8 +112,9 @@ const validateSongForm = () => {
     isValid = false;
   }
 
-  if (!singerSelect.value) {
-    singerError.textContent = "Vui lòng chọn nghệ sĩ";
+  if (!singerSelect.value && !singerGroupSelect.value) {
+    singerError.textContent = "Vui lòng chọn ca sĩ hoặc nhóm ca sĩ";
+    singerGroupError.textContent = "Vui lòng chọn ca sĩ hoặc nhóm ca sĩ";
     isValid = false;
   }
 

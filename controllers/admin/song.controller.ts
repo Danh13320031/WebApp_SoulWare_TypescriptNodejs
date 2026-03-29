@@ -7,6 +7,7 @@ import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import SingerModel from "../../models/singer.model";
+import SingerGroupModel from "../../models/singerGroup.model";
 import SongModel from "../../models/song.model";
 import TopicModel from "../../models/topic.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
@@ -103,7 +104,8 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   const songList = await SongModel.find(find)
     .select("-deleted -description -audio -lyrics -slug")
     .sort(sortFilter.sortOptions)
-    .populate("singerId", "stageName")
+    .populate("singers", "stageName fullName")
+    .populate("singerGroups", "name")
     .populate("topicId", "title")
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
@@ -143,6 +145,10 @@ const createANewSongGet = async (
     deleted: false,
   }).select("stageName");
 
+  const singerGroupList = await SingerGroupModel.find({
+    deleted: false,
+  }).select("name");
+
   const topicList = await TopicModel.find({
     deleted: false,
   }).select("title");
@@ -151,6 +157,7 @@ const createANewSongGet = async (
     pageTitle: "Thêm mới bài hát",
     pathname,
     singerList,
+    singerGroupList,
     topicList,
   });
 };
@@ -179,7 +186,8 @@ const createANewSongPost = async (
         : countDocument + 1,
       status: req.body.status || "active",
       topicId: req.body.topicId || "",
-      singerId: req.body.singerId || "",
+      singers: req.body.singers || [],
+      singerGroups: req.body.singerGroups || [],
     };
 
     const newSong = new SongModel(dataBodyCreateSong);
@@ -217,12 +225,49 @@ const getASongByIdGet = async (req: Request, res: Response): Promise<void> => {
       .select(
         "-deleted -deletedAt -createdAt -updatedAt -slug -like -listen -__v",
       )
-      .populate("singerId", "stageName")
+      .populate("singers", "stageName")
+      .populate("singerGroups", "name")
       .populate("topicId", "title");
 
+    const newSingerFromSong = song?.singers.map((singer) =>
+      singer._id.toString(),
+    );
     const singerList = await SingerModel.find({
       deleted: false,
-    }).select("avatar stageName");
+    }).select("stageName");
+    const newSingerList = singerList.map((singer) => {
+      if (newSingerFromSong?.includes(singer._id.toString())) {
+        return {
+          ...singer.toObject(),
+          checked: true,
+        };
+      } else {
+        return {
+          ...singer.toObject(),
+          checked: false,
+        };
+      }
+    });
+
+    const newSingerGroupFromSong = song?.singerGroups.map((singerGroup) =>
+      singerGroup._id.toString(),
+    );
+    const singerGroupList = await SingerGroupModel.find({
+      deleted: false,
+    }).select("name");
+    const newSingerGroupList = singerGroupList.map((singerGroup) => {
+      if (newSingerGroupFromSong?.includes(singerGroup._id.toString())) {
+        return {
+          ...singerGroup.toObject(),
+          checked: true,
+        };
+      } else {
+        return {
+          ...singerGroup.toObject(),
+          checked: false,
+        };
+      }
+    });
 
     const topicList = await TopicModel.find({
       deleted: false,
@@ -241,7 +286,8 @@ const getASongByIdGet = async (req: Request, res: Response): Promise<void> => {
       pageTitle: `Chỉnh sửa bài hát ${song.title}`,
       pathname,
       song,
-      singerList,
+      newSingerList,
+      newSingerGroupList,
       topicList,
     });
   } catch (error) {
@@ -293,7 +339,8 @@ const updateASongByIdPatch = async (
       position: req.body.position ? Number(req.body.position) : song.position,
       status: req.body.status ? req.body.status : song.status,
       topicId: req.body.topicId ? req.body.topicId : song.topicId,
-      singerId: req.body.singerId ? req.body.singerId : song.singerId,
+      singers: req.body.singers ? req.body.singers : [],
+      singerGroups: req.body.singerGroups ? req.body.singerGroups : [],
     };
 
     await SongModel.updateOne({ _id: songId }, dataBodyUpdateSong);

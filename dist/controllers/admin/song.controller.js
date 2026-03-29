@@ -20,6 +20,7 @@ const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
+const singerGroup_model_1 = __importDefault(require("../../models/singerGroup.model"));
 const song_model_1 = __importDefault(require("../../models/song.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 // [GET]: /admin/songs
@@ -85,7 +86,8 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const songList = yield song_model_1.default.find(find)
         .select("-deleted -description -audio -lyrics -slug")
         .sort(sortFilter.sortOptions)
-        .populate("singerId", "stageName")
+        .populate("singers", "stageName fullName")
+        .populate("singerGroups", "name")
         .populate("topicId", "title")
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
@@ -116,6 +118,9 @@ const createANewSongGet = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const singerList = yield singer_model_1.default.find({
         deleted: false,
     }).select("stageName");
+    const singerGroupList = yield singerGroup_model_1.default.find({
+        deleted: false,
+    }).select("name");
     const topicList = yield topic_model_1.default.find({
         deleted: false,
     }).select("title");
@@ -123,6 +128,7 @@ const createANewSongGet = (req, res) => __awaiter(void 0, void 0, void 0, functi
         pageTitle: "Thêm mới bài hát",
         pathname,
         singerList,
+        singerGroupList,
         topicList,
     });
 });
@@ -147,7 +153,8 @@ const createANewSongPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 : countDocument + 1,
             status: req.body.status || "active",
             topicId: req.body.topicId || "",
-            singerId: req.body.singerId || "",
+            singers: req.body.singers || [],
+            singerGroups: req.body.singerGroups || [],
         };
         const newSong = new song_model_1.default(dataBodyCreateSong);
         yield newSong.save();
@@ -180,11 +187,33 @@ const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             deleted: false,
         })
             .select("-deleted -deletedAt -createdAt -updatedAt -slug -like -listen -__v")
-            .populate("singerId", "stageName")
+            .populate("singers", "stageName")
+            .populate("singerGroups", "name")
             .populate("topicId", "title");
+        const newSingerFromSong = song === null || song === void 0 ? void 0 : song.singers.map((singer) => singer._id.toString());
         const singerList = yield singer_model_1.default.find({
             deleted: false,
-        }).select("avatar stageName");
+        }).select("stageName");
+        const newSingerList = singerList.map((singer) => {
+            if (newSingerFromSong === null || newSingerFromSong === void 0 ? void 0 : newSingerFromSong.includes(singer._id.toString())) {
+                return Object.assign(Object.assign({}, singer.toObject()), { checked: true });
+            }
+            else {
+                return Object.assign(Object.assign({}, singer.toObject()), { checked: false });
+            }
+        });
+        const newSingerGroupFromSong = song === null || song === void 0 ? void 0 : song.singerGroups.map((singerGroup) => singerGroup._id.toString());
+        const singerGroupList = yield singerGroup_model_1.default.find({
+            deleted: false,
+        }).select("name");
+        const newSingerGroupList = singerGroupList.map((singerGroup) => {
+            if (newSingerGroupFromSong === null || newSingerGroupFromSong === void 0 ? void 0 : newSingerGroupFromSong.includes(singerGroup._id.toString())) {
+                return Object.assign(Object.assign({}, singerGroup.toObject()), { checked: true });
+            }
+            else {
+                return Object.assign(Object.assign({}, singerGroup.toObject()), { checked: false });
+            }
+        });
         const topicList = yield topic_model_1.default.find({
             deleted: false,
         }).select("title");
@@ -200,7 +229,8 @@ const getASongByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             pageTitle: `Chỉnh sửa bài hát ${song.title}`,
             pathname,
             song,
-            singerList,
+            newSingerList,
+            newSingerGroupList,
             topicList,
         });
     }
@@ -246,7 +276,8 @@ const updateASongByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
             position: req.body.position ? Number(req.body.position) : song.position,
             status: req.body.status ? req.body.status : song.status,
             topicId: req.body.topicId ? req.body.topicId : song.topicId,
-            singerId: req.body.singerId ? req.body.singerId : song.singerId,
+            singers: req.body.singers ? req.body.singers : [],
+            singerGroups: req.body.singerGroups ? req.body.singerGroups : [],
         };
         yield song_model_1.default.updateOne({ _id: songId }, dataBodyUpdateSong);
         res.status(http_status_codes_1.StatusCodes.OK).json({
