@@ -33,7 +33,7 @@ const getAllSearchResultGet = (req, res) => __awaiter(void 0, void 0, void 0, fu
             deleted: false,
         })
             .select("title avatar singerId slug like")
-            .populate("singerId", "stageName slug")
+            .populate("singers", "stageName slug")
             .populate("topicId", "title slug");
         newSearchedSongList = searchedSongList;
     }

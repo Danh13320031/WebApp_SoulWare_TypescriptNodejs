@@ -75,9 +75,41 @@
                 "
               >
                 Ca sĩ:
-                <a href="" style="color: var(--secondary-color)"
-                  ><%= song?.singerId?.stageName %></a
-                >
+                <% if (song.singers.length > 0 && song.singerGroups.length > 0) { %>
+                  <% song.singers.forEach((singer, index) => { %>
+                    <a
+                      href="/singers/detail/<%= singer.slug %>"
+                      class="text-decoration-none singer-name"
+                      > <%= singer.stageName %> </a
+                    ><%= index < song.singers.length - 1 ? "," : "" %>
+                  <% }) %>
+                  và
+                  <% song.singerGroups.forEach((group, index) => { %>
+                    <a
+                      href="/singer-groups/detail/<%= group.slug %>"
+                      class="text-decoration-none group-name"
+                      > <%= group.name %> </a
+                    ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                  <% }) %>
+                <% } else { %>
+                  <% if (song.singers.length > 0) { %>
+                    <% song.singers.forEach((singer, index) => { %>
+                      <a
+                        href="/singers/detail/<%= singer.slug %>"
+                        class="text-decoration-none singer-name"
+                        > <%= singer.stageName %> </a
+                      ><%= index < song.singers.length - 1 ? "," : "" %>
+                    <% }) %>
+                  <% } else { %>
+                    <% song.singerGroups.forEach((group, index) => { %>
+                      <a
+                        href="/singer-groups/detail/<%= group.slug %>"
+                        class="text-decoration-none group-name"
+                        > <%= group.name %> </a
+                      ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                    <% }) %>
+                  <% } %>
+                <% } %>
               </p>
               <p
                 class="song-info-genre mb-2"

@@ -12,8 +12,11 @@ const getAllFavoriteSongGet = async (
     deleted: false,
   }).populate({
     path: "songId",
-    select: "title avatar singerId slug like",
-    populate: { path: "singerId", select: "stageName slug" },
+    select: "title avatar singers singerGroups slug like",
+    populate: [
+      { path: "singers", select: "stageName slug" },
+      { path: "singerGroups", select: "name slug" },
+    ],
   });
 
   res.render("client/pages/favoriteSong/favoriteSong.view.ejs", {

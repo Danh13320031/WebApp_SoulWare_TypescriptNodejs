@@ -67,8 +67,8 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (req.query.singer)
         singer = req.query.singer;
     if (singer && singer !== "all")
-        find = Object.assign(Object.assign({}, find), { singerId: {
-                _id: singer,
+        find = Object.assign(Object.assign({}, find), { singers: {
+                $in: [singer],
             } });
     // Handle topic filter
     let topic = "all";

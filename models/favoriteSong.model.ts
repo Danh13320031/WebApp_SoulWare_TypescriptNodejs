@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import SongModel from "./song.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
-  songId: { type: Schema.Types.ObjectId, ref: "Song", required: true },
+  songId: { type: Schema.Types.ObjectId, ref: SongModel, required: true },
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",

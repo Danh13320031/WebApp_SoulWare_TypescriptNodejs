@@ -14,7 +14,7 @@ if (songPlayerAudio) {
     audio: [
       {
         name: songData.title,
-        artist: songData.singerId.stageName,
+        artist: songData.singers.map((singer) => singer.stageName).join(", "),
         url: songData.audio,
         cover: songData.avatar,
         lrc: songData.lyrics,

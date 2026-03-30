@@ -52,9 +52,7 @@ if (headerSearchBox) {
               <div
                 class="d-flex gap-3 align-items-center header-search-meta"
               >
-                <a href="/singers/${headerSearchItem.singerId.slug}" class="text-decoration-none header-search-singer"
-                  ><i class="fa-solid fa-microphone-lines me-1"></i>${headerSearchItem.singerId.stageName}</a
-                >
+                ${renderSearch(headerSearchItem.singers, headerSearchItem.singerGroups)}
                 <a href="/songs/${headerSearchItem.topicId.slug}" class="text-decoration-none header-search-topic"
                   ><i class="fa-solid fa-icons me-1"></i>${headerSearchItem.topicId.title}</a
                 >
@@ -71,4 +69,46 @@ if (headerSearchBox) {
       }
     });
   }
+}
+
+function renderSearch(singers, singerGroups) {
+  let html = "";
+  if (singers && singerGroups) {
+    if (singers.length > 0 && singerGroups.length > 0) {
+      singers.forEach((singer, index) => {
+        html += `
+        <a href="/singers/detail/${singer.slug}" class="text-decoration-none singer-name"
+          > ${singer.stageName} </a
+        >${index < singers.length - 1 ? "," : ""}
+      `;
+      });
+      html += " và ";
+      singerGroups.forEach((group, index) => {
+        html += `
+        <a href="/singer-groups/detail/${group.slug}" class="text-decoration-none group-name"
+          > ${group.name} </a
+        >${index < singerGroups.length - 1 ? "," : ""}
+      `;
+      });
+    } else {
+      if (singers.length > 0) {
+        singers.forEach((singer, index) => {
+          html += `
+          <a href="/singers/detail/${singer.slug}" class="text-decoration-none singer-name"
+            > ${singer.stageName} </a
+          >${index < singers.length - 1 ? "," : ""}
+        `;
+        });
+      } else {
+        singerGroups.forEach((group, index) => {
+          html += `
+          <a href="/singer-groups/detail/${group.slug}" class="text-decoration-none group-name"
+            > ${group.name} </a
+          >${index < singerGroups.length - 1 ? "," : ""}
+        `;
+        });
+      }
+    }
+  }
+  return html;
 }

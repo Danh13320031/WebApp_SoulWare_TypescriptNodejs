@@ -113,8 +113,12 @@
   transition: color 0.3s ease;
 }
 
-.favorite-song-meta .favorite-song-singer:hover,
-.favorite-song-meta .favorite-song-singer:hover i {
+.favorite-song-meta .favorite-song-singer .singer-name {
+  color: var(--dark-gray-color);
+  transition: color 0.3s ease;
+}
+
+.favorite-song-meta .favorite-song-singer .singer-name:hover {
   color: var(--primary-color);
 }
 

@@ -78,8 +78,8 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   if (singer && singer !== "all")
     find = {
       ...find,
-      singerId: {
-        _id: singer,
+      singers: {
+        $in: [singer],
       },
     };
 
