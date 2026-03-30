@@ -52,7 +52,7 @@
                   <div class="favorite-song-item">
                     <div class="favorite-song-thumb">
                       <img
-                        src="<%= favoriteSong?.songId?.avatar %>"
+                        src="<%= favoriteSong.songId.avatar %>"
                         alt="<%= favoriteSong?.songId?.title %>"
                       />
 
@@ -67,7 +67,41 @@
                       <div class="favorite-song-meta">
                         <span class="favorite-song-singer">
                           <i class="fa-solid fa-microphone-lines"></i>
-                          <%= favoriteSong?.songId?.singerId?.stageName %>
+                          <% if (favoriteSong?.songId?.singers.length > 0 && favoriteSong?.songId?.singerGroups.length > 0) { %>
+                            <% favoriteSong?.songId?.singers.forEach((singer, index) => { %>
+                              <a
+                                href="/singers/detail/<%= singer.slug %>"
+                                class="text-decoration-none singer-name"
+                                > <%= singer.stageName %> </a
+                              ><%= index < favoriteSong?.songId?.singers.length - 1 ? "," : "" %>
+                            <% }) %>
+                            và
+                            <% favoriteSong?.songId?.singerGroups.forEach((group, index) => { %>
+                              <a
+                                href="/singer-groups/detail/<%= group.slug %>"
+                                class="text-decoration-none group-name"
+                                > <%= group.name %> </a
+                              ><%= index < favoriteSong?.songId?.singerGroups.length - 1 ? "," : "" %>
+                            <% }) %>
+                          <% } else { %>
+                            <% if (favoriteSong?.songId?.singers.length > 0) { %>
+                              <% favoriteSong?.songId?.singers.forEach((singer, index) => { %>
+                                <a
+                                  href="/singers/detail/<%= singer.slug %>"
+                                  class="text-decoration-none singer-name"
+                                  > <%= singer.stageName %> </a
+                                ><%= index < favoriteSong?.songId?.singers.length - 1 ? "," : "" %>
+                              <% }) %>
+                            <% } else { %>
+                              <% favoriteSong?.songId?.singerGroups.forEach((group, index) => { %>
+                                <a
+                                  href="/singer-groups/detail/<%= group.slug %>"
+                                  class="text-decoration-none group-name"
+                                  > <%= group.name %> </a
+                                ><%= index < favoriteSong?.songId?.singerGroups.length - 1 ? "," : "" %>
+                              <% }) %>
+                            <% } %>
+                          <% } %>
                         </span>
 
                         <span class="favorite-song-favorite favorited" data-id="<%= favoriteSong?.songId?._id %>">

@@ -31,7 +31,9 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         deleted: false,
     })
         .select("title avatar singerId slug like")
-        .populate("singerId", "stageName slug");
+        .populate("singers", "stageName slug")
+        .populate("topicId", "title slug")
+        .populate("singerGroups", "name slug");
     res.render("client/pages/song/song.view.ejs", {
         pageTitle: `Danh sách nhạc ${topicTitle}`,
         songList,
@@ -47,7 +49,8 @@ const getOneSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         deleted: false,
     })
         .select("-deletedAt -deleted -status -position -__v")
-        .populate("singerId", "stageName slug")
+        .populate("singers", "stageName slug")
+        .populate("singerGroups", "name slug")
         .populate("topicId", "title slug");
     const favoritedSong = yield favoriteSong_model_1.default.findOne({
         songId: song === null || song === void 0 ? void 0 : song._id,

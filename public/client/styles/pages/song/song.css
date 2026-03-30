@@ -114,9 +114,17 @@
   transition: color 0.3s ease;
 }
 
-.song-meta .song-singer:hover,
+.song-meta .song-singer .singer-name,
+.song-meta .song-group .group-name {
+  color: var(--dark-gray-color);
+  transition: color 0.3s ease;
+}
+
+.song-meta .song-singer .singer-name:hover,
+.song-meta .song-group .group-name:hover,
 .song-meta .song-like:hover,
 .song-meta .song-singer:hover i,
+.song-meta .song-group:hover i,
 .song-meta .song-like:hover i {
   color: var(--primary-color);
 }

@@ -20,7 +20,9 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     deleted: false,
   })
     .select("title avatar singerId slug like")
-    .populate("singerId", "stageName slug");
+    .populate("singers", "stageName slug")
+    .populate("topicId", "title slug")
+    .populate("singerGroups", "name slug");
 
   res.render("client/pages/song/song.view.ejs", {
     pageTitle: `Danh sách nhạc ${topicTitle}`,
@@ -39,7 +41,8 @@ const getOneSongGet = async (req: Request, res: Response): Promise<void> => {
     deleted: false,
   })
     .select("-deletedAt -deleted -status -position -__v")
-    .populate("singerId", "stageName slug")
+    .populate("singers", "stageName slug")
+    .populate("singerGroups", "name slug")
     .populate("topicId", "title slug");
 
   const favoritedSong = await FavoriteSongModel.findOne({
