@@ -9,6 +9,7 @@ import singerGroupRoute from "./singerGroup.route";
 import songRoute from "./song.route";
 import topicRoute from "./topic.route";
 import uploadRoute from "./upload.route";
+import userRoute from "./user.route";
 
 const createAdminRoute = (app: Express): void => {
   const pathAdmin: string = APP_PREFIX_ADMIN as string;
@@ -21,6 +22,7 @@ const createAdminRoute = (app: Express): void => {
   app.use(`${pathAdmin}/upload`, uploadRoute);
   app.use(`${pathAdmin}/admins`, adminRoute);
   app.use(`${pathAdmin}/admin-roles`, adminRoleRoute);
+  app.use(`${pathAdmin}/users`, userRoute);
   app.use(`${pathAdmin}/auth`, authRoute);
 
   return;
