@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
 import activeSider from "../../helpers/admin/activeSider.helper";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import handlePagination from "../../helpers/handlePagination.helper";
 import UserRoleModel from "../../models/userRole.model";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 import { TDataUserRoleCreate } from "../../types/userRole.type";
 
 // [GET]: /admin/user-roles
@@ -13,14 +19,77 @@ const getAllUserRoleGet = async (
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    const userRoleList = await UserRoleModel.find(find).sort({
-      position: "desc",
-    });
+    // Handle search filter
+    let keyword: string = "";
+    let keywordRegex: RegExp = new RegExp("", "i");
+    let slugRegex: RegExp = new RegExp("", "i");
+
+    if (req.query.keyword) keyword = req.query.keyword as string;
+    if (keyword) {
+      keywordRegex = new RegExp(keyword, "i");
+      slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+      find = {
+        ...find,
+        $or: [
+          { name: { $regex: keywordRegex } },
+          { slug: { $regex: slugRegex } },
+        ],
+      };
+    }
+
+    // Handle status filter
+    let status: string = "";
+    if (req.query.status) status = req.query.status as string;
+    if (req.query.status === "all") status = "";
+
+    const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+    if (status)
+      find = {
+        ...find,
+        status,
+      };
+
+    // Handle sort filter
+    let sort: string = "";
+    if (req.query.sort) sort = req.query.sort as string;
+
+    const sortFilter = handleSortFilter(sort);
+
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit)
+      limit = Number(req.query.limit) || APP_ADMIN_PAGINATION_LIMIT;
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await UserRoleModel.countDocuments(find);
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
+    );
+
+    const userRoleList = await UserRoleModel.find(find)
+      .select("-deleted -deletedAt -updatedAt -createdAt -__v")
+      .sort(sortFilter.sortOptions)
+      .skip(pagination.skipPage)
+      .limit(pagination.limitPage);
 
     res.render("admin/pages/userRole/userRole.view.ejs", {
       pageTitle: "Danh sách vai trò người dùng",
       pathname,
       userRoleList,
+      keyword,
+      status,
+      statusFilter,
+      sort: sortFilter.sort,
+      pagination,
     });
   } catch (error) {
     console.log(error);
