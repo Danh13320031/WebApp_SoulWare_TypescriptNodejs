@@ -22,24 +22,6 @@ const getAllAdminRoleGet = async (
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    // Handle pagination
-    let page: number = 1;
-    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
-    let type: string = "";
-
-    if (req.query.page) page = Number(req.query.page);
-    if (req.query.limit)
-      limit = Number(req.query.limit) || APP_ADMIN_PAGINATION_LIMIT;
-    if (req.query.type) type = req.query.type as string;
-
-    const count = await AdminRoleModel.countDocuments(find);
-    const pagination: TPagination = await handlePagination(
-      page,
-      limit,
-      type,
-      count,
-    );
-
     // Handle search filter
     let keyword: string = "";
     let keywordRegex: RegExp = new RegExp("", "i");
@@ -77,6 +59,24 @@ const getAllAdminRoleGet = async (
     if (req.query.sort) sort = req.query.sort as string;
 
     const sortFilter = handleSortFilter(sort);
+
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit)
+      limit = Number(req.query.limit) || APP_ADMIN_PAGINATION_LIMIT;
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await AdminRoleModel.countDocuments(find);
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
+    );
 
     const adminRoleList = await AdminRoleModel.find(find)
       .select("-deleted -deletedAt -updatedAt -createdAt -__v")

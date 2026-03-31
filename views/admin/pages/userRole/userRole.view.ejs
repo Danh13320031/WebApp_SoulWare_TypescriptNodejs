@@ -61,19 +61,19 @@
                 <div class="px-0 container-fluid">
                   <div class="row g-2">
                     <div class="col-lg-4 col-md-6 col-12">
-                      <%#-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm vai trò', keyword: keyword, placeholder: 'Tìm kiếm vai trò...' }) %>
+                      <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm vai trò', keyword: keyword, placeholder: 'Tìm kiếm vai trò...' }) %>
                     </div>
                     <div class="col-lg-4 col-md-6 col-12">
-                      <%#-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái vai trò', status: status, statusFilter: statusFilter }) %>
+                      <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái vai trò', status: status, statusFilter: statusFilter }) %>
                     </div>
                     <div class="col-lg-4 col-md-6 col-12">
-                      <%#-include('../../partials/sortFilter.view.ejs', { 
+                      <%-include('../../partials/sortFilter.view.ejs', { 
                         label: 'Vị trí sắp xếp', 
                         sortArr: [
                           { value: 'position-desc', label: 'Vị trí giảm dần' }, 
                           { value: 'position-asc', label: 'Vị trí tăng dần' },
-                          { value: 'title-desc', label: 'Tiêu đề từ Z-A' },
-                          { value: 'title-asc', label: 'Tiêu đề từ A-Z' },
+                          { value: 'name-desc', label: 'Tiêu đề từ Z-A' },
+                          { value: 'name-asc', label: 'Tiêu đề từ A-Z' },
                           { value: 'createdAt-desc', label: 'Ngày tạo từ mới tới cũ' },
                           { value: 'createdAt-asc', label: 'Ngày tạo từ cũ tới mới' },
                         ] 
@@ -190,7 +190,7 @@
                 { value: 'hard-delete', label: 'Xoá cứng tất cả' },
               ]
             }) %>
-            <%#-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
+            <%-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
           </div>
         </div>
       </section>
