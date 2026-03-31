@@ -11,10 +11,16 @@ const getAllUserRoleGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find: any = { deleted: false };
+
+    const userRoleList = await UserRoleModel.find(find).sort({
+      position: "desc",
+    });
 
     res.render("admin/pages/userRole/userRole.view.ejs", {
       pageTitle: "Danh sách vai trò người dùng",
       pathname,
+      userRoleList,
     });
   } catch (error) {
     console.log(error);

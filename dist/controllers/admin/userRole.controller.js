@@ -19,9 +19,14 @@ const userRole_model_1 = __importDefault(require("../../models/userRole.model"))
 const getAllUserRoleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const userRoleList = yield userRole_model_1.default.find(find).sort({
+            position: "desc",
+        });
         res.render("admin/pages/userRole/userRole.view.ejs", {
             pageTitle: "Danh sách vai trò người dùng",
             pathname,
+            userRoleList,
         });
     }
     catch (error) {
