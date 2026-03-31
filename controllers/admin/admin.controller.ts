@@ -156,6 +156,19 @@ const createANewAdminPost = async (
     if (req.body.password) password = await hashPassword(req.body.password);
     if (req.body.name) fullName = req.body.name;
 
+    const existingAdmin = await AdminModel.findOne({
+      email: req.body.email,
+    });
+    
+    if (existingAdmin) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Email người dùng đã được đăng ký! ",
+      });
+      return;
+    }
+
     const dataBodyCreateAdmin: TDataBodyCreateAdmin = {
       email: req.body.email ? req.body.email : "",
       password: password ? password : "",

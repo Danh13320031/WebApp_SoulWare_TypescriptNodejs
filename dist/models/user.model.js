@@ -14,45 +14,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
-const adminRole_model_1 = __importDefault(require("./adminRole.model"));
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
-    email: { type: String, required: true, unique: true },
+    fullName: { type: String, required: true },
+    email: { type: String, required: true },
     password: { type: String, required: true },
     phone: { type: String, required: true },
-    slug: { type: String, index: true, unique: true },
-    avatar: { type: String, required: true },
-    fullName: { type: String, required: true },
     refreshToken: { type: String, required: false },
-    birthday: { type: Date },
-    address: { type: String },
-    description: { type: String },
+    avatar: { type: String, required: true },
+    description: { type: String, required: false },
     status: {
         type: String,
         required: true,
         enum: ["active", "inactive"],
         default: "active",
     },
+    slug: { type: String, index: true, unique: true },
     position: { type: Number, required: true, default: 1 },
+    address: { type: String },
+    birthday: { type: Date },
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
-    roleId: { type: Schema.Types.ObjectId, ref: adminRole_model_1.default, required: true },
+    roleId: {
+        type: Schema.Types.ObjectId,
+        ref: "UserRole",
+        required: false,
+        default: null,
+    },
 };
-const AdminSchema = new Schema(objSchema, { timestamps: true });
-AdminSchema.pre("save", function () {
+const UserSchema = new Schema(objSchema, { timestamps: true });
+UserSchema.pre("save", function () {
     return __awaiter(this, void 0, void 0, function* () {
         if (!this.isModified("fullName"))
             return;
-        const Admin = this.constructor;
+        const User = this.constructor;
         const baseSlug = (0, slugify_1.default)(this.fullName, { lower: true, strict: true });
         let slug = baseSlug;
         let count = 1;
-        while (yield Admin.findOne({ slug })) {
+        while (yield User.findOne({ slug })) {
             slug = `${baseSlug}-${count}`;
             count++;
         }
         this.slug = slug;
     });
 });
-const AdminModel = mongoose_1.default.model("Admin", AdminSchema, "Admin");
-exports.default = AdminModel;
+const UserModel = mongoose_1.default.model("User", UserSchema, "User");
+exports.default = UserModel;

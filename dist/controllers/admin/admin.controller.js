@@ -133,6 +133,17 @@ const createANewAdminPost = (req, res) => __awaiter(void 0, void 0, void 0, func
             password = yield (0, hashPassword_helper_1.default)(req.body.password);
         if (req.body.name)
             fullName = req.body.name;
+        const existingAdmin = yield admin_model_1.default.findOne({
+            email: req.body.email,
+        });
+        if (existingAdmin) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Email người dùng đã được đăng ký! ",
+            });
+            return;
+        }
         const dataBodyCreateAdmin = {
             email: req.body.email ? req.body.email : "",
             password: password ? password : "",
