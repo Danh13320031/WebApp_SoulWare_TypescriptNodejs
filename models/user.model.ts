@@ -1,43 +1,47 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
-import AdminRoleModel from "./adminRole.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
-  email: { type: String, required: true, unique: true },
+  fullName: { type: String, required: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   phone: { type: String, required: true },
-  slug: { type: String, index: true, unique: true },
-  avatar: { type: String, required: true },
-  fullName: { type: String, required: true },
   refreshToken: { type: String, required: false },
-  birthday: { type: Date },
-  address: { type: String },
-  description: { type: String },
+  avatar: { type: String, required: true },
+  description: { type: String, required: false },
   status: {
     type: String,
     required: true,
     enum: ["active", "inactive"],
     default: "active",
   },
+  slug: { type: String, index: true, unique: true },
   position: { type: Number, required: true, default: 1 },
+  address: { type: String },
+  birthday: { type: Date },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
-  roleId: { type: Schema.Types.ObjectId, ref: AdminRoleModel, required: true },
+  roleId: {
+    type: Schema.Types.ObjectId,
+    ref: "UserRole",
+    required: false,
+    default: null,
+  },
 };
 
-const AdminSchema = new Schema(objSchema, { timestamps: true });
+const UserSchema = new Schema(objSchema, { timestamps: true });
 
-AdminSchema.pre("save", async function () {
+UserSchema.pre("save", async function () {
   if (!this.isModified("fullName")) return;
 
-  const Admin = this.constructor as any;
+  const User = this.constructor as any;
 
   const baseSlug = slugify(this.fullName, { lower: true, strict: true });
   let slug = baseSlug;
   let count = 1;
 
-  while (await Admin.findOne({ slug })) {
+  while (await User.findOne({ slug })) {
     slug = `${baseSlug}-${count}`;
     count++;
   }
@@ -45,6 +49,6 @@ AdminSchema.pre("save", async function () {
   this.slug = slug;
 });
 
-const AdminModel = mongoose.model("Admin", AdminSchema, "Admin");
+const UserModel = mongoose.model("User", UserSchema, "User");
 
-export default AdminModel;
+export default UserModel;
