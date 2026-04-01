@@ -16,6 +16,7 @@ const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
+const userRole_model_1 = __importDefault(require("../../models/userRole.model"));
 // [GET]: /admin/users
 const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,9 +40,12 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 const createANewUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const userRoleList = yield userRole_model_1.default.find(find).select("name");
         res.render("admin/pages/user/create.view.ejs", {
             pageTitle: "Tạo mới người dùng",
             pathname,
+            userRoleList,
         });
     }
     catch (error) {
