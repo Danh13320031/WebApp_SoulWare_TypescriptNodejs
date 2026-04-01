@@ -41,5 +41,10 @@ userRoleRoute.patch(
   authMiddleware.auth,
   userRoleController.changeStatusUserRolePatch,
 );
+userRoleRoute.patch(
+  "/update-multi",
+  authMiddleware.auth,
+  userRoleController.updateMultiUserRolePatch,
+);
 
 export default userRoleRoute;
