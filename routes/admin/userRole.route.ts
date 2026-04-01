@@ -36,5 +36,10 @@ userRoleRoute.patch(
   authMiddleware.auth,
   userRoleController.softRemoveUserRoleByIdPatch,
 );
+userRoleRoute.patch(
+  "/change-status/:userRoleId/:status",
+  authMiddleware.auth,
+  userRoleController.changeStatusUserRolePatch,
+);
 
 export default userRoleRoute;
