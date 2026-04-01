@@ -8,7 +8,10 @@ import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
 import UserRoleModel from "../../models/userRole.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
-import { TDataUserRoleCreate } from "../../types/userRole.type";
+import {
+  TDataUserRoleCreate,
+  TDataUserRoleUpdate,
+} from "../../types/userRole.type";
 
 // [GET]: /admin/user-roles
 const getAllUserRoleGet = async (
@@ -162,16 +165,106 @@ const createANewUserRolePost = async (
   }
 };
 
+// [GET]: /admin/user-roles/update/:userRoleId
+const getAUserRoleByIdGet = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const pathname = activeSider(req.originalUrl);
+    const userRoleId: string = req.params.userRoleId as string;
+
+    const userRole = await UserRoleModel.findOne({
+      _id: userRoleId,
+      deleted: false,
+    }).select("-deleted -deletedAt -createdAt -updatedAt -__v");
+
+    if (!userRole) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy vai trò người dùng!",
+      });
+      return;
+    }
+
+    res.render("admin/pages/userRole/update.view.ejs", {
+      pageTitle: `Cập nhật vai trò "${userRole.name}"`,
+      pathname,
+      userRole,
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - get user role by id",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/user-roles/update/:userRoleId
+const updateUserRolePatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userRoleId: string = req.params.userRoleId as string;
+
+    if (!userRoleId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy vai trò quản trị viên",
+      });
+      return;
+    }
+
+    const dataBodyUpdateUserRole: TDataUserRoleUpdate = {
+      name: req.body.name || "",
+      status: req.body.status || "active",
+      description: req.body.description || "",
+    };
+
+    await UserRoleModel.findOneAndUpdate(
+      { _id: userRoleId },
+      dataBodyUpdateUserRole,
+      { new: true },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật vai trò người dùng thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update user role",
+    });
+    return;
+  }
+};
+
 type TUserRoleController = {
   getAllUserRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewUserRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewUserRolePost: (req: Request, res: Response) => Promise<void>;
+  getAUserRoleByIdGet: (req: Request, res: Response) => Promise<void>;
+  updateUserRolePatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const UserRoleController: TUserRoleController = {
   getAllUserRoleGet,
   createANewUserRoleGet,
   createANewUserRolePost,
+  getAUserRoleByIdGet,
+  updateUserRolePatch,
 };
 
 export default UserRoleController;

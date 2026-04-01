@@ -141,9 +141,80 @@ const createANewUserRolePost = (req, res) => __awaiter(void 0, void 0, void 0, f
         return;
     }
 });
+// [GET]: /admin/user-roles/update/:userRoleId
+const getAUserRoleByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        const userRoleId = req.params.userRoleId;
+        const userRole = yield userRole_model_1.default.findOne({
+            _id: userRoleId,
+            deleted: false,
+        }).select("-deleted -deletedAt -createdAt -updatedAt -__v");
+        if (!userRole) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy vai trò người dùng!",
+            });
+            return;
+        }
+        res.render("admin/pages/userRole/update.view.ejs", {
+            pageTitle: `Cập nhật vai trò "${userRole.name}"`,
+            pathname,
+            userRole,
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - get user role by id",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/user-roles/update/:userRoleId
+const updateUserRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userRoleId = req.params.userRoleId;
+        if (!userRoleId) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy vai trò quản trị viên",
+            });
+            return;
+        }
+        const dataBodyUpdateUserRole = {
+            name: req.body.name || "",
+            status: req.body.status || "active",
+            description: req.body.description || "",
+        };
+        yield userRole_model_1.default.findOneAndUpdate({ _id: userRoleId }, dataBodyUpdateUserRole, { new: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật vai trò người dùng thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update user role",
+        });
+        return;
+    }
+});
 const UserRoleController = {
     getAllUserRoleGet,
     createANewUserRoleGet,
     createANewUserRolePost,
+    getAUserRoleByIdGet,
+    updateUserRolePatch,
 };
 exports.default = UserRoleController;

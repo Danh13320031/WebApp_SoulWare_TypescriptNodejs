@@ -20,5 +20,16 @@ userRoleRoute.post(
   userRoleValidate.createANewUserRoleValidate,
   userRoleController.createANewUserRolePost,
 );
+userRoleRoute.get(
+  "/update/:userRoleId",
+  authMiddleware.auth,
+  userRoleController.getAUserRoleByIdGet,
+);
+userRoleRoute.patch(
+  "/update/:userRoleId",
+  authMiddleware.auth,
+  userRoleValidate.updateUserRoleValidate,
+  userRoleController.updateUserRolePatch,
+);
 
 export default userRoleRoute;
