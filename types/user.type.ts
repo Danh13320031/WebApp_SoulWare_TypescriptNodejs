@@ -9,5 +9,5 @@ export type TDataBodyCreateUser = {
   description?: string;
   status: string;
   position?: number;
-  roleId?: string;
+  roleId: string;
 };

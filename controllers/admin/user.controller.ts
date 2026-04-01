@@ -4,6 +4,7 @@ import activeSider from "../../helpers/admin/activeSider.helper";
 import UserModel from "../../models/user.model";
 import hashPassword from "../../helpers/hashPassword.helper";
 import { TDataBodyCreateUser } from "../../types/user.type";
+import UserRoleModel from "../../models/userRole.model";
 
 // [GET]: /admin/users
 const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
@@ -32,10 +33,14 @@ const createANewUserGet = async (
 ): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find: any = { deleted: false };
+
+    const userRoleList = await UserRoleModel.find(find).select("name");
 
     res.render("admin/pages/user/create.view.ejs", {
       pageTitle: "Tạo mới người dùng",
       pathname,
+      userRoleList,
     });
   } catch (error) {
     console.log(error);

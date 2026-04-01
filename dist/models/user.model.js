@@ -38,7 +38,7 @@ const objSchema = {
     roleId: {
         type: Schema.Types.ObjectId,
         ref: "UserRole",
-        required: false,
+        required: true,
         default: null,
     },
 };

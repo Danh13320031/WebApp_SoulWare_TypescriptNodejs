@@ -22,8 +22,8 @@ const positionError = document.querySelector(".form-position-error");
 const statusSelect = document.getElementById("user-status");
 const statusError = document.querySelector(".form-status-error");
 
-// const roleSelect = document.getElementById("user-role");
-// const roleError = document.querySelector(".form-role-error");
+const roleSelect = document.getElementById("user-role");
+const roleError = document.querySelector(".form-role-error");
 
 let imageValid = imageView && imageView.getAttribute("src") ? true : false;
 
@@ -76,7 +76,7 @@ const validateUserForm = () => {
   positionError.textContent = "";
   emailError.textContent = "";
   statusError.textContent = "";
-  // roleError.textContent = "";
+  roleError.textContent = "";
 
   const hasOldImage =
     imageView &&
@@ -150,10 +150,10 @@ const validateUserForm = () => {
     isValid = false;
   }
 
-  // if (!roleSelect.value) {
-  //   roleError.textContent = "Vui lòng chọn vai trò";
-  //   isValid = false;
-  // }
+  if (!roleSelect.value) {
+    roleError.textContent = "Vui lòng chọn vai trò";
+    isValid = false;
+  }
 
   return isValid;
 };
