@@ -31,5 +31,10 @@ userRoleRoute.patch(
   userRoleValidate.updateUserRoleValidate,
   userRoleController.updateUserRolePatch,
 );
+userRoleRoute.patch(
+  "/soft-delete/:userRoleId",
+  authMiddleware.auth,
+  userRoleController.softRemoveUserRoleByIdPatch,
+);
 
 export default userRoleRoute;

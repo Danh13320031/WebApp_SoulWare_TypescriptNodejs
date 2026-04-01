@@ -210,11 +210,42 @@ const updateUserRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, func
         return;
     }
 });
+// [PATCH]: /admin/user-roles/soft-delete/:adminRoleId
+const softRemoveUserRoleByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userRoleId = req.params.userRoleId;
+        if (!userRoleId) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy vai trò quản trị viên",
+            });
+            return;
+        }
+        yield userRole_model_1.default.findOneAndUpdate({ _id: userRoleId }, { deleted: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Xóa vai trò người dùng thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - soft remove admin role by id",
+        });
+        return;
+    }
+});
 const UserRoleController = {
     getAllUserRoleGet,
     createANewUserRoleGet,
     createANewUserRolePost,
     getAUserRoleByIdGet,
     updateUserRolePatch,
+    softRemoveUserRoleByIdPatch,
 };
 exports.default = UserRoleController;

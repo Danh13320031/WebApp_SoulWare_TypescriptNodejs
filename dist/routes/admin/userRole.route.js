@@ -13,4 +13,5 @@ userRoleRoute.get("/create", auth_middleware_1.default.auth, userRole_controller
 userRoleRoute.post("/create", auth_middleware_1.default.auth, userRole_validate_1.default.createANewUserRoleValidate, userRole_controller_1.default.createANewUserRolePost);
 userRoleRoute.get("/update/:userRoleId", auth_middleware_1.default.auth, userRole_controller_1.default.getAUserRoleByIdGet);
 userRoleRoute.patch("/update/:userRoleId", auth_middleware_1.default.auth, userRole_validate_1.default.updateUserRoleValidate, userRole_controller_1.default.updateUserRolePatch);
+userRoleRoute.patch("/soft-delete/:userRoleId", auth_middleware_1.default.auth, userRole_controller_1.default.softRemoveUserRoleByIdPatch);
 exports.default = userRoleRoute;
