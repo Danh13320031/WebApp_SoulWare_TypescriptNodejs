@@ -301,6 +301,7 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
         messageSubStr = "chủ đề";
         break;
       case "admin-roles":
+      case "user-roles":
         messageSubStr = "vai trò";
         break;
       case "admins":

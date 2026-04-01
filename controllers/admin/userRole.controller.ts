@@ -251,12 +251,52 @@ const updateUserRolePatch = async (
   }
 };
 
+// [PATCH]: /admin/user-roles/soft-delete/:adminRoleId
+const softRemoveUserRoleByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userRoleId: string = req.params.userRoleId as string;
+
+    if (!userRoleId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy vai trò quản trị viên",
+      });
+      return;
+    }
+
+    await UserRoleModel.findOneAndUpdate(
+      { _id: userRoleId },
+      { deleted: true },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Xóa vai trò người dùng thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - soft remove admin role by id",
+    });
+    return;
+  }
+};
+
 type TUserRoleController = {
   getAllUserRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewUserRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewUserRolePost: (req: Request, res: Response) => Promise<void>;
   getAUserRoleByIdGet: (req: Request, res: Response) => Promise<void>;
   updateUserRolePatch: (req: Request, res: Response) => Promise<void>;
+  softRemoveUserRoleByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const UserRoleController: TUserRoleController = {
@@ -265,6 +305,7 @@ const UserRoleController: TUserRoleController = {
   createANewUserRolePost,
   getAUserRoleByIdGet,
   updateUserRolePatch,
+  softRemoveUserRoleByIdPatch,
 };
 
 export default UserRoleController;
