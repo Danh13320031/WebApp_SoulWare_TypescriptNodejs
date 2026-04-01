@@ -192,7 +192,7 @@ const updateUserRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, func
             status: req.body.status || "active",
             description: req.body.description || "",
         };
-        yield userRole_model_1.default.findOneAndUpdate({ _id: userRoleId }, dataBodyUpdateUserRole, { new: true });
+        yield userRole_model_1.default.updateOne({ _id: userRoleId }, dataBodyUpdateUserRole);
         res.status(http_status_codes_1.StatusCodes.OK).json({
             code: http_status_codes_1.StatusCodes.OK,
             status: "Success",
@@ -210,7 +210,7 @@ const updateUserRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, func
         return;
     }
 });
-// [PATCH]: /admin/user-roles/soft-delete/:adminRoleId
+// [PATCH]: /admin/user-roles/soft-delete/:userRoleId
 const softRemoveUserRoleByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userRoleId = req.params.userRoleId;
@@ -240,6 +240,37 @@ const softRemoveUserRoleByIdPatch = (req, res) => __awaiter(void 0, void 0, void
         return;
     }
 });
+// [PATCH]: /admin/user-roles/change-status/:userRoleId/:status
+const changeStatusUserRolePatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userRoleId = req.params.userRoleId;
+        const userRoleStatus = req.params.status;
+        if (!userRoleId) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy vai trò!",
+            });
+            return;
+        }
+        yield userRole_model_1.default.findOneAndUpdate({ _id: userRoleId }, { status: userRoleStatus });
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật trạng thái vai trò thành công!",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - change status user role",
+        });
+        return;
+    }
+});
 const UserRoleController = {
     getAllUserRoleGet,
     createANewUserRoleGet,
@@ -247,5 +278,6 @@ const UserRoleController = {
     getAUserRoleByIdGet,
     updateUserRolePatch,
     softRemoveUserRoleByIdPatch,
+    changeStatusUserRolePatch,
 };
 exports.default = UserRoleController;

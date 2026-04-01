@@ -228,11 +228,7 @@ const updateUserRolePatch = async (
       description: req.body.description || "",
     };
 
-    await UserRoleModel.findOneAndUpdate(
-      { _id: userRoleId },
-      dataBodyUpdateUserRole,
-      { new: true },
-    );
+    await UserRoleModel.updateOne({ _id: userRoleId }, dataBodyUpdateUserRole);
 
     res.status(StatusCodes.OK).json({
       code: StatusCodes.OK,
@@ -251,7 +247,7 @@ const updateUserRolePatch = async (
   }
 };
 
-// [PATCH]: /admin/user-roles/soft-delete/:adminRoleId
+// [PATCH]: /admin/user-roles/soft-delete/:userRoleId
 const softRemoveUserRoleByIdPatch = async (
   req: Request,
   res: Response,
@@ -290,6 +286,46 @@ const softRemoveUserRoleByIdPatch = async (
   }
 };
 
+// [PATCH]: /admin/user-roles/change-status/:userRoleId/:status
+const changeStatusUserRolePatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userRoleId: string = req.params.userRoleId as string;
+    const userRoleStatus = req.params.status as string;
+
+    if (!userRoleId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy vai trò!",
+      });
+      return;
+    }
+
+    await UserRoleModel.findOneAndUpdate(
+      { _id: userRoleId },
+      { status: userRoleStatus },
+    );
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật trạng thái vai trò thành công!",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - change status user role",
+    });
+    return;
+  }
+};
+
 type TUserRoleController = {
   getAllUserRoleGet: (req: Request, res: Response) => Promise<void>;
   createANewUserRoleGet: (req: Request, res: Response) => Promise<void>;
@@ -297,6 +333,7 @@ type TUserRoleController = {
   getAUserRoleByIdGet: (req: Request, res: Response) => Promise<void>;
   updateUserRolePatch: (req: Request, res: Response) => Promise<void>;
   softRemoveUserRoleByIdPatch: (req: Request, res: Response) => Promise<void>;
+  changeStatusUserRolePatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const UserRoleController: TUserRoleController = {
@@ -306,6 +343,7 @@ const UserRoleController: TUserRoleController = {
   getAUserRoleByIdGet,
   updateUserRolePatch,
   softRemoveUserRoleByIdPatch,
+  changeStatusUserRolePatch,
 };
 
 export default UserRoleController;
