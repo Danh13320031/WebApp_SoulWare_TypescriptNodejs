@@ -20,24 +20,6 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
   const pathname = activeSider(req.originalUrl);
   let find: any = { deleted: false };
 
-  // Handle pagination
-  let page: number = 1;
-  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
-  let type: string = "";
-
-  if (req.query.page) page = Number(req.query.page);
-  if (req.query.limit) limit = Number(req.query.limit);
-  if (req.query.type) type = req.query.type as string;
-
-  const count = await AdminModel.countDocuments(find);
-
-  const pagination: TPagination = await handlePagination(
-    page,
-    limit,
-    type,
-    count,
-  );
-
   // Handle search filter
   let keyword: string = "";
   let keywordRegex: RegExp = new RegExp("", "i");
@@ -87,6 +69,24 @@ const adminGet = async (req: Request, res: Response): Promise<void> => {
         _id: role,
       },
     };
+
+  // Handle pagination
+  let page: number = 1;
+  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+  let type: string = "";
+
+  if (req.query.page) page = Number(req.query.page);
+  if (req.query.limit) limit = Number(req.query.limit);
+  if (req.query.type) type = req.query.type as string;
+
+  const count = await AdminModel.countDocuments(find);
+
+  const pagination: TPagination = await handlePagination(
+    page,
+    limit,
+    type,
+    count,
+  );
 
   const adminList = await AdminModel.find(find)
     .select("-deleted -deletedAt")
@@ -159,7 +159,7 @@ const createANewAdminPost = async (
     const existingAdmin = await AdminModel.findOne({
       email: req.body.email,
     });
-    
+
     if (existingAdmin) {
       res.status(StatusCodes.BAD_REQUEST).json({
         code: StatusCodes.BAD_REQUEST,

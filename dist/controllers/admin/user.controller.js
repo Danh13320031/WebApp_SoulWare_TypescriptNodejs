@@ -17,20 +17,85 @@ const activeSider_helper_1 = __importDefault(require("../../helpers/admin/active
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
 const userRole_model_1 = __importDefault(require("../../models/userRole.model"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
+const app_constant_1 = require("../../constants/app.constant");
+const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
 // [GET]: /admin/users
 const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
+        // Handle search filter
+        let keyword = "";
+        let keywordRegex = new RegExp("", "i");
+        let slugRegex = new RegExp("", "i");
+        if (req.query.keyword)
+            keyword = req.query.keyword;
+        if (keyword) {
+            keywordRegex = new RegExp(keyword, "i");
+            slugRegex = new RegExp((0, convertTextToSlug_helper_1.default)(keyword), "i");
+            find = Object.assign(Object.assign({}, find), { $or: [
+                    { fullName: { $regex: keywordRegex } },
+                    { slug: { $regex: slugRegex } },
+                ] });
+        }
+        // Handle status filter
+        let status = "";
+        if (req.query.status)
+            status = req.query.status;
+        if (req.query.status === "all")
+            status = "";
+        const statusFilter = (0, handleStatusFilter_helper_1.default)(status);
+        if (status)
+            find = Object.assign(Object.assign({}, find), { status });
+        // Handle sort filter
+        let sort = "";
+        if (req.query.sort)
+            sort = req.query.sort;
+        const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
+        // Handle singer filter
+        let role = "all";
+        if (req.query.role)
+            role = req.query.role;
+        if (role && role !== "all")
+            find = Object.assign(Object.assign({}, find), { roleId: {
+                    _id: role,
+                } });
+        // Handle pagination
+        let page = 1;
+        let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+        let type = "";
+        if (req.query.page)
+            page = Number(req.query.page);
+        if (req.query.limit)
+            limit = Number(req.query.limit);
+        if (req.query.type)
+            type = req.query.type;
+        const count = yield user_model_1.default.countDocuments(find);
+        const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
         const userList = yield user_model_1.default.find(find)
             .select("fullName email phone avatar status position roleId")
             .populate("roleId", "name")
-            .sort({ position: "desc" });
+            .sort(sortFilter.sortOptions);
+        const userRoleList = yield userRole_model_1.default.find({
+            deleted: false,
+            status: "active",
+        }).select("name");
         res.render("admin/pages/user/user.view.ejs", {
             pageTitle: "Quản lý người dùng",
             pathname,
             userList,
+            keyword,
+            status,
+            statusFilter,
+            sort: sortFilter.sort,
+            userRoleList,
+            role,
+            pagination,
         });
+        return;
     }
     catch (error) {
         console.log(error);

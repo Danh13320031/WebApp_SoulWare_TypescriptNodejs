@@ -5,6 +5,12 @@ import UserModel from "../../models/user.model";
 import hashPassword from "../../helpers/hashPassword.helper";
 import { TDataBodyCreateUser } from "../../types/user.type";
 import UserRoleModel from "../../models/userRole.model";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
+import { TPagination, TStatusFilter } from "../../types/index.type";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handlePagination from "../../helpers/handlePagination.helper";
 
 // [GET]: /admin/users
 const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
@@ -12,16 +18,97 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
+    // Handle search filter
+    let keyword: string = "";
+    let keywordRegex: RegExp = new RegExp("", "i");
+    let slugRegex: RegExp = new RegExp("", "i");
+
+    if (req.query.keyword) keyword = req.query.keyword as string;
+    if (keyword) {
+      keywordRegex = new RegExp(keyword, "i");
+      slugRegex = new RegExp(convertTextToSlug(keyword), "i");
+
+      find = {
+        ...find,
+        $or: [
+          { fullName: { $regex: keywordRegex } },
+          { slug: { $regex: slugRegex } },
+        ],
+      };
+    }
+
+    // Handle status filter
+    let status: string = "";
+    if (req.query.status) status = req.query.status as string;
+    if (req.query.status === "all") status = "";
+
+    const statusFilter: TStatusFilter[] = handleStatusFilter(status);
+
+    if (status)
+      find = {
+        ...find,
+        status,
+      };
+
+    // Handle sort filter
+    let sort: string = "";
+    if (req.query.sort) sort = req.query.sort as string;
+
+    const sortFilter = handleSortFilter(sort);
+
+    // Handle singer filter
+    let role: string = "all";
+    if (req.query.role) role = req.query.role as string;
+
+    if (role && role !== "all")
+      find = {
+        ...find,
+        roleId: {
+          _id: role,
+        },
+      };
+
+    // Handle pagination
+    let page: number = 1;
+    let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+    let type: string = "";
+
+    if (req.query.page) page = Number(req.query.page);
+    if (req.query.limit) limit = Number(req.query.limit);
+    if (req.query.type) type = req.query.type as string;
+
+    const count = await UserModel.countDocuments(find);
+
+    const pagination: TPagination = await handlePagination(
+      page,
+      limit,
+      type,
+      count,
+    );
+
     const userList = await UserModel.find(find)
       .select("fullName email phone avatar status position roleId")
       .populate("roleId", "name")
-      .sort({ position: "desc" });
+      .sort(sortFilter.sortOptions);
+
+    const userRoleList = await UserRoleModel.find({
+      deleted: false,
+      status: "active",
+    }).select("name");
 
     res.render("admin/pages/user/user.view.ejs", {
       pageTitle: "Quản lý người dùng",
       pathname,
       userList,
+      keyword,
+      status,
+      statusFilter,
+      sort: sortFilter.sort,
+      userRoleList,
+      role,
+      pagination,
     });
+    return;
   } catch (error) {
     console.log(error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

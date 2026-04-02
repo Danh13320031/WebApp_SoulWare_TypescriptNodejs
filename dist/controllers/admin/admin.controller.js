@@ -27,18 +27,6 @@ const adminRole_model_1 = __importDefault(require("../../models/adminRole.model"
 const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
     let find = { deleted: false };
-    // Handle pagination
-    let page = 1;
-    let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
-    let type = "";
-    if (req.query.page)
-        page = Number(req.query.page);
-    if (req.query.limit)
-        limit = Number(req.query.limit);
-    if (req.query.type)
-        type = req.query.type;
-    const count = yield admin_model_1.default.countDocuments(find);
-    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
     // Handle search filter
     let keyword = "";
     let keywordRegex = new RegExp("", "i");
@@ -75,6 +63,18 @@ const adminGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         find = Object.assign(Object.assign({}, find), { roleId: {
                 _id: role,
             } });
+    // Handle pagination
+    let page = 1;
+    let limit = app_constant_1.APP_ADMIN_PAGINATION_LIMIT;
+    let type = "";
+    if (req.query.page)
+        page = Number(req.query.page);
+    if (req.query.limit)
+        limit = Number(req.query.limit);
+    if (req.query.type)
+        type = req.query.type;
+    const count = yield admin_model_1.default.countDocuments(find);
+    const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
     const adminList = yield admin_model_1.default.find(find)
         .select("-deleted -deletedAt")
         .sort(sortFilter.sortOptions)
