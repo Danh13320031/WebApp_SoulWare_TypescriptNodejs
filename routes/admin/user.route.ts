@@ -18,5 +18,18 @@ userRoute.post(
   userValidate.createANewUserValidate,
   userController.createANewUserPost,
 );
+userRoute.get(
+  "/update/:userId",
+  authMiddleware.auth,
+  userController.getAUserByIdGet,
+);
+userRoute.patch(
+  "/update/:userId",
+  authMiddleware.auth,
+  upload.single("avatar"),
+  uploadCloud.uploadSingerField,
+  userValidate.updateAUserByIdValidate,
+  userController.updateAUserByIdPatch,
+);
 
 export default userRoute;

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    />
+
+    <link rel="stylesheet" href="/admin/styles/setup.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/admin/styles/lib/tinyMCE.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/alert.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/header.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/footer.css" />
+    <link rel="stylesheet" href="/admin/styles/partials/imagePreview.css" />
+  </head>
+  <body>
+    <%-include('../../partials/sider.view.ejs', { pathname: pathname }) %>
+    <%-include('../../partials/alert.view.ejs') %>
+    <%-include('../../partials/modal.view.ejs') %>
+    <%-include('../../partials/header.view.ejs') %>
+
+    <main class="main" id="main">
+      <section
+        class="user-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3"
+      >
+        <h1
+          class="user-title main-title"
+          style="
+            font-size: var(--font-size-xxl);
+            font-weight: var(--font-weight-bold);
+            color: var(--primary-color);
+          "
+        >
+          <%= pageTitle %>
+        </h1>
+      </section>
+
+      <section class="mb-5 user-content main-content">
+        <div class="card">
+          <div class="card-header bg-white"></div>
+          <div class="card-body">
+            <form
+              action="<%= prefixAdminPath %>/users/update/<%= user._id %>"
+              method="POST"
+              enctype="multipart/form-data"
+              class="user-update-form"
+              id="user-form"
+              user-update-form
+            >
+              <div class="container-fluid">
+                <div class="row g-3">
+                  <div class="col-12 mb-3">
+                    <div
+                      class="d-flex flex-column gap-3 form-group update-image-group"
+                    >
+                      <div
+                        class="w-100 d-flex flex-column justify-content-center align-items-center gap-3 form-image-preview"
+                        form-image-preview
+                      >
+                        <div
+                          class="p-3 d-flex flex-column justify-content-center align-items-center position-relative gap-3 form-image-container"
+                        >
+                          <button
+                            type="button"
+                            class="position-absolute top-0 end-0 m-2 button-icon-danger form-image-remove"
+                            form-image-remove
+                          >
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                          <img
+                            src="<%= user.avatar %>"
+                            alt="<%= user.name %>"
+                            class="form-image-view"
+                            form-image-view
+                          />
+                          <label
+                            for="form-image-input"
+                            class="button-primary text-decoration-none mb-0"
+                            >Tải ảnh lên <i class="fa-solid fa-upload"></i>
+                            <input type="hidden" name="oldAvatar" value="<%= user.avatar %>" class="form-avatar-view" form-avatar-view />
+                            <input
+                              type="file"
+                              name="avatar"
+                              accept="image/*"
+                              class="form-control d-none form-image-input"
+                              id="form-image-input"
+                              form-image-input
+                          /></label>
+                        </div>
+                        <span class="form-error form-image-error"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-name-group">
+                      <label
+                        for="user-name"
+                        class="form-label update-name-label"
+                        >Họ & tên</label
+                      >
+                      <input
+                        type="text"
+                        name="name"
+                        value="<%= user.fullName %>"
+                        placeholder="Nhập họ & tên..."
+                        class="form-control update-name-input"
+                        id="user-name"
+                      />
+                      <span class="form-error form-name-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-email-group">
+                      <label
+                        for="user-email"
+                        class="form-label update-email-label"
+                        >Địa chỉ email</label
+                      >
+                      <input
+                        type="text"
+                        name="email"
+                        value="<%= user.email %>"
+                        placeholder="Nhập địa chi email..."
+                        class="form-control update-email-input"
+                        id="user-email"
+                      />
+                      <span class="form-error form-email-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-password-group">
+                      <label
+                        for="user-password"
+                        class="form-label update-password-label"
+                        >Mật khẩu</label
+                      >
+                      <div class="d-flex">
+                        <input
+                          type="password"
+                          name="password"
+                          placeholder="Nhập mật khẩu..."
+                          class="form-control update-password-input"
+                          id="user-password"
+                          input-password
+                        />
+                        <button
+                          type="button"
+                          class="button-primary"
+                          id="button-show-password"
+                        >
+                          <i
+                            class="fa-solid fa-eye d-none"
+                            id="icon-show-password"
+                          ></i
+                          ><i
+                            class="fa-solid fa-eye-slash"
+                            id="icon-hide-password"
+                          ></i>
+                        </button>
+                      </div>
+                      <span class="form-error form-password-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-phone-group">
+                      <label
+                        for="user-phone"
+                        class="form-label update-phone-label"
+                        >Số điện thoại</label
+                      >
+                      <input
+                        type="text"
+                        name="phone"
+                        value="<%= user.phone %>"
+                        placeholder="Nhập số điện thoại..."
+                        class="form-control update-phone-input"
+                        id="user-phone"
+                      />
+                      <span class="form-error form-phone-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-birthday-group">
+                      <label
+                        for="user-birthday"
+                        class="form-label update-birthday-label"
+                        >Ngày sinh</label
+                      >
+                      <input
+                        type="date"
+                        name="birthday"
+                        value="<%= dayjs(user.birthday).format("YYYY-MM-DD") %>"
+                        class="form-control update-birthday-input"
+                        id="user-birthday"
+                      />
+                      <span class="form-error form-birthday-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-address-group">
+                      <label
+                        for="user-address"
+                        class="form-label update-address-label"
+                        >Địa chỉ</label
+                      >
+                      <input
+                        type="text"
+                        name="address"
+                        value="<%= user.address %>"
+                        placeholder="Nhập địa chi..."
+                        class="form-control update-address-input"
+                        id="user-address"
+                      />
+                      <span class="form-error form-address-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-position-group">
+                      <label
+                        for="user-position"
+                        class="form-label update-position-label"
+                        >Vị trí</label
+                      >
+                      <input
+                        type="number"
+                        name="position"
+                        value="<%= user.position %>"
+                        min="1"
+                        placeholder="Nhập vị trí hoặc tự động tăng nếu để trống"
+                        class="form-control update-position-input"
+                        id="user-position"
+                      />
+                      <span class="form-error form-position-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="form-group update-status-group">
+                      <label
+                        for="user-status"
+                        class="form-label update-status-label"
+                        >Trạng thái</label
+                      >
+                      <select name="status" id="user-status">
+                        <option value="" disabled selected <%= !user.status ? 'selected' : '' %>>
+                          Chọn trạng thái...
+                        </option>
+                        <option value="active" <%= user.status == 'active' ? 'selected' : '' %>>Hoạt động</option>
+                        <option value="inactive" <%= user.status == 'inactive' ? 'selected' : '' %>>Vô hiệu hóa</option>
+                      </select>
+                      <span class="form-error form-status-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-3">
+                    <% if (userRoleList || userRoleList.length > 0) { %>
+                    <div class="form-group update-role-group">
+                      <label
+                        for="user-role"
+                        class="form-label update-role-label"
+                        >Vai trò</label
+                      >
+                      <select name="roleId" id="user-role">
+                        <option value="" disabled <% !user.roleId ? 'selected' : '' %>>
+                          Chọn vai trò...
+                        </option>
+                        <% userRoleList.forEach((role) => { %>
+                        <option value="<%= role.id %>" <%= user?.roleId?._id == role.id ? 'selected' : '' %>><%= role.name %></option>
+                        <% }); %>
+                      </select>
+                      <span class="form-error form-role-error"></span>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group update-description-group">
+                      <label
+                        for="user-description"
+                        class="form-label update-description-label"
+                        >Mô tả</label
+                      >
+                      <textarea
+                        name="description"
+                        class="update-description-input tinymce-editor"
+                        id="user-description"
+                      ><%= user.description %></textarea>
+                      <span class="form-error form-description-error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div
+                      class="d-flex justify-content-center form-button-group"
+                    >
+                      <button
+                        type="submit"
+                        class="button-primary text-decoration-none"
+                      >
+                        Cập nhật người dùng <i class="fa-solid fa-pen"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer bg-white"></div>
+        </div>
+      </section>
+    </main>
+
+    <%-include('../../partials/footer.view.ejs') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/aaf479b433.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/tinymce/tinymce.min.js"></script>
+    <script src="/admin/scripts/lib/tinyMCEConfig.js"></script>
+
+    <script src="/admin/scripts/user/validateForm.js"></script>
+    <script src="/admin/scripts/user/handleFormSubmit.js"></script>
+    <script src="/admin/scripts/index.js"></script>
+  </body>
+</html>
