@@ -14,4 +14,6 @@ const upload = (0, multer_1.default)();
 userRoute.get("/", auth_middleware_1.default.auth, user_controller_1.default.getAllUserGet);
 userRoute.get("/create", auth_middleware_1.default.auth, user_controller_1.default.createANewUserGet);
 userRoute.post("/create", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, user_validate_1.default.createANewUserValidate, user_controller_1.default.createANewUserPost);
+userRoute.get("/update/:userId", auth_middleware_1.default.auth, user_controller_1.default.getAUserByIdGet);
+userRoute.patch("/update/:userId", auth_middleware_1.default.auth, upload.single("avatar"), uploadCloud_middleware_1.default.uploadSingerField, user_validate_1.default.updateAUserByIdValidate, user_controller_1.default.updateAUserByIdPatch);
 exports.default = userRoute;

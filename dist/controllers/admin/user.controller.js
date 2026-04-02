@@ -187,9 +187,108 @@ const createANewUserPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
         return;
     }
 });
+// [GET]: /admin/users/update/:userId
+const getAUserByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let userId = "";
+        if (req.params.userId)
+            userId = req.params.userId;
+        const user = yield user_model_1.default.findOne({
+            _id: userId,
+            deleted: false,
+        }).select("-deleted -deletedAt");
+        const userRoleList = yield userRole_model_1.default.find({
+            deleted: false,
+            status: "active",
+        }).select("name");
+        if (!user) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy người dùng!",
+            });
+            return;
+        }
+        res.render("admin/pages/user/update.view.ejs", {
+            pageTitle: "Cập nhật người dùng",
+            pathname,
+            user,
+            userRoleList,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update admin",
+        });
+        return;
+    }
+});
+// [PATCH]: /admin/users/update/:adminId
+const updateAUserByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let userId = "";
+        let avatar = "";
+        let password = "";
+        if (req.params.userId)
+            userId = req.params.userId;
+        const admin = yield user_model_1.default.findOne({
+            _id: userId,
+            deleted: false,
+        });
+        if (!admin) {
+            res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
+                code: http_status_codes_1.StatusCodes.NOT_FOUND,
+                status: "Fail",
+                message: "Không tìm thấy quản trị viên!",
+            });
+            return;
+        }
+        if (req.body.avatar)
+            avatar = req.body.avatar;
+        if (req.body.password)
+            password = yield (0, hashPassword_helper_1.default)(req.body.password);
+        const dataBodyUpdateUser = {
+            email: req.body.email ? req.body.email : admin.email,
+            password: password ? password : admin.password,
+            phone: req.body.phone ? req.body.phone : admin.phone,
+            avatar: avatar ? avatar : admin.avatar,
+            fullName: req.body.fullName ? req.body.fullName : admin.fullName,
+            birthday: req.body.birthday ? req.body.birthday : admin.birthday,
+            address: req.body.address ? req.body.address : admin.address,
+            description: req.body.description
+                ? req.body.description
+                : admin.description,
+            status: req.body.status ? req.body.status : admin.status,
+            position: req.body.position ? req.body.position : admin.position,
+            roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+        };
+        yield user_model_1.default.updateOne({ _id: userId }, dataBodyUpdateUser);
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            code: http_status_codes_1.StatusCodes.OK,
+            status: "Success",
+            message: "Cập nhật quản trị viên thành công",
+        });
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - update admin",
+        });
+        return;
+    }
+});
 const userController = {
     getAllUserGet,
     createANewUserGet,
     createANewUserPost,
+    getAUserByIdGet,
+    updateAUserByIdPatch,
 };
 exports.default = userController;

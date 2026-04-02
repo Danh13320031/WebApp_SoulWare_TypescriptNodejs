@@ -3,7 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import activeSider from "../../helpers/admin/activeSider.helper";
 import UserModel from "../../models/user.model";
 import hashPassword from "../../helpers/hashPassword.helper";
-import { TDataBodyCreateUser } from "../../types/user.type";
+import {
+  TDataBodyCreateUser,
+  TDataBodyUpdateUser,
+} from "../../types/user.type";
 import UserRoleModel from "../../models/userRole.model";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import { TPagination, TStatusFilter } from "../../types/index.type";
@@ -211,16 +214,127 @@ const createANewUserPost = async (
   }
 };
 
+// [GET]: /admin/users/update/:userId
+const getAUserByIdGet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const pathname = activeSider(req.originalUrl);
+    let userId: string = "";
+
+    if (req.params.userId) userId = req.params.userId as string;
+
+    const user = await UserModel.findOne({
+      _id: userId,
+      deleted: false,
+    }).select("-deleted -deletedAt");
+    const userRoleList = await UserRoleModel.find({
+      deleted: false,
+      status: "active",
+    }).select("name");
+
+    if (!user) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy người dùng!",
+      });
+      return;
+    }
+
+    res.render("admin/pages/user/update.view.ejs", {
+      pageTitle: "Cập nhật người dùng",
+      pathname,
+      user,
+      userRoleList,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update admin",
+    });
+    return;
+  }
+};
+
+// [PATCH]: /admin/users/update/:adminId
+const updateAUserByIdPatch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    let userId: string = "";
+    let avatar: string = "";
+    let password: string = "";
+
+    if (req.params.userId) userId = req.params.userId as string;
+
+    const admin = await UserModel.findOne({
+      _id: userId,
+      deleted: false,
+    });
+
+    if (!admin) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        code: StatusCodes.NOT_FOUND,
+        status: "Fail",
+        message: "Không tìm thấy quản trị viên!",
+      });
+      return;
+    }
+
+    if (req.body.avatar) avatar = req.body.avatar;
+    if (req.body.password) password = await hashPassword(req.body.password);
+
+    const dataBodyUpdateUser: TDataBodyUpdateUser = {
+      email: req.body.email ? req.body.email : admin.email,
+      password: password ? password : admin.password,
+      phone: req.body.phone ? req.body.phone : admin.phone,
+      avatar: avatar ? avatar : admin.avatar,
+      fullName: req.body.fullName ? req.body.fullName : admin.fullName,
+      birthday: req.body.birthday ? req.body.birthday : admin.birthday,
+      address: req.body.address ? req.body.address : admin.address,
+      description: req.body.description
+        ? req.body.description
+        : admin.description,
+      status: req.body.status ? req.body.status : admin.status,
+      position: req.body.position ? req.body.position : admin.position,
+      roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+    };
+
+    await UserModel.updateOne({ _id: userId }, dataBodyUpdateUser);
+
+    res.status(StatusCodes.OK).json({
+      code: StatusCodes.OK,
+      status: "Success",
+      message: "Cập nhật quản trị viên thành công",
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - update admin",
+    });
+    return;
+  }
+};
+
 type IUserController = {
   getAllUserGet: (req: Request, res: Response) => Promise<void>;
   createANewUserGet: (req: Request, res: Response) => Promise<void>;
   createANewUserPost: (req: Request, res: Response) => Promise<void>;
+  getAUserByIdGet: (req: Request, res: Response) => Promise<void>;
+  updateAUserByIdPatch: (req: Request, res: Response) => Promise<void>;
 };
 
 const userController: IUserController = {
   getAllUserGet,
   createANewUserGet,
   createANewUserPost,
+  getAUserByIdGet,
+  updateAUserByIdPatch,
 };
 
 export default userController;
