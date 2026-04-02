@@ -10,10 +10,17 @@ import UserRoleModel from "../../models/userRole.model";
 const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
   try {
     const pathname = activeSider(req.originalUrl);
+    let find: any = { deleted: false };
+
+    const userList = await UserModel.find(find)
+      .select("fullName email phone avatar status position roleId")
+      .populate("roleId", "name")
+      .sort({ position: "desc" });
 
     res.render("admin/pages/user/user.view.ejs", {
       pageTitle: "Quản lý người dùng",
       pathname,
+      userList,
     });
   } catch (error) {
     console.log(error);
