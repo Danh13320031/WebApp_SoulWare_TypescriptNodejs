@@ -21,9 +21,15 @@ const userRole_model_1 = __importDefault(require("../../models/userRole.model"))
 const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const userList = yield user_model_1.default.find(find)
+            .select("fullName email phone avatar status position roleId")
+            .populate("roleId", "name")
+            .sort({ position: "desc" });
         res.render("admin/pages/user/user.view.ejs", {
             pageTitle: "Quản lý người dùng",
             pathname,
+            userList,
         });
     }
     catch (error) {
