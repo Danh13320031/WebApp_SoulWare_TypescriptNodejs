@@ -18,8 +18,8 @@ topicRoute.post(
   "/create",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   topicValidate.createANewTopicValidate,
+  uploadCloud.uploadSingerField,
   topicController.createANewTopicPost,
 );
 topicRoute.get(
@@ -31,8 +31,8 @@ topicRoute.patch(
   "/update/:topicId",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   topicValidate.updateATopicByIdValidate,
+  uploadCloud.uploadSingerField,
   topicController.updateATopicByIdPatch,
 );
 topicRoute.patch(

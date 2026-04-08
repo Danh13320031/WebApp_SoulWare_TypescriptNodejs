@@ -16,12 +16,12 @@ songRoute.get("/create", auth_middleware_1.default.auth, song_controller_1.defau
 songRoute.post("/create", auth_middleware_1.default.auth, upload.fields([
     { name: "avatar", maxCount: 1 },
     { name: "audio", maxCount: 1 },
-]), uploadCloud_middleware_1.default.uploadDiffMultiField, song_validate_1.default.createANewSongValidate, song_controller_1.default.createANewSongPost);
+]), song_validate_1.default.createANewSongValidate, uploadCloud_middleware_1.default.uploadDiffMultiField, song_controller_1.default.createANewSongPost);
 songRoute.get("/update/:songId", auth_middleware_1.default.auth, song_controller_1.default.getASongByIdGet);
 songRoute.patch("/update/:songId", auth_middleware_1.default.auth, upload.fields([
     { name: "avatar", maxCount: 1 },
     { name: "audio", maxCount: 1 },
-]), uploadCloud_middleware_1.default.uploadDiffMultiField, song_validate_1.default.updateASongByIdValidate, song_controller_1.default.updateASongByIdPatch);
+]), song_validate_1.default.updateASongByIdValidate, uploadCloud_middleware_1.default.uploadDiffMultiField, song_controller_1.default.updateASongByIdPatch);
 songRoute.patch("/soft-delete/:songId", auth_middleware_1.default.auth, song_controller_1.default.softRemoveASongByIdDelete);
 songRoute.patch("/change-status/:songId/:status", auth_middleware_1.default.auth, song_controller_1.default.changeStatusSongPatch);
 songRoute.patch("/update-multi", auth_middleware_1.default.auth, song_controller_1.default.updateMultiSongPatch);

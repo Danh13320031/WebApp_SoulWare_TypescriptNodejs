@@ -18,8 +18,8 @@ adminRoute.post(
   "/create",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   adminValidate.createANewAdminValidate,
+  uploadCloud.uploadSingerField,
   adminController.createANewAdminPost,
 );
 adminRoute.get(
@@ -31,8 +31,8 @@ adminRoute.patch(
   "/update/:adminId",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   adminValidate.updateAAdminByIdValidate,
+  uploadCloud.uploadSingerField,
   adminController.updateAAdminByIdPatch,
 );
 adminRoute.patch(

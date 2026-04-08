@@ -18,8 +18,8 @@ singerRoute.post(
   "/create",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   singerValidate.createANewSingerValidate,
+  uploadCloud.uploadSingerField,
   singerController.createANewSingerPost,
 );
 singerRoute.get(
@@ -31,8 +31,8 @@ singerRoute.patch(
   "/update/:singerId",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   singerValidate.updateASingerByIdValidate,
+  uploadCloud.uploadSingerField,
   singerController.updateASingerByIdPatch,
 );
 singerRoute.patch(

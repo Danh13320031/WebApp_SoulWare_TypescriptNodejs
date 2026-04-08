@@ -27,7 +27,7 @@
               <h1
                 class="d-flex align-items-center search-title-text"
                 style="
-                  color: var(--secondary-color);
+                  color: var(--primary-color);
                   font-size: var(--font-size-xl);
                   font-weight: var(--font-weight-semibold);
                 "
@@ -67,7 +67,41 @@
                       <div class="search-song-meta">
                         <span class="search-song-singer">
                           <i class="fa-solid fa-microphone-lines"></i>
-                          <%= song.singerId.stageName %>
+                          <% if (song.singers.length > 0 && song.singerGroups.length > 0) { %>
+                            <% song.singers.forEach((singer, index) => { %>
+                              <a
+                                href="/singers/detail/<%= singer.slug %>"
+                                class="text-decoration-none singer-name"
+                                > <%= singer.stageName %> </a
+                              ><%= index < song.singers.length - 1 ? "," : "" %>
+                            <% }) %>
+                            và
+                            <% song.singerGroups.forEach((group, index) => { %>
+                              <a
+                                href="/singer-groups/detail/<%= group.slug %>"
+                                class="text-decoration-none group-name"
+                                > <%= group.name %> </a
+                              ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                            <% }) %>
+                          <% } else { %>
+                            <% if (song.singers.length > 0) { %>
+                              <% song.singers.forEach((singer, index) => { %>
+                                <a
+                                  href="/singers/detail/<%= singer.slug %>"
+                                  class="text-decoration-none singer-name"
+                                  > <%= singer.stageName %> </a
+                                ><%= index < song.singers.length - 1 ? "," : "" %>
+                              <% }) %>
+                            <% } else { %>
+                              <% song.singerGroups.forEach((group, index) => { %>
+                                <a
+                                  href="/singer-groups/detail/<%= group.slug %>"
+                                  class="text-decoration-none group-name"
+                                  > <%= group.name %> </a
+                                ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                              <% }) %>
+                            <% } %>
+                          <% } %>
                         </span>
 
                         <span class="search-song-like">
@@ -113,5 +147,6 @@
     ></script>
 
     <script src="/client/scripts/search/searchSuggest.js"></script>
+    <script src="/client/scripts/index.js"></script>
   </body>
 </html>

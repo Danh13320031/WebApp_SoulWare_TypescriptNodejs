@@ -6,6 +6,11 @@
   font-family: "Poppins", sans-serif;
 }
 
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
 /* Color setup */
 :root {
   --primary-color: #cc40d7;

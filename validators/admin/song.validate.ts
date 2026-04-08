@@ -6,7 +6,9 @@ const createANewSongValidate = (
   res: Response,
   next: NextFunction,
 ): void => {
-  if (!req.body.avatar) {
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  if (!files.avatar || files.avatar.length <= 0) {
     res.status(StatusCodes.BAD_REQUEST).json({
       code: StatusCodes.BAD_REQUEST,
       status: "Fail",
@@ -15,7 +17,7 @@ const createANewSongValidate = (
     return;
   }
 
-  if (!req.body.audio) {
+  if (!files.audio || files.audio.length <= 0) {
     res.status(StatusCodes.BAD_REQUEST).json({
       code: StatusCodes.BAD_REQUEST,
       status: "Fail",
@@ -80,7 +82,9 @@ const updateASongByIdValidate = (
     return;
   }
 
-  const hasNewAvatar = req.body.avatar && req.body.avatar.length > 0;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  
+  const hasNewAvatar = files.avatar && files.avatar.length > 0;
   const hasOldAvatar = req.body.oldAvatar && req.body.oldAvatar.trim() !== "";
 
   if (!hasNewAvatar && !hasOldAvatar) {
@@ -92,7 +96,7 @@ const updateASongByIdValidate = (
     return;
   }
 
-  const hasNewAudio = req.body.audio && req.body.audio.length > 0;
+  const hasNewAudio = files.audio && files.audio.length > 0;
   const hasOldAudio = req.body.oldAudio && req.body.oldAudio.trim() !== "";
 
   if (!hasNewAudio && !hasOldAudio) {

@@ -17,8 +17,8 @@ songRoute.post(
     { name: "avatar", maxCount: 1 },
     { name: "audio", maxCount: 1 },
   ]),
-  uploadCloud.uploadDiffMultiField,
   songValidate.createANewSongValidate,
+  uploadCloud.uploadDiffMultiField,
   songController.createANewSongPost,
 );
 songRoute.get(
@@ -33,8 +33,8 @@ songRoute.patch(
     { name: "avatar", maxCount: 1 },
     { name: "audio", maxCount: 1 },
   ]),
-  uploadCloud.uploadDiffMultiField,
   songValidate.updateASongByIdValidate,
+  uploadCloud.uploadDiffMultiField,
   songController.updateASongByIdPatch,
 );
 songRoute.patch(

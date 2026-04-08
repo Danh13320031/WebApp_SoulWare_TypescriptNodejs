@@ -11,7 +11,9 @@ const createANewUserValidate = (
   res: Response,
   next: NextFunction,
 ): void => {
-  if (!req.body.avatar) {
+  const file = req.file as Express.Multer.File;
+
+  if (!file || file.fieldname !== "avatar") {
     res.status(StatusCodes.BAD_REQUEST).json({
       code: StatusCodes.BAD_REQUEST,
       status: "Fail",
@@ -112,7 +114,9 @@ const updateAUserByIdValidate = (
     return;
   }
 
-  const hasNewAvatar = req.body.avatar && req.body.avatar.length > 0;
+  const file = req.file as Express.Multer.File;
+
+  const hasNewAvatar = file && file.fieldname === "avatar";
   const hasOldAvatar = req.body.oldAvatar && req.body.oldAvatar.trim() !== "";
 
   if (!hasNewAvatar && !hasOldAvatar) {

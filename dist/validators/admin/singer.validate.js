@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const createANewSingerValidate = (req, res, next) => {
-    if (!req.body.avatar) {
+    const file = req.file;
+    if (!file || file.fieldname !== "avatar") {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
             code: http_status_codes_1.StatusCodes.BAD_REQUEST,
             status: "Fail",
@@ -37,7 +38,8 @@ const createANewSingerValidate = (req, res, next) => {
     next();
 };
 const updateASingerByIdValidate = (req, res, next) => {
-    const hasNewAvatar = req.body.avatar && req.body.avatar.length > 0;
+    const file = req.file;
+    const hasNewAvatar = file && file.fieldname === "avatar";
     const hasOldAvatar = req.body.oldAvatar && req.body.oldAvatar.trim() !== "";
     if (!hasNewAvatar && !hasOldAvatar) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({

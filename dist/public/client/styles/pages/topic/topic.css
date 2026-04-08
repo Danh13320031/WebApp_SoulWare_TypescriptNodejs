@@ -8,6 +8,10 @@
   font-size: var(--font-size-sm);
 }
 
+#topic-main .topic-description {
+  margin-bottom: 0px !important;
+}
+
 #topic-main
   .topic-list
   .topic-list-menu

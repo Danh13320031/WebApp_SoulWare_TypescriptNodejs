@@ -27,7 +27,7 @@
               <h1
                 class="d-flex align-items-center topic-title-text"
                 style="
-                  color: var(--secondary-color);
+                  color: var(--primary-color);
                   font-size: var(--font-size-xl);
                   font-weight: var(--font-weight-semibold);
                 "
@@ -50,12 +50,12 @@
               <ul class="list-unstyled ms-0 d-flex flex-column gap-3 topic-list-menu">
                 <% if(topicList.length > 0) { %>
                   <% topicList.forEach((topic) => { %>
-                    <li class="topic-list-menu-item">
+                    <li class="topic-list-menu-item my-3">
                       <div class="topic-item-box">
                         <div
                           class="d-flex align-items-center justify-content-between topic-item-title"
                         >
-                          <div class="d-flex align-items-center">
+                          <div class="d-flex justify-content-center align-items-center">
                             <div class="topic-avatar">
                               <img
                                 src="<%= topic.avatar %>"
@@ -64,33 +64,118 @@
                                 class="me-2 rounded-1 topic-avatar-img"
                               />
                             </div>
-                            <h4
-                              class="mb-0 topic-name"
-                              style="
-                                color: var(--dark-color);
-                                font-size: var(--font-size-lg);
-                                font-weight: var(--font-weight-semibold);
-                              "
-                            >
-                              <%= topic.title %>
-                              <p
-                                class="mb-0 topic-description"
+                            <div class="topic-info d-flex flex-column justify-content-center">
+                              <h4
+                                class="mb-0 topic-name"
                                 style="
-                                  font-size: var(--font-size-sm);
-                                  color: var(--dark-gray-color);
-                                  font-weight: var(--font-weight-regular);
+                                  color: var(--secondary-color);
+                                  font-size: var(--font-size-lg);
+                                  font-weight: var(--font-weight-semibold);
                                 "
                               >
-                                <%= topic.description %>
-                              </p>
-                            </h4>
+                                Nhạc <%= topic.title %>
+                              </h4>
+                              <div>
+                                <p
+                                  class="mb-0 topic-description"
+                                  style="
+                                    font-size: var(--font-size-sm);
+                                    color: var(--dark-gray-color);
+                                    font-weight: var(--font-weight-regular);
+                                  "
+                                >
+                                  <%- topic.description %>
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           <a
-                            href="http://localhost:3000/songs/<%= topic.slug %>"
+                            href="/songs/<%= topic.slug %>"
                             class="d-flex align-items-center text-decoration-none topic-item-link"
                             >Xem thêm<i class="fa-solid fa-angle-right ms-2"></i
                           ></a>
                         </div>
+                        <hr class="mb-4">
+                      </div>
+                      <% if (songList && songList.length > 0) { %>
+                        <% let count = 0 %>
+                        <ul class="row g-4 list-unstyled topic-song-list">
+                          <% songList.forEach((song, index) => { %>
+                            <% if (song?.topicId?._id.toString() === topic._id.toString() && count < 4) { %>
+                            <%# Card item %>
+                            <li class="col-lg-3 col-md-4 col-6 mb-lg-0 mb-1 topic-song-item">
+                              <div class="topic-song-box song-card-bg">
+                                <div class="rounded-2 mb-2 overflow-hidden song-card-img">
+                                  <a href="/songs/detail/<%= song.slug %>" class="d-block text-decoration-none rounded-2 mb-2 overflow-hidden song-card-link">
+                                    <img
+                                      src="<%= song.avatar %>"
+                                      alt="<%= song.title %>"
+                                      width="100%"
+                                      class="song-card-img"
+                                    />
+                                  </a>
+                                </div>
+                                <div class="d-flex flex-column gap-0 song-card-body">
+                                  <div class="w-100 overflow-x-hidden">
+                                    <a href="/songs/detail/<%= song.slug %>" class="mb-0 text-decoration-none text-truncate song-card-title" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--dark-color);">
+                                      <%= song.title %>
+                                    </a>
+                                  </div>
+                                  <div class="song-singer song-singer-group">
+                                    <i class="fa-solid fa-microphone-lines"></i>
+                                    <% if (song.singers.length > 0 && song.singerGroups.length > 0) { %>
+                                      <% song.singers.forEach((singer) => { %>
+                                        <a
+                                          href="/singers/detail/<%= singer.slug %>"
+                                          class="text-decoration-none singer-name"
+                                          style="font-size: var(--font-size-sm); color: var(--dark-gray-color); font-weight: var(--font-weight-regular);"
+                                          > <%= singer.stageName %> </a
+                                        >
+                                      <% }) %>
+                                      và
+                                      <% song.singerGroups.forEach((group, index) => { %>
+                                        <a
+                                          href="/singer-groups/detail/<%= group.slug %>"
+                                          class="text-decoration-none song-group-name"
+                                          style="font-size: var(--font-size-sm); color: var(--dark-gray-color); font-weight: var(--font-weight-regular);"
+                                          > <%= group.name %> </a
+                                        ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                                      <% }) %>
+                                    <% } else { %>
+                                      <% if (song.singers.length > 0) { %>
+                                        <% song.singers.forEach((singer, index) => { %>
+                                          <a
+                                            href="/singers/detail/<%= singer.slug %>"
+                                            class="text-decoration-none singer-name"
+                                            style="font-size: var(--font-size-sm); color: var(--dark-gray-color); font-weight: var(--font-weight-regular);"
+                                            > <%= singer.stageName %> </a
+                                          ><%= index < song.singers.length - 1 ? "," : "" %>
+                                        <% }) %>
+                                      <% } %>
+                                      <% if (song.singerGroups.length > 0) { %>
+                                        <% song.singerGroups.forEach((group, index) => { %>
+                                          <a
+                                            href="/singer-groups/detail/<%= group.slug %>"
+                                            class="text-decoration-none song-group-name"
+                                            style="font-size: var(--font-size-sm); color: var(--dark-gray-color); font-weight: var(--font-weight-regular);"
+                                            > <%= group.name %> </a
+                                          ><%= index < song.singerGroups.length - 1 ? "," : "" %>
+                                        <% }) %>
+                                      <% } %>
+                                    <% } %>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                            <% count++ %>
+                            <% } %>
+                          <% }) %>
+                          </ul>
+                      <% } %>
+                      <div class="d-flex justify-content-center align-items-center mt-3 topic-song-viewmore">
+                        <a href="/songs/<%= topic.slug %>" class="button-secondary text-decoration-none mt-4 topic-song-item topic-song-viewmore-button">
+                          Xem thêm <i class="fa-solid fa-angle-right"></i>
+                        </a>
                       </div>
                     </li>
                   <% }) %>
@@ -111,5 +196,6 @@
     ></script>
 
     <script src="/client/scripts/search/searchSuggest.js"></script>
+    <script src="/client/scripts/index.js"></script>
   </body>
 </html>

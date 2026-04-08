@@ -14,8 +14,8 @@ userRoute.post(
   "/create",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   userValidate.createANewUserValidate,
+  uploadCloud.uploadSingerField,
   userController.createANewUserPost,
 );
 userRoute.get(
@@ -27,8 +27,8 @@ userRoute.patch(
   "/update/:userId",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   userValidate.updateAUserByIdValidate,
+  uploadCloud.uploadSingerField,
   userController.updateAUserByIdPatch,
 );
 

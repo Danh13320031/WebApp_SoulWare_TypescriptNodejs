@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const createANewSongValidate = (req, res, next) => {
-    if (!req.body.avatar) {
+    const files = req.files;
+    if (!files.avatar || files.avatar.length <= 0) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
             code: http_status_codes_1.StatusCodes.BAD_REQUEST,
             status: "Fail",
@@ -10,7 +11,7 @@ const createANewSongValidate = (req, res, next) => {
         });
         return;
     }
-    if (!req.body.audio) {
+    if (!files.audio || files.audio.length <= 0) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
             code: http_status_codes_1.StatusCodes.BAD_REQUEST,
             status: "Fail",
@@ -62,7 +63,8 @@ const updateASongByIdValidate = (req, res, next) => {
         });
         return;
     }
-    const hasNewAvatar = req.body.avatar && req.body.avatar.length > 0;
+    const files = req.files;
+    const hasNewAvatar = files.avatar && files.avatar.length > 0;
     const hasOldAvatar = req.body.oldAvatar && req.body.oldAvatar.trim() !== "";
     if (!hasNewAvatar && !hasOldAvatar) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
@@ -72,7 +74,7 @@ const updateASongByIdValidate = (req, res, next) => {
         });
         return;
     }
-    const hasNewAudio = req.body.audio && req.body.audio.length > 0;
+    const hasNewAudio = files.audio && files.audio.length > 0;
     const hasOldAudio = req.body.oldAudio && req.body.oldAudio.trim() !== "";
     if (!hasNewAudio && !hasOldAudio) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
