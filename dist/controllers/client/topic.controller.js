@@ -13,17 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const song_model_1 = __importDefault(require("../../models/song.model"));
+const http_status_codes_1 = require("http-status-codes");
 // [GET]: /topics
 const getAllTopicGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const topicList = yield topic_model_1.default.find({
-        deleted: false,
-        status: "active",
-    });
-    res.render("client/pages/topic/topic.view.ejs", {
-        pageTitle: "Chủ đề bài hát",
-        topicList,
-        keyword: "",
-    });
+    try {
+        let find = { deleted: false, status: "active" };
+        const topicList = yield topic_model_1.default.find(find);
+        const songList = yield song_model_1.default.find(find)
+            .select("title avatar singers singerGroups slug topicId")
+            .populate("singers", "stageName slug")
+            .populate("topicId", "title slug")
+            .populate("singerGroups", "name slug");
+        res.render("client/pages/topic/topic.view.ejs", {
+            pageTitle: "Chủ đề bài hát",
+            topicList,
+            songList,
+            keyword: "",
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - Cannot get topic list",
+        });
+        return;
+    }
 });
 const topicController = {
     getAllTopicGet,

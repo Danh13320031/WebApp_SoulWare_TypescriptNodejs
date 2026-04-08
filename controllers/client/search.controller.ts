@@ -25,8 +25,9 @@ const getAllSearchResultGet = async (
       status: "active",
       deleted: false,
     })
-      .select("title avatar singerId slug like")
+      .select("title avatar singers slug like")
       .populate("singers", "stageName slug")
+      .populate("singerGroups", "name slug")
       .populate("topicId", "title slug");
 
     newSearchedSongList = searchedSongList;

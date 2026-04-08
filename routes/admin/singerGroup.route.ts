@@ -23,8 +23,8 @@ singerGroupRoute.post(
   "/create",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   singerGroupValidate.createANewSingerGroupValidate,
+  uploadCloud.uploadSingerField,
   singerGroupController.createANewSingerGroupPost,
 );
 singerGroupRoute.get(
@@ -37,8 +37,8 @@ singerGroupRoute.patch(
   "/update/:singerGroupId",
   authMiddleware.auth,
   upload.single("avatar"),
-  uploadCloud.uploadSingerField,
   singerGroupValidate.updateASingerGroupByIdValidate,
+  uploadCloud.uploadSingerField,
   singerGroupController.updateASingerGroupByIdPatch,
 );
 singerGroupRoute.patch(
