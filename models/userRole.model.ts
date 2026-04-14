@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 
 const objSchema = {
   name: { type: String, required: true },
+  type: {
+    type: String,
+    required: true,
+  },
   slug: { type: String, index: true, unique: true },
   status: {
     type: String,

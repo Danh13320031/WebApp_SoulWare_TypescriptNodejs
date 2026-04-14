@@ -17,6 +17,10 @@ const slugify_1 = __importDefault(require("slugify"));
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
     name: { type: String, required: true },
+    type: {
+        type: String,
+        required: true,
+    },
     slug: { type: String, index: true, unique: true },
     status: {
         type: String,

@@ -170,7 +170,7 @@ const listenToSongOncePatch = async (
   return;
 };
 
-type ISongController = {
+type TSongController = {
   getAllSongGet: (req: Request, res: Response) => Promise<void>;
   getOneSongGet: (req: Request, res: Response) => Promise<void>;
   likeSongPatch: (req: Request, res: Response) => Promise<void>;
@@ -178,7 +178,7 @@ type ISongController = {
   listenToSongOncePatch: (req: Request, res: Response) => Promise<void>;
 };
 
-const songController: ISongController = {
+const songController: TSongController = {
   getAllSongGet,
   getOneSongGet,
   likeSongPatch,

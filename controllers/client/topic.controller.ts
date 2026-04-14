@@ -32,11 +32,11 @@ const getAllTopicGet = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-type ITopicController = {
+type TTopicController = {
   getAllTopicGet: (req: Request, res: Response) => Promise<void>;
 };
 
-const topicController: ITopicController = {
+const topicController: TTopicController = {
   getAllTopicGet,
 };
 
