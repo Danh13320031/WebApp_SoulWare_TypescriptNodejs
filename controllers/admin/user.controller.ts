@@ -191,7 +191,11 @@ const createANewUserPost = async (
       position: req.body.position
         ? Number(req.body.position)
         : countDocument + 1,
-      roleId: req.body.roleId ? req.body.roleId : null,
+      roleId: req.body.roleId
+        ? req.body.roleId === "user"
+          ? null
+          : req.body.roleId
+        : null,
     };
 
     const newUser = new UserModel(dataBodyCreateUser);
@@ -299,7 +303,11 @@ const updateAUserByIdPatch = async (
         : admin.description,
       status: req.body.status ? req.body.status : admin.status,
       position: req.body.position ? req.body.position : admin.position,
-      roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+      roleId: req.body.roleId
+        ? req.body.roleId === "user"
+          ? null
+          : req.body.roleId
+        : admin.roleId,
     };
 
     await UserModel.updateOne({ _id: userId }, dataBodyUpdateUser);

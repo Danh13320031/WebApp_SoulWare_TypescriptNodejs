@@ -53,11 +53,11 @@ const getAllSearchResultGet = async (
   }
 };
 
-type ISearchController = {
+type TSearchController = {
   getAllSearchResultGet: (req: Request, res: Response) => Promise<void>;
 };
 
-const searchController: ISearchController = {
+const searchController: TSearchController = {
   getAllSearchResultGet,
 };
 

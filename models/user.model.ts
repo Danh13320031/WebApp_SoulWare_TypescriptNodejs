@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
+import UserRoleModel from "./userRole.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
@@ -8,7 +9,7 @@ const objSchema = {
   password: { type: String, required: true },
   phone: { type: String, required: true },
   refreshToken: { type: String, required: false },
-  avatar: { type: String, required: true },
+  avatar: { type: String, required: false },
   description: { type: String, required: false },
   status: {
     type: String,
@@ -24,8 +25,8 @@ const objSchema = {
   deletedAt: { type: Date, default: null },
   roleId: {
     type: Schema.Types.ObjectId,
-    ref: "UserRole",
-    required: true,
+    ref: UserRoleModel,
+    required: false,
     default: null,
   },
 };

@@ -203,6 +203,19 @@ body.no-scroll {
   background: none;
 }
 
+label.label-type-01 {
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0px !important;
+}
+label.label-type-02 {
+  color: var(--secondary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0px !important;
+}
+
 /* Input setup */
 input[type="range"] {
   -webkit-appearance: none;
@@ -227,6 +240,48 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+input[type="text"].input-type-01,
+input[type="email"].input-type-01,
+input[type="password"].input-type-01,
+input[type="number"].input-type-01 {
+  border: 2px solid var(--light-gray-color);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--dark-primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  transition: border-color 0.3s ease;
+}
+input[type="text"].input-type-01:focus,
+input[type="email"].input-type-01:focus,
+input[type="password"].input-type-01:focus,
+input[type="number"].input-type-01:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 2px var(--light-primary-color) !important;
+}
+
+input[type="text"].input-type-02,
+input[type="email"].input-type-02,
+input[type="password"].input-type-02,
+input[type="number"].input-type-02 {
+  border: 2px solid var(--light-gray-color);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--secondary-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  transition: border-color 0.3s ease;
+}
+input[type="text"].input-type-02:focus,
+input[type="email"].input-type-02:focus,
+input[type="password"].input-type-02:focus,
+input[type="number"].input-type-02:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 2px var(--light-secondary-color) !important;
 }
 
 /* Aplayer setup */

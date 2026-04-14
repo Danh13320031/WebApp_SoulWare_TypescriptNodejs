@@ -26,11 +26,11 @@ const getAllFavoriteSongGet = async (
   });
 };
 
-type IFavoriteSongController = {
+type TFavoriteSongController = {
   getAllFavoriteSongGet: (req: Request, res: Response) => Promise<void>;
 };
 
-const favoriteSongController: IFavoriteSongController = {
+const favoriteSongController: TFavoriteSongController = {
   getAllFavoriteSongGet,
 };
 

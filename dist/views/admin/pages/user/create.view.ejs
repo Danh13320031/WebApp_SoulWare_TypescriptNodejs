@@ -263,8 +263,8 @@
                         >Vai trò</label
                       >
                       <select name="roleId" id="user-role">
-                        <option value="" disabled selected>
-                          Chọn vai trò...
+                        <option value="user" selected>
+                          Người dùng thường
                         </option>
                         <% userRoleList.forEach((role) => { %>
                         <option value="<%= role.id %>"><%= role.name %></option>

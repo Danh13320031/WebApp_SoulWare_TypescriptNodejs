@@ -166,7 +166,11 @@ const createANewUserPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
             position: req.body.position
                 ? Number(req.body.position)
                 : countDocument + 1,
-            roleId: req.body.roleId ? req.body.roleId : null,
+            roleId: req.body.roleId
+                ? req.body.roleId === "user"
+                    ? null
+                    : req.body.roleId
+                : null,
         };
         const newUser = new user_model_1.default(dataBodyCreateUser);
         yield newUser.save();
@@ -264,7 +268,11 @@ const updateAUserByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 : admin.description,
             status: req.body.status ? req.body.status : admin.status,
             position: req.body.position ? req.body.position : admin.position,
-            roleId: req.body.roleId ? req.body.roleId : admin.roleId,
+            roleId: req.body.roleId
+                ? req.body.roleId === "user"
+                    ? null
+                    : req.body.roleId
+                : admin.roleId,
         };
         yield user_model_1.default.updateOne({ _id: userId }, dataBodyUpdateUser);
         res.status(http_status_codes_1.StatusCodes.OK).json({

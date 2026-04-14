@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
+const userRole_model_1 = __importDefault(require("./userRole.model"));
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
     fullName: { type: String, required: true },
@@ -21,7 +22,7 @@ const objSchema = {
     password: { type: String, required: true },
     phone: { type: String, required: true },
     refreshToken: { type: String, required: false },
-    avatar: { type: String, required: true },
+    avatar: { type: String, required: false },
     description: { type: String, required: false },
     status: {
         type: String,
@@ -37,8 +38,8 @@ const objSchema = {
     deletedAt: { type: Date, default: null },
     roleId: {
         type: Schema.Types.ObjectId,
-        ref: "UserRole",
-        required: true,
+        ref: userRole_model_1.default,
+        required: false,
         default: null,
     },
 };
