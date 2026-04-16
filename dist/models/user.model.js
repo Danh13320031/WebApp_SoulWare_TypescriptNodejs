@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
-const userRole_model_1 = __importDefault(require("./userRole.model"));
+// import UserRoleModel from "./userRole.model";
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
     fullName: { type: String, required: true },
@@ -36,12 +36,12 @@ const objSchema = {
     birthday: { type: Date },
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
-    roleId: {
-        type: Schema.Types.ObjectId,
-        ref: userRole_model_1.default,
-        required: false,
-        default: null,
-    },
+    // roleId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: UserRoleModel,
+    //   required: false,
+    //   default: null,
+    // },
 };
 const UserSchema = new Schema(objSchema, { timestamps: true });
 UserSchema.pre("save", function () {

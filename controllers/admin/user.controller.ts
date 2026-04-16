@@ -7,7 +7,7 @@ import {
   TDataBodyCreateUser,
   TDataBodyUpdateUser,
 } from "../../types/user.type";
-import UserRoleModel from "../../models/userRole.model";
+// import UserRoleModel from "../../models/userRole.model";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import { TPagination, TStatusFilter } from "../../types/index.type";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
@@ -94,10 +94,10 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
       .populate("roleId", "name")
       .sort(sortFilter.sortOptions);
 
-    const userRoleList = await UserRoleModel.find({
-      deleted: false,
-      status: "active",
-    }).select("name");
+    // const userRoleList = await UserRoleModel.find({
+    //   deleted: false,
+    //   status: "active",
+    // }).select("name");
 
     res.render("admin/pages/user/user.view.ejs", {
       pageTitle: "Quản lý người dùng",
@@ -107,7 +107,7 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
       status,
       statusFilter,
       sort: sortFilter.sort,
-      userRoleList,
+      // userRoleList,
       role,
       pagination,
     });
@@ -132,12 +132,12 @@ const createANewUserGet = async (
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    const userRoleList = await UserRoleModel.find(find).select("name");
+    // const userRoleList = await UserRoleModel.find(find).select("name");
 
     res.render("admin/pages/user/create.view.ejs", {
       pageTitle: "Tạo mới người dùng",
       pathname,
-      userRoleList,
+      // userRoleList,
     });
   } catch (error) {
     console.log(error);
@@ -191,11 +191,11 @@ const createANewUserPost = async (
       position: req.body.position
         ? Number(req.body.position)
         : countDocument + 1,
-      roleId: req.body.roleId
-        ? req.body.roleId === "user"
-          ? null
-          : req.body.roleId
-        : null,
+      // roleId: req.body.roleId
+      //   ? req.body.roleId === "user"
+      //     ? null
+      //     : req.body.roleId
+      //   : null,
     };
 
     const newUser = new UserModel(dataBodyCreateUser);
@@ -230,10 +230,10 @@ const getAUserByIdGet = async (req: Request, res: Response): Promise<void> => {
       _id: userId,
       deleted: false,
     }).select("-deleted -deletedAt");
-    const userRoleList = await UserRoleModel.find({
-      deleted: false,
-      status: "active",
-    }).select("name");
+    // const userRoleList = await UserRoleModel.find({
+    //   deleted: false,
+    //   status: "active",
+    // }).select("name");
 
     if (!user) {
       res.status(StatusCodes.NOT_FOUND).json({
@@ -248,7 +248,7 @@ const getAUserByIdGet = async (req: Request, res: Response): Promise<void> => {
       pageTitle: "Cập nhật người dùng",
       pathname,
       user,
-      userRoleList,
+      // userRoleList,
     });
   } catch (error) {
     console.log(error);
@@ -303,11 +303,11 @@ const updateAUserByIdPatch = async (
         : admin.description,
       status: req.body.status ? req.body.status : admin.status,
       position: req.body.position ? req.body.position : admin.position,
-      roleId: req.body.roleId
-        ? req.body.roleId === "user"
-          ? null
-          : req.body.roleId
-        : admin.roleId,
+      // roleId: req.body.roleId
+      //   ? req.body.roleId === "user"
+      //     ? null
+      //     : req.body.roleId
+      //   : admin.roleId,
     };
 
     await UserModel.updateOne({ _id: userId }, dataBodyUpdateUser);

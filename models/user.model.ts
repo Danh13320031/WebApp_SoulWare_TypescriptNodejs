@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
-import UserRoleModel from "./userRole.model";
+// import UserRoleModel from "./userRole.model";
 const Schema = mongoose.Schema;
 
 const objSchema = {
@@ -23,12 +23,12 @@ const objSchema = {
   birthday: { type: Date },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
-  roleId: {
-    type: Schema.Types.ObjectId,
-    ref: UserRoleModel,
-    required: false,
-    default: null,
-  },
+  // roleId: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: UserRoleModel,
+  //   required: false,
+  //   default: null,
+  // },
 };
 
 const UserSchema = new Schema(objSchema, { timestamps: true });
