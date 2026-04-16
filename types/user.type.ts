@@ -9,7 +9,7 @@ export type TDataBodyCreateUser = {
   description?: string;
   status: string;
   position?: number;
-  roleId: string;
+  // roleId: string;
 };
 
 export type TDataBodyUpdateUser = {
@@ -23,5 +23,5 @@ export type TDataBodyUpdateUser = {
   description?: string;
   status: string;
   position: number;
-  roleId: string;
+  // roleId: string;
 };

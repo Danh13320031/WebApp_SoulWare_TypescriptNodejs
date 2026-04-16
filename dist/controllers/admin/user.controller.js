@@ -16,7 +16,7 @@ const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
-const userRole_model_1 = __importDefault(require("../../models/userRole.model"));
+// import UserRoleModel from "../../models/userRole.model";
 const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
 const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
@@ -79,10 +79,10 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             .select("fullName email phone avatar status position roleId")
             .populate("roleId", "name")
             .sort(sortFilter.sortOptions);
-        const userRoleList = yield userRole_model_1.default.find({
-            deleted: false,
-            status: "active",
-        }).select("name");
+        // const userRoleList = await UserRoleModel.find({
+        //   deleted: false,
+        //   status: "active",
+        // }).select("name");
         res.render("admin/pages/user/user.view.ejs", {
             pageTitle: "Quản lý người dùng",
             pathname,
@@ -91,7 +91,7 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             status,
             statusFilter,
             sort: sortFilter.sort,
-            userRoleList,
+            // userRoleList,
             role,
             pagination,
         });
@@ -112,11 +112,11 @@ const createANewUserGet = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
-        const userRoleList = yield userRole_model_1.default.find(find).select("name");
+        // const userRoleList = await UserRoleModel.find(find).select("name");
         res.render("admin/pages/user/create.view.ejs", {
             pageTitle: "Tạo mới người dùng",
             pathname,
-            userRoleList,
+            // userRoleList,
         });
     }
     catch (error) {
@@ -166,11 +166,11 @@ const createANewUserPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
             position: req.body.position
                 ? Number(req.body.position)
                 : countDocument + 1,
-            roleId: req.body.roleId
-                ? req.body.roleId === "user"
-                    ? null
-                    : req.body.roleId
-                : null,
+            // roleId: req.body.roleId
+            //   ? req.body.roleId === "user"
+            //     ? null
+            //     : req.body.roleId
+            //   : null,
         };
         const newUser = new user_model_1.default(dataBodyCreateUser);
         yield newUser.save();
@@ -202,10 +202,10 @@ const getAUserByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             _id: userId,
             deleted: false,
         }).select("-deleted -deletedAt");
-        const userRoleList = yield userRole_model_1.default.find({
-            deleted: false,
-            status: "active",
-        }).select("name");
+        // const userRoleList = await UserRoleModel.find({
+        //   deleted: false,
+        //   status: "active",
+        // }).select("name");
         if (!user) {
             res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
                 code: http_status_codes_1.StatusCodes.NOT_FOUND,
@@ -218,7 +218,7 @@ const getAUserByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             pageTitle: "Cập nhật người dùng",
             pathname,
             user,
-            userRoleList,
+            // userRoleList,
         });
     }
     catch (error) {
@@ -268,11 +268,11 @@ const updateAUserByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 : admin.description,
             status: req.body.status ? req.body.status : admin.status,
             position: req.body.position ? req.body.position : admin.position,
-            roleId: req.body.roleId
-                ? req.body.roleId === "user"
-                    ? null
-                    : req.body.roleId
-                : admin.roleId,
+            // roleId: req.body.roleId
+            //   ? req.body.roleId === "user"
+            //     ? null
+            //     : req.body.roleId
+            //   : admin.roleId,
         };
         yield user_model_1.default.updateOne({ _id: userId }, dataBodyUpdateUser);
         res.status(http_status_codes_1.StatusCodes.OK).json({

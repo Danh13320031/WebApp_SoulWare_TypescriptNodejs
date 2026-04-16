@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="/admin/styles/setup.css" />
     <link rel="stylesheet" href="/admin/styles/lib/bootstrap.css" />
     <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
-    <link rel="stylesheet" href="/admin/styles/partials/sider.css" />
     <link rel="stylesheet" href="/admin/styles/partials/alert.css">
     <link rel="stylesheet" href="/admin/styles/partials/modal.css" />
     <link rel="stylesheet" href="/admin/styles/partials/header.css" />
@@ -30,9 +29,9 @@
     <%-include('../../partials/header.view.ejs') %>
 
     <main class="main" id="main">
-      <section class="user-role-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <section class="song-header main-header d-flex align-items-center justify-content-between flex-wrap gap-3">
         <h1
-        class="user-role-title main-title"
+        class="song-title main-title"
         style="
           font-size: var(--font-size-xxl);
           font-weight: var(--font-weight-bold);
@@ -41,54 +40,21 @@
         >
           <%= pageTitle %>
         </h1>
-        <a href="/admin/user-roles/create" class="button-primary text-decoration-none">
-          Thêm mới <i class="fa-solid fa-plus"></i>
-        </a>
       </section>
-      <section class="user-role-content main-content">
+      <section class="song-content main-content">
         <div
-          class="card my-2 shadow-sm user-role-card main-card"
+          class="card my-2 shadow-sm song-card main-card"
           style="border-color: var(--primary-color)"
         >
           <div
-            class="card-header py-3 bg-white user-role-card-header main-card-header"
+            class="card-header py-3 bg-white song-card-header main-card-header"
           >
-            <div class="d-flex flex-column gap-2 main-card-filter">
-              <h5 class="mb-0 d-flex align-items-center main-card-filter-title" style="color: var(--primary-color); font-weight: var(--font-weight-bold); font-size: var(--font-size-lg);">
-                <i class="fa-solid fa-filter me-2"></i>Bộ lọc
-              </h5>
-              <div class="main-card-filter-content">
-                <div class="px-0 container-fluid">
-                  <div class="row g-2">
-                    <div class="col-lg-4 col-md-6 col-12">
-                      <%-include('../../partials/searchFilter.view.ejs', { label: 'Tìm kiếm vai trò', keyword: keyword, placeholder: 'Tìm kiếm vai trò...' }) %>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                      <%-include('../../partials/statusFilter.view.ejs', { label: 'Trạng thái vai trò', status: status, statusFilter: statusFilter }) %>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                      <%-include('../../partials/sortFilter.view.ejs', { 
-                        label: 'Vị trí sắp xếp', 
-                        sortArr: [
-                          { value: 'position-desc', label: 'Vị trí giảm dần' }, 
-                          { value: 'position-asc', label: 'Vị trí tăng dần' },
-                          { value: 'name-desc', label: 'Tiêu đề từ Z-A' },
-                          { value: 'name-asc', label: 'Tiêu đề từ A-Z' },
-                          { value: 'createdAt-desc', label: 'Ngày tạo từ mới tới cũ' },
-                          { value: 'createdAt-asc', label: 'Ngày tạo từ cũ tới mới' },
-                        ] 
-                      }) %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="card-body user-role-card-body main-card-body">
-            <% if (userRoleList && userRoleList.length > 0) { %>
+          <div class="card-body song-card-body main-card-body">
+            <% if (subscriptionPlanList && subscriptionPlanList.length > 0) { %>
             <div class="overflow-auto table-responsive">
-              <table class="table table-border table-hover mb-0 user-role-table main-table" id="main-table" data-type="user-roles">
-                <thead class="user-role-table-header main-table-header">
+              <table class="table table-border table-hover mb-0 song-table main-table" id="main-table" data-type="songs">
+                <thead class="song-table-header main-table-header">
                   <tr>
                     <th scope="col">
                       <div class="form-check">
@@ -102,15 +68,17 @@
                       </div>
                     </th>
                     <th>STT</th>
-                    <th scope="col" class="text-uppercase">Tên vai trò</th>
-                    <th scope="col" class="text-uppercase">Mô tả ngắn</th>                  
+                    <th scope="col" class="text-uppercase">Tên gói</th>
+                    <th scope="col" class="text-uppercase">Giá</th>
+                    <th scope="col" class="text-uppercase">Thời lượng</th>
+                    <th scope="col" class="text-uppercase">Lượt tải</th>
                     <th scope="col" class="text-uppercase">Vị trí</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
                     <th scope="col" class="text-uppercase">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% userRoleList.forEach((userRole, index) => { %>
+                  <% subscriptionPlanList.forEach((subscriptionPlan, index) => { %>
                   <tr>
                     <td scope="row">
                       <div class="form-check">
@@ -119,39 +87,49 @@
                         value=""
                         class="form-check-input form-check-single"
                         form-check-single
-                        data-id="<%= userRole._id %>"
+                        data-id="<%= subscriptionPlan._id %>"
                         />
                       </div>
                     </td>
                     <td><%= index + 1 %></td>
-                    <td><%= userRole.name %></td>
-                    <td><%- userRole.description %></td>
-                    <td><%= userRole.position %></td>
+                    <td> 
+                      <b><%= subscriptionPlan.name %> (<%= subscriptionPlan.code %>)</b>
+                    </td>
+                    <td><%= Number(subscriptionPlan.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %></td>
+                    <td><%= subscriptionPlan.durationDays ? subscriptionPlan.durationDays + ' ngày' : '' %></td>
+                    <td>
+                      <%= subscriptionPlan.downloadLimit !== null ? 
+                          subscriptionPlan.downloadLimit <= 0 ? 'Không giới hạn lượt tải' : 
+                          subscriptionPlan.downloadLimit + ' lượt tải' : 
+                          '0 lượt tải'
+                      %>
+                    </td>
+                    <td><%= subscriptionPlan.position %></td>
                     <td>
                       <select 
                         name="status" 
-                        class="badge status-select user-role-status-select"
+                        class="badge status-select song-status-select"
                         status-select
-                        user-role-status-select
-                        data-id="<%= userRole._id %>"
-                        <% if(userRole.status === 'active') { %>
+                        song-status-select
+                        data-id="<%= subscriptionPlan._id %>"
+                        <% if(subscriptionPlan.status === 'active') { %>
                           style="color: var(--success-color); border-color: var(--success-color);"
                           value="active"
-                        <% } else if(userRole.status === 'inactive') { %>
+                        <% } else if(subscriptionPlan.status === 'inactive') { %>
                           style="color: var(--error-color); border-color: var(--error-color);"
                           value="inactive"
                         <% } %>
                         >
-                          <option value="active" <%= userRole.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
-                          <option value="inactive" <%= userRole.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
+                          <option value="active" <%= subscriptionPlan.status === 'active' ? 'selected' : '' %> class="badge" style="background-color: var(--success-color); color: #fff;">Đang hoạt động</option>
+                          <option value="inactive" <%= subscriptionPlan.status === 'inactive' ? 'selected' : '' %> class="badge" style="background-color: var(--error-color); color: #fff;">Vô hiệu hóa</option>
                       </select>
                     </td>
                     <td>
                       <div class="d-flex gap-2">
-                        <a href="<%= prefixAdminPath %>/user-roles/update/<%= userRole._id %>" type="button" class="button-icon-info text-decoration-none">
+                        <a href="<%= prefixAdminPath %>/subscription-plans/update/<%= subscriptionPlan._id %>" type="button" class="button-icon-info text-decoration-none">
                           <i class="fas fa-pen"></i>
                         </a>
-                        <button type="button" class="button-icon-danger button-delete" data-id="<%= userRole._id %>" data-type="userRoles">
+                        <button type="button" class="button-icon-danger button-delete" data-id="<%= subscriptionPlan._id %>" data-type="songs">
                           <i class="fas fa-trash"></i>
                         </button>
                         <button type="button" class="button-secondary">
@@ -180,9 +158,9 @@
             <% } %>
           </div>
           <div
-            class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap topic-card-footer main-card-footer"
+            class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"
           >
-            <%-include('../../partials/updateMulti.view.ejs', {
+            <%#-include('../../partials/updateMulti.view.ejs', {
               updateMultiArr: [
                 { value: 'status-active', label: 'Đang hoạt động' },
                 { value: 'status-inactive', label: 'Vô hiệu hóa' },
@@ -190,7 +168,7 @@
                 { value: 'hard-delete', label: 'Xoá cứng tất cả' },
               ]
             }) %>
-            <%-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
+            <%#-include('../../partials/pagination.view.ejs', { pagination: pagination }) %>
           </div>
         </div>
       </section>

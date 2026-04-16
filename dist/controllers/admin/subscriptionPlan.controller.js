@@ -8,12 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
-const registerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
+const subscriptionPlan_model_1 = __importDefault(require("../../models/subscriptionPlan.model"));
+const getAllSubscriptionPlanGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.render("client/pages/auth/register.view.ejs", {
-            pageTitle: "Đăng ký",
+        const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
+        let find = { deleted: false };
+        const subscriptionPlanList = yield subscriptionPlan_model_1.default.find(find);
+        res.render("admin/pages/subscriptionPlan/subscriptionPlan.view.ejs", {
+            pageTitle: "Danh sách gói dịch vụ",
+            pathname,
+            subscriptionPlanList,
         });
     }
     catch (error) {
@@ -21,13 +31,11 @@ const registerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
             status: "Fail",
-            message: "Server error - register",
+            message: "Server error - get all subscription plans",
         });
-        return;
     }
 });
-const authController = {
-    registerGet,
-    // registerPost,
+const subscriptionPlanController = {
+    getAllSubscriptionPlanGet,
 };
-exports.default = authController;
+exports.default = subscriptionPlanController;

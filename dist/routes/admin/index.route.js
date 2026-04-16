@@ -11,10 +11,11 @@ const dashboard_route_1 = __importDefault(require("./dashboard.route"));
 const singer_route_1 = __importDefault(require("./singer.route"));
 const singerGroup_route_1 = __importDefault(require("./singerGroup.route"));
 const song_route_1 = __importDefault(require("./song.route"));
+const subscriptionPlan_route_1 = __importDefault(require("./subscriptionPlan.route"));
 const topic_route_1 = __importDefault(require("./topic.route"));
 const upload_route_1 = __importDefault(require("./upload.route"));
 const user_route_1 = __importDefault(require("./user.route"));
-const userRole_route_1 = __importDefault(require("./userRole.route"));
+// import userRoleRoute from "./userRole.route";
 const createAdminRoute = (app) => {
     const pathAdmin = app_constant_1.APP_PREFIX_ADMIN;
     app.use(`${pathAdmin}/dashboard`, dashboard_route_1.default);
@@ -26,7 +27,7 @@ const createAdminRoute = (app) => {
     app.use(`${pathAdmin}/admins`, admin_routes_1.default);
     app.use(`${pathAdmin}/admin-roles`, adminRole_route_1.default);
     app.use(`${pathAdmin}/users`, user_route_1.default);
-    app.use(`${pathAdmin}/user-roles`, userRole_route_1.default);
+    app.use(`${pathAdmin}/subscription-plans`, subscriptionPlan_route_1.default);
     app.use(`${pathAdmin}/auth`, auth_route_1.default);
     return;
 };
