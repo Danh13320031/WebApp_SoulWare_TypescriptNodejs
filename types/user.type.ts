@@ -4,12 +4,14 @@ export type TDataBodyCreateUser = {
   password: string;
   phone: string;
   avatar: string;
-  birthday?: Date;
-  address?: string;
-  description?: string;
+  birthday?: Date | null;
+  address?: string | null;
+  description?: string | null;
   status: string;
   position?: number;
-  // roleId: string;
+  subscriptionPlanId: string;
+  subscriptionStartAt?: Date | null;
+  subscriptionEndAt?: Date | null;
 };
 
 export type TDataBodyUpdateUser = {
@@ -18,10 +20,12 @@ export type TDataBodyUpdateUser = {
   phone: string;
   avatar: string;
   fullName: string;
-  birthday?: Date;
-  address?: string;
-  description?: string;
+  birthday?: Date | null;
+  address?: string | null;
+  description?: string | null;
   status: string;
   position: number;
-  // roleId: string;
+  subscriptionPlanId: string;
+  subscriptionStartAt?: Date | null;
+  subscriptionEndAt?: Date | null;
 };

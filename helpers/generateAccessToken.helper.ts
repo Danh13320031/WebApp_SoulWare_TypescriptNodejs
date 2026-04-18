@@ -1,8 +1,11 @@
 import jwt, { SignOptions } from "jsonwebtoken";
-import { TDataAccessTokenPayload } from "../types/auth.type";
+import {
+  TDataAccessTokenPayload,
+  TDataAccessTokenPayloadClient,
+} from "../types/auth.type";
 
 const generateAccessToken = (
-  payload: TDataAccessTokenPayload,
+  payload: TDataAccessTokenPayload | TDataAccessTokenPayloadClient,
   secret: string,
   expiresIn: SignOptions["expiresIn"],
 ): string => {

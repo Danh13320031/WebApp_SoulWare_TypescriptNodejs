@@ -4,6 +4,12 @@ export type TDataAccessTokenPayload = {
   roleId: string;
 };
 
+export type TDataAccessTokenPayloadClient = {
+  id: string;
+  email: string;
+  subscriptionPlanId: string;
+};
+
 export type TDataRefreshTokenPayload = {
   id: string;
 };
@@ -14,6 +20,7 @@ export type TDataRegister = {
   password: string;
   confirmPassword: string;
   fullName: string;
+  subscriptionPlanId: string;
 };
 
 export type TAuthCookieOptions = {

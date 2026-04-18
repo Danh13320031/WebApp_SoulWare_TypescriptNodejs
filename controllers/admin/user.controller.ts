@@ -1,19 +1,21 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import activeSider from "../../helpers/admin/activeSider.helper";
-import UserModel from "../../models/user.model";
 import hashPassword from "../../helpers/hashPassword.helper";
+import UserModel from "../../models/user.model";
 import {
   TDataBodyCreateUser,
   TDataBodyUpdateUser,
 } from "../../types/user.type";
 // import UserRoleModel from "../../models/userRole.model";
-import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
-import { TPagination, TStatusFilter } from "../../types/index.type";
-import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
-import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import dayjs from "dayjs";
 import { APP_ADMIN_PAGINATION_LIMIT } from "../../constants/app.constant";
+import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
+import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
+import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
+import SubscriptionPlanModel from "../../models/subscriptionPlan.model";
+import { TPagination, TStatusFilter } from "../../types/index.type";
 
 // [GET]: /admin/users
 const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
@@ -60,14 +62,15 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
     const sortFilter = handleSortFilter(sort);
 
     // Handle singer filter
-    let role: string = "all";
-    if (req.query.role) role = req.query.role as string;
+    let subscriptionPlan: string = "all";
+    if (req.query.subscriptionPlan)
+      subscriptionPlan = req.query.subscriptionPlan as string;
 
-    if (role && role !== "all")
+    if (subscriptionPlan && subscriptionPlan !== "all")
       find = {
         ...find,
-        roleId: {
-          _id: role,
+        subscriptionPlanId: {
+          _id: subscriptionPlan,
         },
       };
 
@@ -90,14 +93,14 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
     );
 
     const userList = await UserModel.find(find)
-      .select("fullName email phone avatar status position roleId")
-      .populate("roleId", "name")
+      .select("fullName email phone avatar status position subscriptionPlanId")
+      .populate("subscriptionPlanId", "name code")
       .sort(sortFilter.sortOptions);
 
-    // const userRoleList = await UserRoleModel.find({
-    //   deleted: false,
-    //   status: "active",
-    // }).select("name");
+    const subscriptionPlanList = await SubscriptionPlanModel.find({
+      deleted: false,
+      status: "active",
+    }).select("name");
 
     res.render("admin/pages/user/user.view.ejs", {
       pageTitle: "Quản lý người dùng",
@@ -107,8 +110,8 @@ const getAllUserGet = async (req: Request, res: Response): Promise<void> => {
       status,
       statusFilter,
       sort: sortFilter.sort,
-      // userRoleList,
-      role,
+      subscriptionPlanList,
+      subscriptionPlan,
       pagination,
     });
     return;
@@ -132,12 +135,13 @@ const createANewUserGet = async (
     const pathname = activeSider(req.originalUrl);
     let find: any = { deleted: false };
 
-    // const userRoleList = await UserRoleModel.find(find).select("name");
+    const subscriptionPlanList =
+      await SubscriptionPlanModel.find(find).select("name code");
 
     res.render("admin/pages/user/create.view.ejs", {
       pageTitle: "Tạo mới người dùng",
       pathname,
-      // userRoleList,
+      subscriptionPlanList,
     });
   } catch (error) {
     console.log(error);
@@ -178,6 +182,27 @@ const createANewUserPost = async (
       return;
     }
 
+    const subscriptionPlan = await SubscriptionPlanModel.findOne({
+      _id: req.body.subscriptionPlanId,
+    });
+
+    if (!subscriptionPlan) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy gói người dùng!",
+      });
+      return;
+    }
+
+    let subscriptionStartAt: Date | null = null;
+    let subscriptionEndAt: Date | null = null;
+
+    if (subscriptionPlan.code !== "FREE") {
+      subscriptionStartAt = dayjs(Date.now()).toDate();
+      subscriptionEndAt = dayjs(subscriptionStartAt).add(1, "month").toDate();
+    }
+
     const dataBodyCreateUser: TDataBodyCreateUser = {
       email: req.body.email ? req.body.email : "",
       password: password ? password : "",
@@ -191,11 +216,9 @@ const createANewUserPost = async (
       position: req.body.position
         ? Number(req.body.position)
         : countDocument + 1,
-      // roleId: req.body.roleId
-      //   ? req.body.roleId === "user"
-      //     ? null
-      //     : req.body.roleId
-      //   : null,
+      subscriptionPlanId: subscriptionPlan._id.toString(),
+      subscriptionStartAt: subscriptionStartAt ? subscriptionStartAt : null,
+      subscriptionEndAt: subscriptionEndAt ? subscriptionEndAt : null,
     };
 
     const newUser = new UserModel(dataBodyCreateUser);
@@ -230,10 +253,10 @@ const getAUserByIdGet = async (req: Request, res: Response): Promise<void> => {
       _id: userId,
       deleted: false,
     }).select("-deleted -deletedAt");
-    // const userRoleList = await UserRoleModel.find({
-    //   deleted: false,
-    //   status: "active",
-    // }).select("name");
+    const subscriptionPlanList = await SubscriptionPlanModel.find({
+      deleted: false,
+      status: "active",
+    }).select("name code");
 
     if (!user) {
       res.status(StatusCodes.NOT_FOUND).json({
@@ -248,7 +271,7 @@ const getAUserByIdGet = async (req: Request, res: Response): Promise<void> => {
       pageTitle: "Cập nhật người dùng",
       pathname,
       user,
-      // userRoleList,
+      subscriptionPlanList,
     });
   } catch (error) {
     console.log(error);
@@ -290,6 +313,36 @@ const updateAUserByIdPatch = async (
     if (req.body.avatar) avatar = req.body.avatar;
     if (req.body.password) password = await hashPassword(req.body.password);
 
+    const subscriptionPlan = await SubscriptionPlanModel.findOne({
+      _id: req.body.subscriptionPlanId,
+    });
+
+    if (!subscriptionPlan) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        code: StatusCodes.BAD_REQUEST,
+        status: "Fail",
+        message: "Không tìm thấy gói người dùng!",
+      });
+      return;
+    }
+
+    let subscriptionStartAt: Date | null = admin.subscriptionStartAt;
+    let subscriptionEndAt: Date | null = admin.subscriptionEndAt;
+
+    if (
+      subscriptionPlan.code !== "FREE" &&
+      subscriptionPlan._id.toString() !==
+        admin.subscriptionPlanId._id.toString()
+    ) {
+      subscriptionStartAt = dayjs(Date.now()).toDate();
+      subscriptionEndAt = dayjs(subscriptionStartAt).add(1, "month").toDate();
+    }
+
+    if (subscriptionPlan.code === "FREE") {
+      subscriptionStartAt = null;
+      subscriptionEndAt = null;
+    }
+
     const dataBodyUpdateUser: TDataBodyUpdateUser = {
       email: req.body.email ? req.body.email : admin.email,
       password: password ? password : admin.password,
@@ -303,11 +356,9 @@ const updateAUserByIdPatch = async (
         : admin.description,
       status: req.body.status ? req.body.status : admin.status,
       position: req.body.position ? req.body.position : admin.position,
-      // roleId: req.body.roleId
-      //   ? req.body.roleId === "user"
-      //     ? null
-      //     : req.body.roleId
-      //   : admin.roleId,
+      subscriptionPlanId: subscriptionPlan._id.toString(),
+      subscriptionStartAt: subscriptionStartAt,
+      subscriptionEndAt: subscriptionEndAt,
     };
 
     await UserModel.updateOne({ _id: userId }, dataBodyUpdateUser);

@@ -14,14 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const activeSider_helper_1 = __importDefault(require("../../helpers/admin/activeSider.helper"));
-const user_model_1 = __importDefault(require("../../models/user.model"));
 const hashPassword_helper_1 = __importDefault(require("../../helpers/hashPassword.helper"));
+const user_model_1 = __importDefault(require("../../models/user.model"));
 // import UserRoleModel from "../../models/userRole.model";
-const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
-const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
-const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
+const dayjs_1 = __importDefault(require("dayjs"));
 const app_constant_1 = require("../../constants/app.constant");
+const handleSortFilter_helper_1 = __importDefault(require("../../helpers/admin/handleSortFilter.helper"));
+const handleStatusFilter_helper_1 = __importDefault(require("../../helpers/admin/handleStatusFilter.helper"));
+const convertTextToSlug_helper_1 = __importDefault(require("../../helpers/convertTextToSlug.helper"));
 const handlePagination_helper_1 = __importDefault(require("../../helpers/handlePagination.helper"));
+const subscriptionPlan_model_1 = __importDefault(require("../../models/subscriptionPlan.model"));
 // [GET]: /admin/users
 const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -56,12 +58,12 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             sort = req.query.sort;
         const sortFilter = (0, handleSortFilter_helper_1.default)(sort);
         // Handle singer filter
-        let role = "all";
-        if (req.query.role)
-            role = req.query.role;
-        if (role && role !== "all")
-            find = Object.assign(Object.assign({}, find), { roleId: {
-                    _id: role,
+        let subscriptionPlan = "all";
+        if (req.query.subscriptionPlan)
+            subscriptionPlan = req.query.subscriptionPlan;
+        if (subscriptionPlan && subscriptionPlan !== "all")
+            find = Object.assign(Object.assign({}, find), { subscriptionPlanId: {
+                    _id: subscriptionPlan,
                 } });
         // Handle pagination
         let page = 1;
@@ -76,13 +78,13 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const count = yield user_model_1.default.countDocuments(find);
         const pagination = yield (0, handlePagination_helper_1.default)(page, limit, type, count);
         const userList = yield user_model_1.default.find(find)
-            .select("fullName email phone avatar status position roleId")
-            .populate("roleId", "name")
+            .select("fullName email phone avatar status position subscriptionPlanId")
+            .populate("subscriptionPlanId", "name code")
             .sort(sortFilter.sortOptions);
-        // const userRoleList = await UserRoleModel.find({
-        //   deleted: false,
-        //   status: "active",
-        // }).select("name");
+        const subscriptionPlanList = yield subscriptionPlan_model_1.default.find({
+            deleted: false,
+            status: "active",
+        }).select("name");
         res.render("admin/pages/user/user.view.ejs", {
             pageTitle: "Quản lý người dùng",
             pathname,
@@ -91,8 +93,8 @@ const getAllUserGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             status,
             statusFilter,
             sort: sortFilter.sort,
-            // userRoleList,
-            role,
+            subscriptionPlanList,
+            subscriptionPlan,
             pagination,
         });
         return;
@@ -112,11 +114,11 @@ const createANewUserGet = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const pathname = (0, activeSider_helper_1.default)(req.originalUrl);
         let find = { deleted: false };
-        // const userRoleList = await UserRoleModel.find(find).select("name");
+        const subscriptionPlanList = yield subscriptionPlan_model_1.default.find(find).select("name code");
         res.render("admin/pages/user/create.view.ejs", {
             pageTitle: "Tạo mới người dùng",
             pathname,
-            // userRoleList,
+            subscriptionPlanList,
         });
     }
     catch (error) {
@@ -153,6 +155,23 @@ const createANewUserPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
             });
             return;
         }
+        const subscriptionPlan = yield subscriptionPlan_model_1.default.findOne({
+            _id: req.body.subscriptionPlanId,
+        });
+        if (!subscriptionPlan) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy gói người dùng!",
+            });
+            return;
+        }
+        let subscriptionStartAt = null;
+        let subscriptionEndAt = null;
+        if (subscriptionPlan.code !== "FREE") {
+            subscriptionStartAt = (0, dayjs_1.default)(Date.now()).toDate();
+            subscriptionEndAt = (0, dayjs_1.default)(subscriptionStartAt).add(1, "month").toDate();
+        }
         const dataBodyCreateUser = {
             email: req.body.email ? req.body.email : "",
             password: password ? password : "",
@@ -166,11 +185,9 @@ const createANewUserPost = (req, res) => __awaiter(void 0, void 0, void 0, funct
             position: req.body.position
                 ? Number(req.body.position)
                 : countDocument + 1,
-            // roleId: req.body.roleId
-            //   ? req.body.roleId === "user"
-            //     ? null
-            //     : req.body.roleId
-            //   : null,
+            subscriptionPlanId: subscriptionPlan._id.toString(),
+            subscriptionStartAt: subscriptionStartAt ? subscriptionStartAt : null,
+            subscriptionEndAt: subscriptionEndAt ? subscriptionEndAt : null,
         };
         const newUser = new user_model_1.default(dataBodyCreateUser);
         yield newUser.save();
@@ -202,10 +219,10 @@ const getAUserByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             _id: userId,
             deleted: false,
         }).select("-deleted -deletedAt");
-        // const userRoleList = await UserRoleModel.find({
-        //   deleted: false,
-        //   status: "active",
-        // }).select("name");
+        const subscriptionPlanList = yield subscriptionPlan_model_1.default.find({
+            deleted: false,
+            status: "active",
+        }).select("name code");
         if (!user) {
             res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
                 code: http_status_codes_1.StatusCodes.NOT_FOUND,
@@ -218,7 +235,7 @@ const getAUserByIdGet = (req, res) => __awaiter(void 0, void 0, void 0, function
             pageTitle: "Cập nhật người dùng",
             pathname,
             user,
-            // userRoleList,
+            subscriptionPlanList,
         });
     }
     catch (error) {
@@ -255,6 +272,29 @@ const updateAUserByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
             avatar = req.body.avatar;
         if (req.body.password)
             password = yield (0, hashPassword_helper_1.default)(req.body.password);
+        const subscriptionPlan = yield subscriptionPlan_model_1.default.findOne({
+            _id: req.body.subscriptionPlanId,
+        });
+        if (!subscriptionPlan) {
+            res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+                code: http_status_codes_1.StatusCodes.BAD_REQUEST,
+                status: "Fail",
+                message: "Không tìm thấy gói người dùng!",
+            });
+            return;
+        }
+        let subscriptionStartAt = admin.subscriptionStartAt;
+        let subscriptionEndAt = admin.subscriptionEndAt;
+        if (subscriptionPlan.code !== "FREE" &&
+            subscriptionPlan._id.toString() !==
+                admin.subscriptionPlanId._id.toString()) {
+            subscriptionStartAt = (0, dayjs_1.default)(Date.now()).toDate();
+            subscriptionEndAt = (0, dayjs_1.default)(subscriptionStartAt).add(1, "month").toDate();
+        }
+        if (subscriptionPlan.code === "FREE") {
+            subscriptionStartAt = null;
+            subscriptionEndAt = null;
+        }
         const dataBodyUpdateUser = {
             email: req.body.email ? req.body.email : admin.email,
             password: password ? password : admin.password,
@@ -268,11 +308,9 @@ const updateAUserByIdPatch = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 : admin.description,
             status: req.body.status ? req.body.status : admin.status,
             position: req.body.position ? req.body.position : admin.position,
-            // roleId: req.body.roleId
-            //   ? req.body.roleId === "user"
-            //     ? null
-            //     : req.body.roleId
-            //   : admin.roleId,
+            subscriptionPlanId: subscriptionPlan._id.toString(),
+            subscriptionStartAt: subscriptionStartAt,
+            subscriptionEndAt: subscriptionEndAt,
         };
         yield user_model_1.default.updateOne({ _id: userId }, dataBodyUpdateUser);
         res.status(http_status_codes_1.StatusCodes.OK).json({

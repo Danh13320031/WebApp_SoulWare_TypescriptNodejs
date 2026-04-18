@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
+import { APP_DEFAULT_AVATAR } from "../constants/app.constant";
+import SubscriptionPlanModel from "./subscriptionPlan.model";
 // import UserRoleModel from "./userRole.model";
 const Schema = mongoose.Schema;
 
@@ -9,7 +11,7 @@ const objSchema = {
   password: { type: String, required: true },
   phone: { type: String, required: true },
   refreshToken: { type: String, required: false },
-  avatar: { type: String, required: false },
+  avatar: { type: String, required: false, default: APP_DEFAULT_AVATAR },
   description: { type: String, required: false },
   status: {
     type: String,
@@ -23,12 +25,13 @@ const objSchema = {
   birthday: { type: Date },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
-  // roleId: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: UserRoleModel,
-  //   required: false,
-  //   default: null,
-  // },
+  subscriptionPlanId: {
+    type: Schema.Types.ObjectId,
+    ref: SubscriptionPlanModel,
+    required: true,
+  },
+  subscriptionStartAt: { type: Date, required: false, default: null },
+  subscriptionEndAt: { type: Date, required: false, default: null },
 };
 
 const UserSchema = new Schema(objSchema, { timestamps: true });
