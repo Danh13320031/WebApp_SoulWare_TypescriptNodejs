@@ -79,7 +79,7 @@
                             <i class="fa-solid fa-xmark"></i>
                           </button>
                           <img
-                            src="<%= user.avatar %>"
+                            src="<%= user.avatar ? user.avatar : '/images/avatar.jpg' %>"
                             alt="<%= user.name %>"
                             class="form-image-view"
                             form-image-view
@@ -88,7 +88,7 @@
                             for="form-image-input"
                             class="button-primary text-decoration-none mb-0"
                             >Tải ảnh lên <i class="fa-solid fa-upload"></i>
-                            <input type="hidden" name="oldAvatar" value="<%= user.avatar %>" class="form-avatar-view" form-avatar-view />
+                            <input type="hidden" name="oldAvatar" value="<%= user.avatar ? user.avatar : '/images/avatar.jpg' %>" class="form-avatar-view" form-avatar-view />
                             <input
                               type="file"
                               name="avatar"
@@ -262,22 +262,22 @@
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <% if (userRoleList || userRoleList.length > 0) { %>
-                    <div class="form-group update-role-group">
+                    <% if (subscriptionPlanList || subscriptionPlanList.length > 0) { %>
+                    <div class="form-group update-subscriptionPlan-group">
                       <label
-                        for="user-role"
-                        class="form-label update-role-label"
-                        >Vai trò</label
+                        for="user-subscriptionPlan"
+                        class="form-label update-subscriptionPlan-label"
+                        >Gói đăng ký</label
                       >
-                      <select name="roleId" id="user-role">
-                        <option value="user" <% !user.roleId ? 'selected' : '' %>>
-                          Người dùng thường
+                      <select name="subscriptionPlanId" id="user-subscriptionPlan">
+                        <option value="" disabled <%= !user.subscriptionPlanId ? 'selected' : '' %>>
+                          -- Chọn gói đăng ký --
                         </option>
-                        <% userRoleList.forEach((role) => { %>
-                        <option value="<%= role.id %>" <%= user?.roleId?._id == role.id ? 'selected' : '' %>><%= role.name %></option>
+                        <% subscriptionPlanList.forEach((subscriptionPlan) => { %>
+                        <option value="<%= subscriptionPlan.id %>" <%= user?.subscriptionPlanId?._id == subscriptionPlan.id ? 'selected' : '' %>><%= subscriptionPlan.name %> (<%= subscriptionPlan.code %>)</option>
                         <% }); %>
                       </select>
-                      <span class="form-error form-role-error"></span>
+                      <span class="form-error form-subscriptionPlan-error"></span>
                     </div>
                     <% } %>
                   </div>

@@ -255,22 +255,22 @@
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                    <% if (userRoleList || userRoleList.length > 0) { %>
-                    <div class="form-group create-role-group">
+                    <% if (subscriptionPlanList || subscriptionPlanList.length > 0) { %>
+                    <div class="form-group create-subscriptionPlan-group">
                       <label
-                        for="user-role"
-                        class="form-label create-role-label"
-                        >Vai trò</label
+                        for="user-subscriptionPlan"
+                        class="form-label create-subscriptionPlan-label"
+                        >Gói đăng ký</label
                       >
-                      <select name="roleId" id="user-role">
-                        <option value="user" selected>
-                          Người dùng thường
+                      <select name="subscriptionPlanId" id="user-subscriptionPlan">
+                        <option value="" disabled selected>
+                          -- Chọn gói đăng ký --
                         </option>
-                        <% userRoleList.forEach((role) => { %>
-                        <option value="<%= role.id %>"><%= role.name %></option>
+                        <% subscriptionPlanList.forEach((subscriptionPlan) => { %>
+                        <option value="<%= subscriptionPlan.id %>"><%= subscriptionPlan.name %> (<%= subscriptionPlan.code %>)</option>
                         <% }); %>
                       </select>
-                      <span class="form-error form-role-error"></span>
+                      <span class="form-error form-subscriptionPlan-error"></span>
                     </div>
                     <% } %>
                   </div>

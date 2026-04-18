@@ -307,6 +307,9 @@ if (buttonDeleteList && buttonDeleteList.length > 0) {
       case "admins":
         messageSubStr = "quản trị viên";
         break;
+      case "users":
+        messageSubStr = "người dùng";
+        break;
       case "singers":
         messageSubStr = "ca sĩ";
         break;
@@ -722,27 +725,30 @@ if (buttonShowPassword) {
 }
 // End handle show password
 
-// Handle role filter
-const mainCardFilterRole = document.getElementById("main-card-filter-role");
+// Handle subscriptionPlan filter
+const mainCardFilterSubscriptionPlan = document.getElementById(
+  "main-card-filter-subscriptionPlan",
+);
 
-if (mainCardFilterRole) {
+if (mainCardFilterSubscriptionPlan) {
   const url = new URL(window.location.href);
-  const mainCardRoleSelect = mainCardFilterRole.querySelector(
-    ".main-card-role-select",
-  );
+  const mainCardSubscriptionPlanSelect =
+    mainCardFilterSubscriptionPlan.querySelector(
+      ".main-card-subscriptionPlan-select",
+    );
 
-  if (url && mainCardRoleSelect) {
-    mainCardRoleSelect.addEventListener("change", (e) => {
-      const role = e.target.value;
+  if (url && mainCardSubscriptionPlanSelect) {
+    mainCardSubscriptionPlanSelect.addEventListener("change", (e) => {
+      const subscriptionPlan = e.target.value;
 
-      if (url.searchParams.get("role") === "all") {
-        url.searchParams.delete("role");
+      if (url.searchParams.get("subscriptionPlan") === "all") {
+        url.searchParams.delete("subscriptionPlan");
       } else {
-        url.searchParams.set("role", role);
+        url.searchParams.set("subscriptionPlan", subscriptionPlan);
       }
 
       window.location.href = url.href;
     });
   }
 }
-// End handle role filter
+// End handle subscriptionPlan filter

@@ -134,6 +134,8 @@
                     <th scope="col" class="text-uppercase">Chủ đề</th>
                     <th scope="col" class="text-uppercase">Lượt nghe</th>
                     <th scope="col" class="text-uppercase">Lượt thích</th>
+                    <th scope="col" class="text-uppercase">Có thể tải</th>
+                    <th scope="col" class="text-uppercase">Lượt tải</th>
                     <th scope="col" class="text-uppercase">Vị trí</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
                     <th scope="col" class="text-uppercase">Hành động</th>
@@ -188,6 +190,8 @@
                     <td><%= song?.topicId?.title %></td>
                     <td><%= song.listen %></td>
                     <td><%= song.like %></td>
+                    <td><%= song.isPremium == true ? 'Có' : 'Không' %></td>
+                    <td><%= song.download %></td>
                     <td><%= song.position %></td>
                     <td>
                       <select 

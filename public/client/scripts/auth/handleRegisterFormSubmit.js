@@ -18,6 +18,8 @@ if (registerForm) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = loadIcon.outerHTML + " " + loadText;
 
+    console.log(JSON.stringify(Object.fromEntries(formData)));
+
     const apiUrl = registerForm.action;
     const fetchOption = {
       method: "POST",

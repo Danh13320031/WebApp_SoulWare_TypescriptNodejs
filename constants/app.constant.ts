@@ -6,3 +6,5 @@ export const APP_TIMEZONE: string = "Asia/Ho_Chi_Minh";
 export const APP_PREFIX_ADMIN: string = "/admin";
 export const APP_ADMIN_PAGINATION_LIMIT: number = 10;
 export const APP_CLIENT_PAGINATION_LIMIT: number = 20;
+export const APP_DEFAULT_AVATAR: string =
+  "http://localhost:3000/images/avatar.jpg";

@@ -79,13 +79,13 @@
                       }) %>
                     </div>
                     <div class="col-lg-3 col-md-6 col-12">
-                      <div class="main-card-filter-role" id="main-card-filter-role">
-                        <label for="main-card-role-select" class="mb-0 main-card-role-label">Vai trò</label>
-                        <select name="role" class="main-card-role-select" id="main-card-role-select">
+                      <div class="main-card-filter-subscriptionPlan" id="main-card-filter-subscriptionPlan">
+                        <label for="main-card-subscriptionPlan-select" class="mb-0 main-card-subscriptionPlan-label">Gói dịch vụ</label>
+                        <select name="subscriptionPlan" class="main-card-subscriptionPlan-select" id="main-card-subscriptionPlan-select">
                           <option value="all">Tất cả</option>
-                          <% if (userRoleList && userRoleList.length > 0) { %>
-                            <% for (let i = 0; i < userRoleList.length; i++) { %>
-                            <option value="<%= userRoleList[i]._id %>" <% if(userRoleList[i]._id == role) { %>selected<% } %>><%= userRoleList[i].name %></option>
+                          <% if (subscriptionPlanList && subscriptionPlanList.length > 0) { %>
+                            <% for (let i = 0; i < subscriptionPlanList.length; i++) { %>
+                            <option value="<%= subscriptionPlanList[i]._id %>" <% if(subscriptionPlanList[i]._id == subscriptionPlan) { %>selected<% } %>><%= subscriptionPlanList[i].name %></option>
                             <% } %>
                           <% } %>
                         </select>
@@ -118,7 +118,7 @@
                     <th scope="col" class="text-uppercase">Họ và tên</th>
                     <th scope="col" class="text-uppercase">Địa chỉ email</th>
                     <th scope="col" class="text-uppercase">Số diện thoại</th>
-                    <th scope="col" class="text-uppercase">Vai trò</th>
+                    <th scope="col" class="text-uppercase">Gói dịch vụ</th>
                     <th scope="col" class="text-uppercase">Vị trí</th>
                     <th scope="col" class="text-uppercase">Trạng thái</th>
                     <th scope="col" class="text-uppercase">Hành động</th>
@@ -151,7 +151,7 @@
                     <td><%= user.fullName %></td>
                     <td><%= user.email %></td>
                     <td><%= user.phone %></td>
-                    <td><%= user.roleId ? user.roleId.name : 'Người dùng thường' %></td>
+                    <td><%= user.subscriptionPlanId.name %> (<%= user.subscriptionPlanId.code %>)</td>
                     <td><%= user.position %></td>
                     <td>
                       <select 
@@ -208,7 +208,7 @@
           <div
             class="card-footer bg-white py-3 d-flex justify-content-between align-items-center gap-2 flex-wrap song-card-footer main-card-footer"
           >
-            <%#-include('../../partials/updateMulti.view.ejs', {
+            <%-include('../../partials/updateMulti.view.ejs', {
               updateMultiArr: [
                 { value: 'status-active', label: 'Đang hoạt động' },
                 { value: 'status-inactive', label: 'Vô hiệu hóa' },

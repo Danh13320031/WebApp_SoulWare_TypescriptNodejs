@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
+const app_constant_1 = require("../constants/app.constant");
+const subscriptionPlan_model_1 = __importDefault(require("./subscriptionPlan.model"));
 // import UserRoleModel from "./userRole.model";
 const Schema = mongoose_1.default.Schema;
 const objSchema = {
@@ -22,7 +24,7 @@ const objSchema = {
     password: { type: String, required: true },
     phone: { type: String, required: true },
     refreshToken: { type: String, required: false },
-    avatar: { type: String, required: false },
+    avatar: { type: String, required: false, default: app_constant_1.APP_DEFAULT_AVATAR },
     description: { type: String, required: false },
     status: {
         type: String,
@@ -36,12 +38,13 @@ const objSchema = {
     birthday: { type: Date },
     deleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
-    // roleId: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: UserRoleModel,
-    //   required: false,
-    //   default: null,
-    // },
+    subscriptionPlanId: {
+        type: Schema.Types.ObjectId,
+        ref: subscriptionPlan_model_1.default,
+        required: true,
+    },
+    subscriptionStartAt: { type: Date, required: false, default: null },
+    subscriptionEndAt: { type: Date, required: false, default: null },
 };
 const UserSchema = new Schema(objSchema, { timestamps: true });
 UserSchema.pre("save", function () {

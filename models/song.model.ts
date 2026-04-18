@@ -24,6 +24,8 @@ const objSchema = {
   position: { type: Number, required: true, default: 1 },
   deleted: { type: Boolean, required: true, default: false },
   deletedAt: { type: Date, default: null },
+  isPremium: { type: Boolean, required: true, default: false },
+  download: { type: Number, required: true, default: 0 },
   topicId: { type: Schema.Types.ObjectId, ref: TopicModel, required: true },
   singers: {
     type: [Schema.Types.ObjectId],

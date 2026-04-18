@@ -21,24 +21,6 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
   const pathname = activeSider(req.originalUrl);
   let find: any = { deleted: false };
 
-  // Handle pagination
-  let page: number = 1;
-  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
-  let type: string = "";
-
-  if (req.query.page) page = Number(req.query.page);
-  if (req.query.limit) limit = Number(req.query.limit);
-  if (req.query.type) type = req.query.type as string;
-
-  const count = await SongModel.countDocuments(find);
-
-  const pagination: TPagination = await handlePagination(
-    page,
-    limit,
-    type,
-    count,
-  );
-
   // Handle search filter
   let keyword: string = "";
   let keywordRegex: RegExp = new RegExp("", "i");
@@ -101,14 +83,34 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
 
   const sortFilter = handleSortFilter(sort);
 
+  // Handle pagination
+  let page: number = 1;
+  let limit: number = APP_ADMIN_PAGINATION_LIMIT;
+  let type: string = "";
+
+  if (req.query.page) page = Number(req.query.page);
+  if (req.query.limit) limit = Number(req.query.limit);
+  if (req.query.type) type = req.query.type as string;
+
+  const count = await SongModel.countDocuments(find);
+
+  const pagination: TPagination = await handlePagination(
+    page,
+    limit,
+    type,
+    count,
+  );
+
   const songList = await SongModel.find(find)
-    .select("-deleted -description -audio -lyrics -slug")
+    .select("-description -audio -lyrics -slug")
     .sort(sortFilter.sortOptions)
     .populate("singers", "stageName fullName")
     .populate("singerGroups", "name")
     .populate("topicId", "title")
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
+
+  console.log(songList);
 
   const singerList = await SingerModel.find({
     deleted: false,
