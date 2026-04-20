@@ -37,9 +37,9 @@ const optionalAuth = async (
         deleted: false,
       })
         .select(
-          "-deleted -deletedAt -createdAt -updatedAt -slug -refreshToken -__v",
+          "-deleted -deletedAt -createdAt -updatedAt -slug -refreshToken -position -status -roleId -__v",
         )
-        .populate("subscriptionPlanId", "permissions");
+        .populate("subscriptionPlanId", "permissions name code");
 
       res.locals.userAccount = user || null;
       return next();
@@ -68,7 +68,7 @@ const optionalAuth = async (
       deleted: false,
     })
       .select(
-        "-deleted -deletedAt -createdAt -updatedAt -slug -accessToken -__v",
+        "-deleted -deletedAt -createdAt -updatedAt -slug -accessToken -refreshToken -position -status -roleId -__v",
       )
       .populate("subscriptionPlanId", "permissions");
 
@@ -95,7 +95,6 @@ const optionalAuth = async (
     });
 
     res.locals.userAccount = user;
-
     return next();
   } catch (error) {
     res.locals.userAccount = null;

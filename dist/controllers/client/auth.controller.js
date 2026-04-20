@@ -211,10 +211,31 @@ const loginPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
 });
+const logoutGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = res.locals.user ? res.locals.user : null;
+        if (user)
+            yield user_model_1.default.updateOne({ _id: user._id }, { refreshToken: "" });
+        res.clearCookie("accessTokenUser");
+        res.clearCookie("refreshTokenUser");
+        res.redirect("/auth/login");
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            code: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+            status: "Fail",
+            message: "Server error - logout",
+        });
+        return;
+    }
+});
 const authController = {
     registerGet,
     registerPost,
     loginGet,
     loginPost,
+    logoutGet,
 };
 exports.default = authController;
