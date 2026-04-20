@@ -3,14 +3,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ESubscriptionPlanCode = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
+var ESubscriptionPlanCode;
+(function (ESubscriptionPlanCode) {
+    ESubscriptionPlanCode["FREE"] = "FREE";
+    ESubscriptionPlanCode["LIMITED"] = "LIMITED";
+    ESubscriptionPlanCode["PREMIUM"] = "PREMIUM";
+})(ESubscriptionPlanCode || (exports.ESubscriptionPlanCode = ESubscriptionPlanCode = {}));
 const objSchema = {
     name: { type: String, required: true },
     code: {
         type: String,
         required: true,
-        enum: ["free", "limited", "premium"],
+        enum: ["FREE", "LIMITED", "PREMIUM"],
         unique: true,
     },
     description: { type: String, required: false },

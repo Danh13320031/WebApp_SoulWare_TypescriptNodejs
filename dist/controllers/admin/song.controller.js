@@ -91,7 +91,6 @@ const getAllSongGet = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         .populate("topicId", "title")
         .skip(pagination.skipPage)
         .limit(pagination.limitPage);
-    console.log(songList);
     const singerList = yield singer_model_1.default.find({
         deleted: false,
     }).select("stageName");

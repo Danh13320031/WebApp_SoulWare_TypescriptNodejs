@@ -2,6 +2,15 @@
   max-width: 1300px;
   margin: 0 auto;
 }
+
 .form-control {
   box-shadow: none !important;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.w-max-content {
+  width: max-content;
 }

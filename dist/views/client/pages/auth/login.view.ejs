@@ -14,19 +14,17 @@
     <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
   </head>
   <body>
-    <main id="main" class="register-main">
-      <section
-        class="w-100 min-vh-100 d-flex align-items-center register-wrapper"
-      >
+    <main id="main" class="login-main">
+      <section class="w-100 min-vh-100 d-flex align-items-center login-wrapper">
         <div
-          class="d-none align-items-center d-lg-flex overflow-hidden w-50 flex-shrink-1 register-image"
+          class="d-none align-items-center d-lg-flex overflow-hidden w-50 flex-shrink-1 login-image"
           style="
             height: 100vh;
             background-image: url(https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/176518/Originals/poster-am-nhac-2.jpg);
           "
         ></div>
         <div
-          class="d-flex flex-grow-1 w-50 align-items-center justify-content-center register-content"
+          class="d-flex flex-grow-1 w-50 align-items-center justify-content-center login-content"
           style="
             background: linear-gradient(
               30deg,
@@ -40,37 +38,37 @@
             <div class="row justify-content-center">
               <div class="col-lg-7 col-sm-8 col-12">
                 <div
-                  class="card px-lg-3 px-5 py-3 h-100 rounded-3 register-box"
+                  class="card px-lg-3 px-5 py-3 h-100 rounded-3 login-box"
                   style="border: 3px solid var(--dark-primary-color)"
                 >
                   <div
-                    class="d-lg-flex d-block justify-content-between align-items-center my-3 register-title"
+                    class="d-lg-flex d-block justify-content-between align-items-center my-3 login-title"
                   >
                     <div class="d-lg-block d-flex justify-content-center">
                       <img
                         src="/images/logo-removebg-preview.png"
                         alt="logo"
                         width="120"
-                        class="register-logo"
+                        class="login-logo"
                       />
                     </div>
                     <h1
-                      class="text-center text-uppercase register-title-text"
+                      class="text-center text-uppercase login-title-text"
                       style="
                         color: var(--primary-color);
                         font-weight: var(--font-weight-semibold);
                         font-size: var(--font-size-xl);
                       "
                     >
-                      Đăng ký tài khoản
+                      Đăng nhập
                     </h1>
                   </div>
-                  <div class="register-form">
+                  <div class="login-form">
                     <form
-                      action="/auth/register"
+                      action="/auth/login"
                       method="POST"
-                      id="register-form"
-                      class="d-flex flex-column gap-2 register-form"
+                      id="login-form"
+                      class="d-flex flex-column gap-2 login-form"
                     >
                       <div class="form-group d-flex flex-column gap-1">
                         <label
@@ -87,27 +85,6 @@
                         />
                         <span
                           class="form-error form-email-error"
-                          style="
-                            font-size: var(--font-size-sm);
-                            color: var(--error-color);
-                          "
-                        ></span>
-                      </div>
-                      <div class="form-group d-flex flex-column gap-1">
-                        <label
-                          for="phone"
-                          class="form-label label-type-01 form-phone-label"
-                          >Số điện thoại</label
-                        >
-                        <input
-                          type="text"
-                          placeholder="Nhập số điện thoại..."
-                          class="form-control input-type-01 form-phone-input"
-                          id="phone"
-                          name="phone"
-                        />
-                        <span
-                          class="form-error form-phone-error"
                           style="
                             font-size: var(--font-size-sm);
                             color: var(--error-color);
@@ -148,91 +125,46 @@
                           "
                         ></span>
                       </div>
-                      <div class="form-group d-flex flex-column gap-1">
-                        <label
-                          for="confirmPassword"
-                          class="form-label label-type-01 form-confirmPassword-label"
-                          >Xác nhận mật khẩu</label
-                        >
-                        <div class="d-flex gap-1">
-                          <input
-                            type="password"
-                            placeholder="Nhập lại mật khẩu..."
-                            class="form-control input-type-01 form-confirmPassword-input"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                          />
-                          <button
-                            type="button"
-                            class="button-primary button-show-password"
-                          >
-                            <i
-                              class="fa-solid fa-eye d-none icon-show-password form-icon"
-                            ></i>
-                            <i
-                              class="fa-solid fa-eye-slash icon-hide-password form-icon"
-                            ></i>
-                          </button>
-                        </div>
-                        <span
-                          class="form-error form-confirmPassword-error"
-                          style="
-                            font-size: var(--font-size-sm);
-                            color: var(--error-color);
-                          "
-                        ></span>
-                      </div>
-                      <div class="form-group d-flex flex-column gap-1">
-                        <label
-                          for="fullName"
-                          class="form-label label-type-01 form-fullName-label"
-                          >Họ & Tên</label
-                        >
-                        <input
-                          type="text"
-                          placeholder="Nhập họ & tên..."
-                          class="form-control input-type-01 form-fullName-input"
-                          id="fullName"
-                          name="fullName"
-                        />
-                        <span
-                          class="form-error form-fullName-error"
-                          style="
-                            font-size: var(--font-size-sm);
-                            color: var(--error-color);
-                          "
-                        ></span>
-                      </div>
                       <div
-                        class="d-flex justify-content-end align-items-center"
+                        class="d-flex justify-content-between align-items-center"
                       >
                         <a
-                          href="/auth/login"
+                          href="/auth/register"
                           class="form-link"
                           style="
                             color: var(--link-color);
                             font-weight: var(--font-weight-light);
                             font-size: var(--font-size-sm);
                           "
-                          >Đã có tài khoản</a
+                          >Bạn chưa đăng ký tài khoản?</a
+                        >
+                        <a
+                          href="/auth/forgot-password"
+                          class="form-link"
+                          style="
+                            color: var(--link-color);
+                            font-weight: var(--font-weight-light);
+                            font-size: var(--font-size-sm);
+                          "
+                          >Quên mật khẩu</a
                         >
                       </div>
                       <div
                         class="d-flex justify-content-between align-items-center"
                       >
-                        <div class="d-flex gap-1 register-button-social">
+                        <div class="d-flex gap-1 login-button-social">
                           <button
                             type="button"
-                            class="button-secondary register-button-google"
+                            class="button-secondary login-button-google"
                           >
                             <i class="fa-brands fa-google"></i>
                           </button>
                         </div>
                         <button
                           type="submit"
-                          class="button-main register-button-submit"
+                          class="button-main login-button-submit"
                         >
-                          Đăng ký<i
+                          Đăng nhập<i
                             class="fa-solid fa-right-to-bracket ms-2"
                           ></i>
                         </button>
@@ -254,7 +186,7 @@
     ></script>
 
     <script src="/client/scripts/index.js"></script>
-    <script src="/client/scripts/auth/validateRegisterForm.js"></script>
-    <script src="/client/scripts/auth/handleRegisterFormSubmit.js"></script>
+    <script src="/client/scripts/auth/validateLoginForm.js"></script>
+    <script src="/client/scripts/auth/handleLoginFormSubmit.js"></script>
   </body>
 </html>

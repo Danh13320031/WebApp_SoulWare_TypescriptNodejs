@@ -88,6 +88,7 @@
           <div
             class="nav-auth h-100 d-flex align-items-center justify-content-end"
           >
+            <% if(!userAccount) { %>
             <ul class="nav-list mb-0 list-unstyled d-flex justify-content-end">
               <li class="nav-item">
                 <a
@@ -114,6 +115,57 @@
                 >
               </li>
             </ul>
+            <% } else { %>
+              <div class="dropdown nav-auth-info">
+                <div 
+                  class="dropdown-toggle p-1 border border-2 rounded-circle nav-auth-info-avatar" 
+                  data-bs-toggle="dropdown" 
+                  style="border-color: var(--primary-color) !important; box-shadow: 0px 0px 5px var(--primary-color); cursor: pointer;"
+                >
+                  <img
+                    src="<%= userAccount.avatar %>"
+                    alt="<%= userAccount.fullName %>"
+                    width="32"
+                    height="32"
+                    class="rounded-circle"
+                  />
+                </div>
+                <div class="p-2 w-max-content dropdown-menu">
+                  <div 
+                    class="pb-2 nav-auth-info-name" 
+                    style="
+                      font-weight: var(--font-weight-bold); 
+                      font-size: var(--font-size-md); 
+                      color: var(--primary-color);"
+                  >
+                    Xin chào, <%= userAccount.fullName %>
+                    <hr class="mb-0 mt-2">
+                  </div> 
+                  <ul class="list-unstyled mb-0 nav-auth-info-list">
+                    <li>
+                      <a 
+                        href="/auth/profile" 
+                        class="dropdown-item nav-auth-info-item" 
+                        style="
+                          color: var(--dark-gray-color); 
+                          font-size: var(--font-size-sm);
+                          font-weight: var(--font-weight-regular);"
+                      ><i class="fa-solid fa-caret-right me-2"></i>Trang cá nhân <i class="fa-solid fa-user ms-2"></i></a>
+                    </li>
+                    <li>
+                      <a 
+                        href="/auth/logout" 
+                        class="dropdown-item nav-auth-info-item" 
+                        style="
+                          color: var(--dark-gray-color); 
+                          font-size: var(--font-size-sm);
+                          font-weight: var(--font-weight-regular);"
+                      ><i class="fa-solid fa-caret-right me-2"></i>Đăng xuất <i class="fa-solid fa-arrow-right-from-bracket ms-2"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            <% } %>
           </div>
         </div>
         <div class="col-10 d-lg-none d-block">
@@ -136,14 +188,15 @@
               class="position-fixed d-flex flex-column gap-2 nav-mobile-menu-box"
               id="nav-mobile-menu-box"
             >
+              <% if (userAccount) { %>
               <div
                 class="flex-shrink-1 d-flex gap-2 p-2 align-items-center justify-content-between nav-mobile-menu-user"
               >
                 <div class="d-flex gap-2 align-items-center">
                   <a href="/" class="rounded-circle overflow-hidden">
                     <img
-                      src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-                      alt="Bùi Pháp Danh"
+                      src="<%= userAccount.avatar %>"
+                      alt="<%= userAccount.fullName %>"
                       width="40px"
                       class="mobile-menu-avatar-img"
                     />
@@ -156,7 +209,7 @@
                       font-weight: var(--font-weight-semibold);
                     "
                   >
-                    Bùi Pháp Danh
+                    <%= userAccount.fullName %>
                   </div>
                 </div>
                 <a
@@ -166,6 +219,18 @@
                   ><i class="fa-solid fa-arrow-right"></i
                 ></a>
               </div>
+              <% } else { %>
+                <div 
+                  class="flex-shrink-1 d-flex gap-2 p-2 pt-3 align-items-center justify-content-between text-uppercase nav-mobile-menu-user"
+                  style="
+                    color: var(--primary-color);
+                    font-size: var(--font-size-lg);
+                    font-weight: var(--font-weight-semibold);
+                  "
+                >
+                  Danh mục
+                </div>
+              <% } %>
               <ul
                 class="mb-0 list-unstyled p-2 d-flex flex-column border border-top-1 border-bottom-1 border-end-0 border-start-0 gap-2 flex-shrink-1 nav-mobile-menu-list"
               >
@@ -203,6 +268,7 @@
                   >
                 </li>
               </ul>
+              <% if (!userAccount) { %>
               <ul
                 class="mb-0 list-unstyled d-flex flex-grow-1 align-items-end nav-mobile-menu-auth"
               >
@@ -229,6 +295,23 @@
                   >
                 </li>
               </ul>
+              <% } else { %>
+              <ul
+                class="mb-0 list-unstyled d-flex flex-grow-1 align-items-end nav-mobile-menu-auth"
+              >
+                <li class="nav-mobile-menu-item flex-grow-1">
+                  <a
+                    href="/auth/logout"
+                    class="text-decoration-none text-center p-2 w-100 d-block nav-mobile-menu-link"
+                    style="
+                      font-size: var(--font-size-md);
+                      font-weight: var(--font-weight-bold);
+                    "
+                    >Đăng xuất</a
+                  >
+                </li>
+              </ul>
+              <% } %>
             </div>
           </div>
         </div>

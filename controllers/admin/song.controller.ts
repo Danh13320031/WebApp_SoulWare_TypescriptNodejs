@@ -110,8 +110,6 @@ const getAllSongGet = async (req: Request, res: Response): Promise<void> => {
     .skip(pagination.skipPage)
     .limit(pagination.limitPage);
 
-  console.log(songList);
-
   const singerList = await SingerModel.find({
     deleted: false,
   }).select("stageName");

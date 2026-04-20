@@ -14,7 +14,9 @@ import handleSortFilter from "../../helpers/admin/handleSortFilter.helper";
 import handleStatusFilter from "../../helpers/admin/handleStatusFilter.helper";
 import convertTextToSlug from "../../helpers/convertTextToSlug.helper";
 import handlePagination from "../../helpers/handlePagination.helper";
-import SubscriptionPlanModel from "../../models/subscriptionPlan.model";
+import SubscriptionPlanModel, {
+  ESubscriptionPlanCode,
+} from "../../models/subscriptionPlan.model";
 import { TPagination, TStatusFilter } from "../../types/index.type";
 
 // [GET]: /admin/users
@@ -198,7 +200,7 @@ const createANewUserPost = async (
     let subscriptionStartAt: Date | null = null;
     let subscriptionEndAt: Date | null = null;
 
-    if (subscriptionPlan.code !== "FREE") {
+    if (subscriptionPlan.code !== ESubscriptionPlanCode.FREE) {
       subscriptionStartAt = dayjs(Date.now()).toDate();
       subscriptionEndAt = dayjs(subscriptionStartAt).add(1, "month").toDate();
     }
@@ -330,7 +332,7 @@ const updateAUserByIdPatch = async (
     let subscriptionEndAt: Date | null = admin.subscriptionEndAt;
 
     if (
-      subscriptionPlan.code !== "FREE" &&
+      subscriptionPlan.code !== ESubscriptionPlanCode.FREE &&
       subscriptionPlan._id.toString() !==
         admin.subscriptionPlanId._id.toString()
     ) {
@@ -338,7 +340,7 @@ const updateAUserByIdPatch = async (
       subscriptionEndAt = dayjs(subscriptionStartAt).add(1, "month").toDate();
     }
 
-    if (subscriptionPlan.code === "FREE") {
+    if (subscriptionPlan.code === ESubscriptionPlanCode.FREE) {
       subscriptionStartAt = null;
       subscriptionEndAt = null;
     }
