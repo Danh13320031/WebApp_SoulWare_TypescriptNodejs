@@ -41,7 +41,7 @@ if (buttonShowPasswordList && buttonShowPasswordList.length > 0) {
     button.addEventListener("click", () => {
       const inputPassword = document.querySelector("input.form-password-input");
       const inputConfirmPassword = document.querySelector(
-        "input.form-confirm-password-input",
+        "input.form-confirmPassword-input",
       );
       const iconShowPasswordList = document.querySelectorAll(
         ".icon-show-password",
@@ -50,24 +50,36 @@ if (buttonShowPasswordList && buttonShowPasswordList.length > 0) {
         ".icon-hide-password",
       );
 
-      if (
-        !inputPassword ||
-        !inputConfirmPassword ||
-        !iconShowPasswordList ||
-        !iconHidePasswordList
-      )
-        return;
-
-      if (inputPassword.type === "password") {
-        inputPassword.type = "text";
-        inputConfirmPassword.type = "text";
-        iconShowPasswordList.forEach((icon) => icon.classList.remove("d-none"));
-        iconHidePasswordList.forEach((icon) => icon.classList.add("d-none"));
+      if (!inputConfirmPassword) {
+        if (inputPassword.type === "password") {
+          inputPassword.type = "text";
+          iconShowPasswordList.forEach((icon) =>
+            icon.classList.remove("d-none"),
+          );
+          iconHidePasswordList.forEach((icon) => icon.classList.add("d-none"));
+        } else {
+          inputPassword.type = "password";
+          iconShowPasswordList.forEach((icon) => icon.classList.add("d-none"));
+          iconHidePasswordList.forEach((icon) =>
+            icon.classList.remove("d-none"),
+          );
+        }
       } else {
-        inputPassword.type = "password";
-        inputConfirmPassword.type = "password";
-        iconShowPasswordList.forEach((icon) => icon.classList.add("d-none"));
-        iconHidePasswordList.forEach((icon) => icon.classList.remove("d-none"));
+        if (inputPassword.type === "password") {
+          inputPassword.type = "text";
+          inputConfirmPassword.type = "text";
+          iconShowPasswordList.forEach((icon) =>
+            icon.classList.remove("d-none"),
+          );
+          iconHidePasswordList.forEach((icon) => icon.classList.add("d-none"));
+        } else {
+          inputPassword.type = "password";
+          inputConfirmPassword.type = "password";
+          iconShowPasswordList.forEach((icon) => icon.classList.add("d-none"));
+          iconHidePasswordList.forEach((icon) =>
+            icon.classList.remove("d-none"),
+          );
+        }
       }
     });
   });

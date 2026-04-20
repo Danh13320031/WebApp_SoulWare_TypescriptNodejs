@@ -1,12 +1,18 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
+export enum ESubscriptionPlanCode {
+  FREE = "FREE",
+  LIMITED = "LIMITED",
+  PREMIUM = "PREMIUM",
+}
+
 const objSchema = {
   name: { type: String, required: true },
   code: {
     type: String,
     required: true,
-    enum: ["free", "limited", "premium"],
+    enum: ["FREE", "LIMITED", "PREMIUM"],
     unique: true,
   },
   description: { type: String, required: false },
