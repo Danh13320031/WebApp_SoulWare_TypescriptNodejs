@@ -228,11 +228,35 @@ const loginPost = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const logoutGet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = res.locals.user ? res.locals.user : null;
+
+    if (user)
+      await UserModel.updateOne({ _id: user._id }, { refreshToken: "" });
+
+    res.clearCookie("accessTokenUser");
+    res.clearCookie("refreshTokenUser");
+
+    res.redirect("/auth/login");
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "Fail",
+      message: "Server error - logout",
+    });
+    return;
+  }
+};
+
 type TAuthController = {
   registerGet: (req: Request, res: Response) => Promise<void>;
   registerPost: (req: Request, res: Response) => Promise<void>;
   loginGet: (req: Request, res: Response) => Promise<void>;
   loginPost: (req: Request, res: Response) => Promise<void>;
+  logoutGet: (req: Request, res: Response) => Promise<void>;
 };
 
 const authController: TAuthController = {
@@ -240,6 +264,7 @@ const authController: TAuthController = {
   registerPost,
   loginGet,
   loginPost,
+  logoutGet,
 };
 
 export default authController;

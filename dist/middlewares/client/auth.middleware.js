@@ -30,8 +30,8 @@ const optionalAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                 _id: decoded.id,
                 deleted: false,
             })
-                .select("-deleted -deletedAt -createdAt -updatedAt -slug -refreshToken -__v")
-                .populate("subscriptionPlanId", "permissions");
+                .select("-deleted -deletedAt -createdAt -updatedAt -slug -refreshToken -position -status -roleId -__v")
+                .populate("subscriptionPlanId", "permissions name code");
             res.locals.userAccount = user || null;
             return next();
         }
@@ -53,7 +53,7 @@ const optionalAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             refreshToken: refreshToken,
             deleted: false,
         })
-            .select("-deleted -deletedAt -createdAt -updatedAt -slug -accessToken -__v")
+            .select("-deleted -deletedAt -createdAt -updatedAt -slug -accessToken -refreshToken -position -status -roleId -__v")
             .populate("subscriptionPlanId", "permissions");
         if (!user) {
             res.locals.userAccount = null;
