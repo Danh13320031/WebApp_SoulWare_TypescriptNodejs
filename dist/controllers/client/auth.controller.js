@@ -197,7 +197,7 @@ const loginPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({
             code: http_status_codes_1.StatusCodes.OK,
             status: "Success",
-            message: "Login successfully",
+            message: "Đăng nhập thành công!",
         });
         return;
     }

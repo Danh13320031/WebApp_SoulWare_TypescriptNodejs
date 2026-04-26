@@ -144,7 +144,7 @@
                   <ul class="list-unstyled mb-0 nav-auth-info-list">
                     <li>
                       <a 
-                        href="/auth/profile" 
+                        href="/user/profile" 
                         class="dropdown-item nav-auth-info-item" 
                         style="
                           color: var(--dark-gray-color); 
@@ -327,12 +327,13 @@
               style="border-color: var(--secondary-color)"
             >
               <input
-                class="form-control me-2 border-0 bg-transparent rounded-pill header-search-input"
                 type="search"
                 placeholder="Tìm kiếm bài hát yêu thích của bạn..."
                 aria-label="Search"
                 name="keyword"
                 value="<%= keyword %>"
+                class="form-control me-2 border-0 bg-transparent rounded-pill header-search-input"
+                style="font-size: var(--font-size-sm); font-weight: var(--font-weight-regular);"
               />
               <button
                 class="btn btn-outline-dark border-0 bg-transparent rounded-pill header-search-btn"

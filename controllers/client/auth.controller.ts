@@ -214,7 +214,7 @@ const loginPost = async (req: Request, res: Response): Promise<void> => {
     res.json({
       code: StatusCodes.OK,
       status: "Success",
-      message: "Login successfully",
+      message: "Đăng nhập thành công!",
     });
     return;
   } catch (error) {

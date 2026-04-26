@@ -29,3 +29,14 @@ export type TDataBodyUpdateUser = {
   subscriptionStartAt?: Date | null;
   subscriptionEndAt?: Date | null;
 };
+
+export type TDataBodyUpdateProfile = {
+  fullName: string;
+  email: string;
+  password?: string;
+  phone: string;
+  avatar: string;
+  birthday?: Date | null;
+  address?: string | null;
+  description?: string | null;
+};

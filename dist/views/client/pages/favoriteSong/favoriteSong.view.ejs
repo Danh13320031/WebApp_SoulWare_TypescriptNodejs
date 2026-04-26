@@ -12,12 +12,14 @@
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
     <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/alert.css">
     <link rel="stylesheet" href="/client/styles/partials/header.css" />
     <link rel="stylesheet" href="/client/styles/pages/favoriteSong/favoriteSong.css" />
     <link rel="stylesheet" href="/client/styles/partials/footer.css" />
   </head>
   <body>
     <%-include('../../partials/header.view.ejs', { keyword: keyword }) %>
+    <%-include('../../partials/alert.view.ejs') %>
 
     <main class="main py-5" id="favorite-song-main">
       <section class="favorite-song-title">

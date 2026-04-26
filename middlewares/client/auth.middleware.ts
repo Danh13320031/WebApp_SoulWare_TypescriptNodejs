@@ -104,7 +104,7 @@ const optionalAuth = async (
 
 const requiredAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.userAccount) {
-    return res.redirect("/auth/register");
+    return res.redirect("/auth/login");
   }
 
   next();
