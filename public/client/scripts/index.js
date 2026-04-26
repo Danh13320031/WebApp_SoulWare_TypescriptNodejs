@@ -31,6 +31,60 @@ if (navMobileMenuOverlay) {
 }
 // End handle toggle mobile menu
 
+// Handle show alert
+const globalAlert = document.getElementById("global-alert");
+const globalAlertMessage = document.getElementById("global-alert-message");
+const globalAlertClose = document.getElementById("global-alert-close");
+
+if (globalAlertClose) {
+  globalAlertClose.addEventListener("click", () => {
+    globalAlert.classList.add("d-none");
+  });
+}
+
+let alertTimeout;
+
+const showAlert = (type, message) => {
+  if (!globalAlert || !globalAlertMessage) return;
+
+  clearTimeout(alertTimeout);
+
+  if (type === "error") {
+    const iconErrorClose = document.createElement("i");
+    iconErrorClose.classList.add("fa-solid", "fa-xmark");
+
+    globalAlert.classList.add("error");
+    globalAlertMessage.classList.add("error");
+    globalAlertClose.className = "button-danger global-alert-close";
+    globalAlertClose.innerHTML = iconErrorClose.outerHTML;
+  } else {
+    const iconSuccessClose = document.createElement("i");
+    iconSuccessClose.classList.add("fa-solid", "fa-check");
+
+    globalAlert.classList.add("success");
+    globalAlertMessage.classList.add("success");
+    globalAlertClose.className = "button-success global-alert-close";
+    globalAlertClose.innerHTML = iconSuccessClose.outerHTML;
+  }
+
+  globalAlertMessage.innerText = message;
+  globalAlert.classList.add("active");
+
+  alertTimeout = setTimeout(() => {
+    globalAlert.classList.remove("active");
+  }, 3500);
+};
+
+const flashData = sessionStorage.getItem("flashMessage");
+
+if (flashData) {
+  const { type, message } = JSON.parse(flashData);
+
+  showAlert(type, message);
+  sessionStorage.removeItem("flashMessage");
+}
+// End handle show alert
+
 // Handle show password
 const buttonShowPasswordList = document.querySelectorAll(
   ".button-show-password",

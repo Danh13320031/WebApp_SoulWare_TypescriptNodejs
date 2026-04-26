@@ -8,12 +8,14 @@ const favoriteSong_route_1 = __importDefault(require("./favoriteSong.route"));
 const search_route_1 = __importDefault(require("./search.route"));
 const song_route_1 = __importDefault(require("./song.route"));
 const topic_route_1 = __importDefault(require("./topic.route"));
+const user_route_1 = __importDefault(require("./user.route"));
 const createClientRoute = (app) => {
     app.use("/topics", topic_route_1.default);
     app.use("/songs", song_route_1.default);
     app.use("/favorite-songs", favoriteSong_route_1.default);
     app.use("/search", search_route_1.default);
     app.use("/auth", auth_route_1.default);
+    app.use("/user", user_route_1.default);
     return;
 };
 exports.default = createClientRoute;

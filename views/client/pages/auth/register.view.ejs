@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng ký</title>
+    <title><%= pageTitle %></title>
 
     <link
       rel="stylesheet"
@@ -12,8 +12,11 @@
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
     <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/alert.css" />
   </head>
   <body>
+    <%-include('../../partials/alert.view.ejs') %>
+
     <main id="main" class="register-main">
       <section
         class="w-100 min-vh-100 d-flex align-items-center register-wrapper"

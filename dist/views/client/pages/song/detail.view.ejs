@@ -16,12 +16,14 @@
 
     <link rel="stylesheet" href="/client/styles/setup.css" />
     <link rel="stylesheet" href="/client/styles/lib/bootstrap.css" />
+    <link rel="stylesheet" href="/client/styles/partials/alert.css">
     <link rel="stylesheet" href="/client/styles/partials/header.css" />
     <link rel="stylesheet" href="/client/styles/pages/song/detail.css" />
     <link rel="stylesheet" href="/client/styles/partials/footer.css" />
   </head>
   <body>
     <%-include('../../partials/header.view.ejs', { keyword: keyword }) %>
+    <%-include('../../partials/alert.view.ejs') %>
 
     <main class="main py-5" id="song-detail-main">
       <section class="song-info mb-5">

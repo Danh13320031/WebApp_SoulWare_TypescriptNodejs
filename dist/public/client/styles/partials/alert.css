@@ -1,0 +1,29 @@
+.global-alert {
+  position: fixed;
+  background-color: white;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 300px;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(150%);
+  transition: all 0.3s ease-in-out;
+}
+
+.global-alert.active {
+  transform: translateX(0%);
+}
+
+.global-alert.success {
+  border-color: var(--success-color);
+}
+.global-alert .global-alert-message.success {
+  color: var(--success-color);
+}
+.global-alert.error {
+  border-color: var(--error-color);
+}
+.global-alert .global-alert-message.error {
+  color: var(--error-color);
+}

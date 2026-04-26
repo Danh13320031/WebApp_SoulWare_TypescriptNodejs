@@ -32,8 +32,19 @@ if (loginForm) {
       const result = await res.json();
 
       if (result.status === "Fail") {
+        showAlert(
+          "error",
+          result.message || "Vui lòng kiểm tra lại thông tin!",
+        );
         return;
       } else {
+        sessionStorage.setItem(
+          "flashMessage",
+          JSON.stringify({
+            type: "success",
+            message: result.message || "Đăng nhập thành công!",
+          }),
+        );
         window.location.href = "/topics";
       }
     } catch (error) {
